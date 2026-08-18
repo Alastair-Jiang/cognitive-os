@@ -130,11 +130,14 @@ def decide(
     q3 = consistency >= 0.8
     q4 = abs(obs) >= 0.01
 
-    if q1 and q2 and q3 and q4:
-        verdict = "SUPPORTED"
-    if q1 and q2 and q4 and obs <= -0.01:
+    # 注意: 三个分支互斥, 必须用 if/elif 而非连续 if(否则后写覆盖前写, 见 PR #4 审核)。
+    # REFUTED 要求「方向反转且跨 seed 一致」: 若 80% 的 seed 正向但堆叠均值显著为负
+    # (如个别极端负 seed 拖累), 属于矛盾信号, 判 INCONCLUSIVE 而非 REFUTED。
+    if q1 and q2 and q4 and obs <= -0.01 and not q3:
         verdict = "REFUTED"
-    if not (q1 and q2 and q3 and q4) and not (q1 and q2 and q4 and obs <= -0.01):
+    elif q1 and q2 and q3 and q4 and obs > 0.0:
+        verdict = "SUPPORTED"
+    else:
         verdict = "INCONCLUSIVE"
 
     return {
@@ -164,9 +167,11 @@ def main() -> None:
     args = ap.parse_args()
     seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
 
+    if not seeds:
+        ap.error("--seeds 至少需要一个语料 seed(用逗号分隔)")
     rows: list[dict[str, Any]] = []
-    for s in seeds:
-        print(f"[EXP-003] corpus_seed={s} ({seeds.index(s)+1}/{len(seeds)}) …", flush=True)
+    for i, s in enumerate(seeds, 1):
+        print(f"[EXP-003] corpus_seed={s} ({i}/{len(seeds)}) …", flush=True)
         rows.append(run_seed(s, args.queries, args.k))
 
     all_diffs: list[float] = [d for r in rows for d in r["diffs"]]
