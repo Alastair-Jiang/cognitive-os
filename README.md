@@ -1,4 +1,4 @@
-English | [简体中文](./README.zh.md) >
+< English | [简体中文](./README.zh.md) >
 
 # Cognitive OS — Research Repository for a Personal Cognitive OS
 
