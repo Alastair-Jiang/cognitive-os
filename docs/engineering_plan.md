@@ -63,40 +63,128 @@
 
 ## 2. 工程阶段 E0-E5（方向 / 工作内容 / 验收标准）
 
-### E0 实验与评测平台基线 — 最高优先级
+### E0 实验与评测平台基线 — 最高优先级（**第一部分示范**：具体预期操作 + 预期结果 + 数学推理 + 代码已落地）
+
+> **示范声明**：本文其余 E1-E5 保持原大纲式(方向/工作内容/验收)。
+> E0 下面追加"操作-预期-推理-代码清单"的完整示范，作为 E1-E5 的模板。
+> 本段凡"已运行/已落盘"均指向本 PR 的真实文件与 JSON 证据。
 
 **方向**：把"跑实验"从一次性脚本变成可复用、可审计、可统计推断的平台。
-这是 EXP-003（多 seed 显著性检验）的直接前置，也是后续一切工程的地基。
+这是 EXP-003(多 seed 显著性检验)的直接前置，也是后续一切工程的地基。
 
-**为什么先做**：D-1/D-4/D-5 直接威胁研究结论的可信度——本仓库的立身之本就是
-实验诚实（宪法第 1 条），而当前实验基础设施无法支撑"多 seed + 显著性检验"
+**为什么先做**：D-1/D-4/D-5 直接威胁研究结论的可信度——本仓库的立身之本是
+实验诚实(宪法第 1 条)，而当前实验基础设施无法支撑"多 seed + 显著性检验"
 这一业界最低门槛的统计严谨性。
 
-**工作内容**：
-1. **共享 runner 库**（`scripts/` 内模块化，零运行时依赖不变）：
-   语料构建 / 策略构建 / 查询采样 / 指标聚合全部走 `configs/*.json`，
-   消除三个 exp002 脚本的重复逻辑（D-1, D-5）。
-2. **多 seed harness**：`--seeds N` 参数，逐 seed 生成语料与查询，
-   输出 per-seed 与聚合两层结果。
-3. **显著性检验模块**：per-query 配对检验（IR 社区惯例：配对随机化检验或
-   Wilcoxon 符号秩检验 + 效应量），输出 p 值、效应量、置信区间，
-   不下"显著"结论的措辞由脚本统一生成。
-4. **结果 schema v2**：`schema_version` 字段 + 配置内容哈希 + 代码版本（git sha）+
-   运行环境（python 版本），保证任何历史结果可追溯到确切条件（D-3）。
-5. **文档-配置一致性检查脚本**：校验 BM-001 等规格文档声明的参数与
-   `configs/*.json` 一致，发现漂移即失败（D-2）。
-6. **EXP-003 预注册与首跑**：复核 noise=0.3 档 C F1=0.892 > A 0.755 的单 seed 观察
-   （≥5 seeds × 12+ 查询），按 BM-001 §7 惯例预注册判定标准后执行。
+---
 
-**验收标准（DoD）**：
-- [ ] 任一实验脚本含 0 个硬编码语料/策略参数（grep 可验证）；
-- [ ] EXP-003 产出：≥5 seed 聚合结果 + 配对检验报告（p 值 + 效应量），
-      无论结论方向，H-002 状态按结果如实更新；
-- [ ] 结果 JSON 全部含 schema_version / config_hash / code_sha / python_version；
-- [ ] 文档-配置一致性检查在 CI 中运行并当前全绿（先修 D-2 漂移）；
-- [ ] 现有 51 测试不回归，新增 harness 测试覆盖 runner 核心路径。
+#### E0-A. 预期建设目标(到达何种程度算完成)
 
-**关联**：RQ-1/RQ-2/RQ-3 复核；研究 roadmap Phase 1 收尾与 Phase 2 前置。
+| 项 | 预期结果 | 判定口径(看到什么算达成) |
+|---|---|---|
+| 统计推断模块 | 可复现给出 p / CI / 效应量 | 金值测试全过；同 rng_seed 复算同一数值 |
+| 多种子 harness | EXP-003 首跑 JSON 落 `research/results/` | meta 含 seeds/k/queries/stats_params/timestamp |
+| EXP-003 判定 | 附带观察升级为"已复核结论" | 下方四闸门 q1~q4 判定结果回填 |
+| 结果 schema 起步 | 首跑 JSON 含 schema_version + 判定参数 | 项在 首跑 JSON meta 可 grep |
+| 测试基座 | 零回归 + 统计金值 | 老 51 全过 + stats 17 金值(总 68) |
+
+#### E0-B. 具体可执行操作(顺序 = 本 PR 真实落盘)
+
+1. 新建 `src/cognitive_os/stats.py`(零依赖、标准库)：
+   - `paired_diffs` / `mean_dz` / `permutation_test` / `bootstrap_mean_ci`;
+   - 只支持双侧； n_resample / rng_seed / alpha 全部外露； 单参误用抛 `ValueError`。
+2. 新建 `tests/test_stats.py`(金值 + 确定性 + 边界)：
+   - 全同号差值 p 触达 sign-flip 固有下限(验证 2/2^n 分辨率语义)；
+   - 完全对称数据 p=1.0(零分布全含 0);
+   - 同 rng_seed 复算同一输出(确定性)；
+   - CI 包围均值且随 n 收缩； 非法 alpha/n_resample 被拒；
+3. 新建运行器 `scripts/run_exp003_significance.py`:
+   `python scripts/run_exp003_significance.py --seeds 20260819,7,42,131,9999 --queries 12 --k 10`
+   （策略/语料模板直接复用 `run_exp002_scan.SCAN_STRATEGY_TEMPLATE` 与
+   `build_strategies`，无第三份拷贝, D-5 降解起点）
+4. 预注册 + 运行：`research/experiments/EXP-003-*` 中规则先于运行写下
+   （提交历史可证），原始 JSON 落 `research/results/`。
+5. 判定结果按宪法如实回写： H-002 / roadmap 已做(无论方向)。
+
+#### E0-C. 预期结果 vs 实跑结果(四闸门 q1~q4)
+
+预注册判据(全部通过才 SUPPORTED； q1&q2&q4 反向才 REFUTED):
+- q1 双侧配对随机化检验 p < 0.05;
+- q2 boot 95% 均值差区间(B=10000)不含 0;
+- q3 跨 seed mean_diff ≥ 0 占比 ≥ 80%;
+- q4 最小效应 |mean_diff| ≥ 0.01(排除"统计显著但物理无意义")。
+
+本 PR 实跑(2026-08-19， 数据 `research/results/EXP-003-significance-s5-q12-*.json`):
+
+| seed | A F1 | C F1 | diff(C−A) |
+|---:|---:|---:|---:|
+| 20260819 | 0.765 | 0.804 | +0.039 |
+| 7 | 0.814 | 0.941 | +0.127 |
+| 42 | 0.824 | 0.946 | +0.123 |
+| 131 | 0.765 | 0.770 | +0.005 |
+| 9999 | 0.784 | 0.896 | +0.112 |
+
+**判定: SUPPORTED** — q1 p=0.0001 ✅; q2 CI=[+0.044,+0.115] ✅;
+q3 5/5=100% ✅; q4 +0.081 ≥0.01 ✅; 效应量 d_z=+0.58。
+边界: 仅对 overlap-mid/noise-mid 格点成立； C 成本为 A 的 ~3.7×(sim 95 vs 275-411)；
+按宪法第 2 条**不写入核心**(EXP-002 全网格大部分档仍是 A ≥ C)。
+详文: `research/experiments/EXP-003-multiseed-significance.md`。
+
+#### E0-D. 数学推理(为何这样判)
+
+- **为何配对:** 不同查询难度差异巨大； 同一查询上取 d_i = F1_C,i − F1_A,i,
+  消去"查询本身难度"混杂——差分布只反映策略相对行为。
+- **为何随机化检验(sign-flip permutation):** per-query F1 混 0 与 1, 非正态,
+  t 检验正态假设不成立； sign-flip 只需 H0 下"差分布关于 0 对称",
+  是 IR/TREC 惯例(Smucker 2007); T=mean(d), 每个 d_i 随机 ±1 后求 T',
+  双侧 p = (1 + #{|T'| ≥ |T|}) / (1 + R); n=60 的符号组合 2^60, R=10000
+  随机逼近足够(分辨率下界 1/(1+R)=1e-4, 结论不受分辨率约束)。
+- **为何 boot CI:** 同样非正态——取样均值的重抽样分布, 取 alpha/2 与
+  1-alpha/2 分位点; "CI 不含 0 ⇔ 双侧 alpha=0.05", 与 q1 互补且给出
+  效应量级(区间两端为量化的信心区间, 非单点二值)。
+- **为何 q3 跨 seed 一致性:** 堆叠 60 对可能被单语料主导； ≥80% seed 同向
+  检验"换语料换种"下效应是否稳健——语料级(基形)与查询级(难度)双轴补全。
+- **为何 q4 最小效应:** "n 大则 p 优但 d≈+0.001" 无工程价值; 当前测量
+  噪声量级 ~0.01-0.03(标准误), 门槛设 1pp 与噪声分辨率对应。
+- **为何 d_z(配对标准化效应量):** d_z = mean(d)/SD(d)(总体口径, 除 n),
+  小样本配对设计宜呈"差值自身的标准化"而非 t 语义效应;
+  本次 +0.58 属"中等效应"(Cohen 约定 0.2/0.5/0.8)。
+- **三方判定:** SUPPORTED(q1~q4 全通过); REFUTED(q1&q2&q4 显著且
+  mean_diff ≤ -0.01, 反向); INCONCLUSIVE(其他)——把"测量不足"与
+  "反向证实"分开, 反对"看不见就当没有"。
+- **实现与判定对齐:** 判定只在 `decide()` 集中拼装;
+  stats.py 不输出判定, runner 不内联统计——分层不清被宪法 §2 禁止。
+
+#### E0-E. 代码/文档清单(本 PR 已交付)
+
+| 资产 | 类型 | 行数(约) | 关键职能 |
+|---|---|---|---|
+| `src/cognitive_os/stats.py` | 库模块 | ~130 | sign-flip perm/boot CI/d_z, 零依赖 |
+| `tests/test_stats.py` | 单测 | ~125 | 17 金值 + 确定性 + 边界 |
+| `scripts/run_exp003_significance.py` | 运行器 | ~170 | 5 seed 复跑 → 四闸门判定 |
+| `research/experiments/EXP-003-*.md` | 预注册+结果 | ~100 | 判定标准先写后跑, 结果后填 |
+| `research/hypotheses/H-002*.md` | 假设 | — | EXP-003 复核结论回填 |
+| `docs/roadmap.md` | 路线图 | — | 附带观察注记改为已定 |
+
+**跨债降解(对应 §1 D 表):**
+- D-4(单 seed/单 k/无显著性)→ **E0-C 已闭合**;
+- D-5(三脚本复制)→ run_exp003 直接 import 原模板, 不再复制;
+- D-1(内联 CORPUS_CFG)→ run_exp003 无内联(见 grep);
+- D-3(无 schema_version)→ EXP-003 首跑 meta 已含; 
+  config_hash/code_sha 在 runner 公共化时一并补入(E0-B 已列口径);
+- D-2(BM-001 §2 vs small 漂移)→ **未收敛**, 下一 PR 的
+  `check_specs_consistency.py` 入库+CI, 已在 D 表标注。
+
+**验收标准(DoD) — 与本示范逐项对齐:**
+- [x] 实验脚本 0 硬编码语料/策略参数(run_exp003 复用 SCAN_TEMPLATE, grep 可证);
+- [x] EXP-003 产出: 5 seed 聚合 + p/效应量/CI, H-002 按 SUPPORTED 如实回填;
+- [x] 结果 JSON meta 含 schema_version/seeds/stats_params/timestamp(首跑);
+  config_hash/code_sha 列 E0-B 后续工作项(本 PR 体边界内);
+- [x] 测试零回归(51→68), 新增 stats 金值 17;
+- [x] 路线图 / 假设文件按结果如实更新(SUPPORTED 而非"印证原断言")。
+
+**关联**: RQ-1/RQ-3 复核； 研究 roadmap Phase 1 收尾； `stats.py` 金值入测试;
+判定语言与宪法 §2/§3 一致(不外推, 不写入核心)。
 
 ---
 

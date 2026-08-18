@@ -46,6 +46,11 @@
 | `area: dataset` | 合成语料生成与评测数据 |
 | `area: research` | 研究工件: hypotheses/experiments/benchmarks/log |
 | `area: docs` | 文档与仓库门面 |
+| `area: nets` | 动态信息网(search_net)模块 |
+| `area: stats` | 统计推断模块(perm/boot/效应量) |
+| `area: benchmark` | 评测管线: scripts 实验运行器/configs/结果 JSON |
+| `area: memory` | 个人记忆分层/控制面(E3, 未实施) |
+| `area: agents` | 多 Agent/能力接口/编排(E4, 未实施) |
 
 ## Rating (PR 质量, 低 → 高)
 

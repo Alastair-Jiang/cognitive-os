@@ -48,6 +48,11 @@ project's primary language (中文/Chinese).
 | `area: dataset` | Synthetic corpus generation & evaluation data |
 | `area: research` | Research artifacts: hypotheses/experiments/benchmarks/log |
 | `area: docs` | Documentation & repo surface |
+| `area: nets` | Dynamic information net (search_net) module |
+| `area: stats` | Statistical inference module (perm/boot/effect size) |
+| `area: benchmark` | Evaluation pipeline: experiment runners/configs/result JSONs |
+| `area: memory` | Personal memory tiers/control plane (E3, not implemented) |
+| `area: agents` | Multi-agent/capability interface/orchestration (E4, not implemented) |
 
 ## Rating (PR quality, low → high)
 
