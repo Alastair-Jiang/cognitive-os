@@ -43,8 +43,8 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/Dongxu-Jiang/cognitive-os"
-Issues = "https://github.com/Dongxu-Jiang/cognitive-os/issues"
+Repository = "https://github.com/Alastair-Jiang/cognitive-os"
+Issues = "https://github.com/Alastair-Jiang/cognitive-os/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

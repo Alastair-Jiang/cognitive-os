@@ -1,0 +1,53 @@
+name: 缺陷报告
+description: 报告一个 bug, 帮助我们改进
+title: "[Bug]: "
+labels: ["🐛 缺陷"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢抽出时间填写这份缺陷报告!
+  - type: textarea
+    id: description
+    attributes:
+      label: 描述缺陷
+      description: 清晰简洁地描述这个 bug 是什么。
+      placeholder: 发生了什么
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 如何复现这个问题?
+      placeholder: |
+        1. 运行 '...'
+        2. 调用 '...'
+        3. 看到错误
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 你期望发生什么?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 请填写以下信息。
+      value: |
+        - OS: [例如 Ubuntu 24.04, macOS 14, Windows 11]
+        - 版本 / commit: [例如 v0.1.0 / abc1234]
+        - 运行时: [例如 Python 3.12]
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      options:
+        - label: 我已搜索过现有 issue, 这不是重复提交
+          required: true
