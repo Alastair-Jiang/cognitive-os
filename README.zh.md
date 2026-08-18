@@ -150,6 +150,7 @@ python -m unittest discover -s tests -v
 - [Research Questions(研究问题)](docs/research_questions.md)
 - [System Constitution(系统宪法/行为约束)](docs/system_constitution.md)
 - [Roadmap(路线图)](docs/roadmap.md)
+- [Engineering Plan(工程化路线图)](docs/engineering_plan.md)
 
 ## 参与贡献
 

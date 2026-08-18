@@ -7,6 +7,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ## [Unreleased]
 
+### Added
+
+- Engineering roadmap `docs/engineering_plan.md`: concept→status→gap matrix,
+  six-phase plan E0–E5 (direction / work items / acceptance criteria), and the
+  work-item→PR mapping standard; audited 7 cross-cutting engineering debts
+  (incl. a new finding: BM-001 §2 parameter drift vs `configs/benchmark.small.json`)
+- Research log LOG-2026-08-19-engineering-plan (planning rationale and next steps)
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added
