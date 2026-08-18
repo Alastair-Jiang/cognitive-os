@@ -1,11 +1,13 @@
-# 行为准则 (Code of Conduct)
+< English | [简体中文](./CODE_OF_CONDUCT.zh.md) >
 
-我们作为贡献者与维护者, 承诺让本项目与社区对每个人都是无骚扰的体验。
+# Code of Conduct
 
-- 互相尊重、建设性交流;
-- 聚焦技术本身;
-- 假定善意。
+As contributors and maintainers, we pledge to make this project and community a harassment-free experience for everyone.
 
-违规行为可向仓库所有者报告。
+- Respect each other and communicate constructively;
+- Stay focused on the technical content;
+- Assume good faith.
 
-*改编自 [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)。*
+Violations can be reported to the repository owner.
+
+*Adapted from [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).*

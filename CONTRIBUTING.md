@@ -1,43 +1,42 @@
-# 贡献指南 (Contributing)
+< English | [简体中文](./CONTRIBUTING.zh.md) >
 
-感谢你对本项目的兴趣! 请花一点时间阅读本指南, 让贡献更顺畅。
+# Contributing
 
-## 研究仓库的特殊约定
+Thank you for your interest in this project! Please take a moment to read this guide to make contributions smoother.
 
-本项目是**开放式研究平台**, 遵循 `docs/system_constitution.md` 的诚实规则:
+## Special conventions of the research repository
 
-1. **任何"更优/更高效"的说法必须指向可复现的实验**, 未标注 `[V]`
-   的论断一律是假设;
-2. **实验结果只对实验条件有效, 不得外推**(合成数据、config、seed);
-3. **假设被否定时如实记录 REFUTED**, 不强行保留;
-4. 新想法先写进 `research/hypotheses/`(状态 UNVALIDATED), 设计实验
-   预注册到 `research/experiments/`, 运行脚本后把原始数据落到
-   `research/results/`, 最后用实验更新假设状态。
+This project is an **open research platform** that follows the honesty rules in `docs/system_constitution.md`:
 
-## 快速开始
+1. **Any claim of "better / more efficient" must point to a reproducible experiment**; claims without a `[V]` mark are hypotheses;
+2. **Experimental results are only valid under the experimental conditions and must not be extrapolated** (synthetic data, config, seed);
+3. **When a hypothesis is refuted, record it honestly as REFUTED**, and do not forcibly keep it;
+4. New ideas should first be written into `research/hypotheses/` (status UNVALIDATED), experiments designed and pre-registered in `research/experiments/`, raw data dropped into `research/results/` after running scripts, and finally the hypothesis status updated with the experiment results.
 
-1. Fork 本仓库;
-2. 创建功能分支: `git checkout -b feat/your-feature`;
-3. 做出修改并用清晰的 commit message 提交;
-4. push 并对 `main` 打开 pull request。
+## Quick start
 
-## Pull request 检查清单
+1. Fork this repository;
+2. Create a feature branch: `git checkout -b feat/your-feature`;
+3. Make your changes and commit with a clear commit message;
+4. Push and open a pull request against `main`.
 
-- [ ] PR 描述说明了改了什么、为什么;
-- [ ] 本地测试通过 (`python -m pytest tests/ -q`);
-- [ ] 新行为有测试覆盖;
-- [ ] 面向用户的行为变化已更新文档;
-- [ ] 涉及研究结论: 假设/实验/日志已同步更新(`research/` 目录)。
+## Pull request checklist
 
-## Issue 约定
+- [ ] PR description explains what was changed and why;
+- [ ] Local tests pass (`python -m pytest tests/ -q`);
+- [ ] New behavior is covered by tests;
+- [ ] User-facing behavior changes are reflected in the docs;
+- [ ] If research conclusions are involved: hypotheses / experiments / logs updated accordingly (in the `research/` directory).
 
-- 使用 issue 表单: 缺陷报告 / 功能请求 / 提问;
-- 用匹配的 label 标记 issue: `🐛 缺陷` / `✨ 功能` / `🔴 P0`-`🟢 P3`;
-- PR 质量用 `rating:` 证据等级 label 标记(见 LABELS.md)。
+## Issue conventions
 
-## Commit 风格
+- Use the issue forms: bug report / feature request / question;
+- Mark issues with matching labels: `🐛 缺陷` / `✨ 功能` / `🔴 P0`-`🟢 P3`;
+- Mark PR quality with `rating:` evidence-level labels (see LABELS.md).
 
-使用**带 scope 的 conventional commits**: `type(scope): description`
+## Commit style
+
+Use **scoped conventional commits**: `type(scope): description`
 
 ```
 feat(retrieval): 添加 X 策略
@@ -46,12 +45,11 @@ docs(hypotheses): 更新 H-001 状态
 research(benchmark): EXP-002 扫描结果
 ```
 
-常用 type: `feat` `fix` `docs` `chore` `refactor` `test` `ci` `perf` `research`。
-Scope = 你改动的模块(anchors / graph / nets / retrieval / validation /
-dataset / research / docs …)。
+Common types: `feat` `fix` `docs` `chore` `refactor` `test` `ci` `perf` `research`.
+Scope = the module you changed (anchors / graph / nets / retrieval / validation / dataset / research / docs …).
 
 ## Code style
 
-- 纯标准库(Python >= 3.10), 保持零运行时依赖;
-- 行宽 100, 遵守 `pyproject.toml` 中的 ruff 配置;
-- 函数/类要有一行中文 docstring(与全仓库文档语言一致)。
+- Pure standard library (Python >= 3.10), keep zero runtime dependencies;
+- Line width 100, follow the ruff config in `pyproject.toml`;
+- Functions/classes should have a one-line Chinese docstring (consistent with the repository-wide documentation language).
