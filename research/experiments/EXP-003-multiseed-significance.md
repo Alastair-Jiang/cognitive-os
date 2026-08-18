@@ -100,8 +100,7 @@ rn g_ se ed=888; 全部固定于 `sc ri pt s/ru n_e xp003 _si gn if ic an ce.py`
 
 ### Next Step(衔接工程化 E0 后续)
 
-- **定位**: 该结论接 H-002 措辞 → 附>次登录(见 research/hypotheses/H-002);
-- **E0 收口**: 覆盖单 seed 全量著改新实验时默认先做此操作, 见
+- **定位**: 该结论仅格点级成立, 不改变 H-002 整体判定的措辞(见 `research/hypotheses/H-002`);
+- **E0 收口**: 覆盖单 seed 全网格的新实验默认先做多种子+显著性检验, 见
   `docs/engineering_plan.md` E0 验收;
-- **记号**: PR #3 中将 EXP-003 标记为 `
-rating: 📊 实验` 级别的证据工件。
+- **记号**: PR #4 将 EXP-003 标记为 `rating: 📊 实验` 级别的证据工件。
