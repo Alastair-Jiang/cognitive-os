@@ -1,0 +1,109 @@
+{
+  "corpus": {
+    "n_events": 12,
+    "fragments_per_event": 8,
+    "embed_dim": 24,
+    "n_topics": 5,
+    "topics_per_event": 4,
+    "within_event_noise": 0.5,
+    "time_horizon": 100.0,
+    "event_span": 20.0,
+    "source_count": 4,
+    "source_min_weight": 0.6,
+    "primary_source_prob": 0.6,
+    "index_top_m": 6,
+    "seed": 20260819
+  },
+  "strategies": {
+    "A": {
+      "source_bonus": 0.05
+    },
+    "B": {
+      "anchor": {
+        "n_anchors": 3,
+        "pool_hops": 1,
+        "semantic_w": 1.0,
+        "source_w": 0.5,
+        "temporal_w": 0.3,
+        "density_w": 0.4,
+        "temporal_scale": 40.0
+      },
+      "net": {
+        "name": "B-expansion",
+        "radius": 0.72,
+        "temporal_window": 40.0,
+        "source_min_weight": 0.0,
+        "max_candidates_per_anchor": 5,
+        "max_hops": 1,
+        "semantic_w": 1.0,
+        "source_w": 0.3,
+        "temporal_w": 0.2,
+        "structural_w": 0.2
+      }
+    },
+    "C": {
+      "validator": {
+        "confidence_threshold": 0.9,
+        "stabilization_eps": 0.001,
+        "stabilize_rounds": 2,
+        "max_rounds": 6,
+        "consensus_w": 0.4
+      },
+      "nets": [
+        {
+          "name": "narrow-semantic",
+          "radius": 0.88,
+          "temporal_window": null,
+          "source_min_weight": 0.0,
+          "max_candidates_per_anchor": 4,
+          "max_hops": 1,
+          "semantic_w": 1.0,
+          "source_w": 0.0,
+          "temporal_w": 0.0,
+          "structural_w": 0.0
+        },
+        {
+          "name": "wide-source",
+          "radius": 0.7,
+          "temporal_window": 40.0,
+          "source_min_weight": 0.0,
+          "max_candidates_per_anchor": 6,
+          "max_hops": 2,
+          "semantic_w": 0.5,
+          "source_w": 0.4,
+          "temporal_w": 0.1,
+          "structural_w": 0.2
+        },
+        {
+          "name": "temporal",
+          "radius": 0.78,
+          "temporal_window": 25.0,
+          "source_min_weight": 0.0,
+          "max_candidates_per_anchor": 5,
+          "max_hops": 2,
+          "semantic_w": 0.6,
+          "source_w": 0.1,
+          "temporal_w": 0.3,
+          "structural_w": 0.2
+        },
+        {
+          "name": "structural",
+          "radius": 0.72,
+          "temporal_window": 50.0,
+          "source_min_weight": 0.0,
+          "max_candidates_per_anchor": 5,
+          "max_hops": 3,
+          "semantic_w": 0.4,
+          "source_w": 0.2,
+          "temporal_w": 0.1,
+          "structural_w": 0.5
+        }
+      ]
+    }
+  },
+  "graph": {
+    "semantic_threshold": 0.7,
+    "temporal_window": 40.0,
+    "require_source_diversity": true
+  }
+}
