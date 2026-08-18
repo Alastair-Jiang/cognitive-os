@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- 工程化路线图 `docs/engineering_plan.md`: 概念→现状→差距总表、
+  E0-E5 六阶段计划(方向/工作内容/验收标准)、工作项→PR 映射标准;
+  盘点 7 项横切工程债(含 BM-001 §2 与 benchmark.small.json 参数漂移的新发现)
+- 研究日志 LOG-2026-08-19-engineering-plan(规划依据与 Next Step)
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

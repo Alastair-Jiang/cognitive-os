@@ -170,6 +170,7 @@ the hypothesis and the experimental result.
 - [Research Questions](docs/research_questions.md)
 - [System Constitution](docs/system_constitution.md)
 - [Roadmap](docs/roadmap.md)
+- [Engineering Plan](docs/engineering_plan.md)
 
 ## Contributing
 
