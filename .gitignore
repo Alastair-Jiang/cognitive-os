@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local scratch
+outputs/
+scratch/
+*.log
+
+# 注意: research/results/ 下的实验结果 JSON 属于研究记录,
+# 应当被版本控制, 不要在此忽略。

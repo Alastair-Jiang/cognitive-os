@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cognitive-os"
+version = "0.1.0"
+description = "Personal Cognitive OS — an experimental research platform for dynamic information retrieval, progressive validation, and personalized cognitive infrastructure"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Alastair(Dongxu-Jiang)", email = "2684331892@qq.com"},
+]
+keywords = [
+    "information-retrieval",
+    "dynamic-search",
+    "progressive-validation",
+    "anchors",
+    "knowledge-graph",
+    "personal-cognitive-os",
+    "research-platform",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Indexing",
+]
+
+# 第一版原型刻意保持零运行时依赖(纯标准库), 保证任何环境可复现运行。
+# numpy 等仅作为可选 dev 依赖, 未来规模化实验需要时再引入。
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "numpy>=1.24",
+    "pytest>=7.0",
+]
+
+[project.urls]
+Repository = "https://github.com/Dongxu-Jiang/cognitive-os"
+Issues = "https://github.com/Dongxu-Jiang/cognitive-os/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+# 无 pytest 时可用标准库运行: python -m unittest discover -s tests -v
+pythonpath = ["src"]
