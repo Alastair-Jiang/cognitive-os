@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "experiment": "EXP-002-consensus",
+    "timestamp": "20260819-032804"
+  },
+  "reports": [
+    {
+      "config": "configs/benchmark.small.json",
+      "n_queries": 12,
+      "truncate": null,
+      "max": {
+        "f1_at_k": 0.4902,
+        "recall_at_k": 0.5952,
+        "precision_at_k": 0.4167,
+        "mrr": 0.625,
+        "similarity_calls": 1326.25,
+        "iterations": 2.25,
+        "latency_ms": 7.5207,
+        "early_stopped_frac": 0.75
+      },
+      "mean": {
+        "f1_at_k": 0.4412,
+        "recall_at_k": 0.5357,
+        "precision_at_k": 0.375,
+        "mrr": 0.5807,
+        "similarity_calls": 2388.3333,
+        "iterations": 3.0833,
+        "latency_ms": 13.5499,
+        "early_stopped_frac": 0.5833
+      },
+      "delta_mean_minus_max": {
+        "f1_at_k": -0.049,
+        "recall_at_k": -0.0595,
+        "precision_at_k": -0.0417,
+        "mrr": -0.0443,
+        "similarity_calls": 1062.0833,
+        "iterations": 0.8333,
+        "latency_ms": 6.0292,
+        "early_stopped_frac": -0.1667
+      }
+    },
+    {
+      "config": "configs/benchmark.medium.json",
+      "n_queries": 30,
+      "truncate": null,
+      "max": {
+        "f1_at_k": 0.4982,
+        "recall_at_k": 0.5259,
+        "precision_at_k": 0.4733,
+        "mrr": 0.6956,
+        "similarity_calls": 9228.9667,
+        "iterations": 3.5333,
+        "latency_ms": 57.0407,
+        "early_stopped_frac": 0.7333
+      },
+      "mean": {
+        "f1_at_k": 0.5018,
+        "recall_at_k": 0.5296,
+        "precision_at_k": 0.4767,
+        "mrr": 0.7734,
+        "similarity_calls": 15944.5667,
+        "iterations": 5.4333,
+        "latency_ms": 98.4221,
+        "early_stopped_frac": 0.3667
+      },
+      "delta_mean_minus_max": {
+        "f1_at_k": 0.0035,
+        "recall_at_k": 0.0037,
+        "precision_at_k": 0.0033,
+        "mrr": 0.0778,
+        "similarity_calls": 6715.6,
+        "iterations": 1.9,
+        "latency_ms": 41.3814,
+        "early_stopped_frac": -0.3667
+      }
+    }
+  ]
+}

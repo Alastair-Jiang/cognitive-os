@@ -81,6 +81,44 @@ def cluster_purity(component_pids: Sequence[str], pid_to_event: Dict[str, str]) 
     return max(counts.values()) / len(component_pids)
 
 
+def mean_component_purity(
+    components: Sequence[Sequence[str]], pid_to_event: Dict[str, str]
+) -> float:
+    """聚类级纯度(H-003 重设计): 全部连通成分纯度的按大小加权平均。
+
+    只测种子成分会遗漏“其他成分是否被正确拆分”; 加权平均给出
+    整张图的结构质量。孤立点成分(大小 1)纯度为 1.0。
+    """
+    total = sum(len(c) for c in components)
+    if total == 0:
+        return 0.0
+    return sum(len(c) * cluster_purity(c, pid_to_event) for c in components) / total
+
+
+def chain_purity(component_pids: Sequence[str], pid_to_chain: Dict[str, int]) -> float:
+    """成分的链纯度: 最大因果链占比(测“结构信号把链聚起来”)。
+
+    与 cluster_purity 的唯一区别是 ground-truth 标签为链而非事件。
+    """
+    if not component_pids:
+        return 0.0
+    counts: Dict[int, int] = {}
+    for pid in component_pids:
+        ch = pid_to_chain.get(pid, -1)
+        counts[ch] = counts.get(ch, 0) + 1
+    return max(counts.values()) / len(component_pids)
+
+
+def mean_chain_purity(
+    components: Sequence[Sequence[str]], pid_to_chain: Dict[str, int]
+) -> float:
+    """聚类级链纯度: 全部成分的链纯度按大小加权平均。"""
+    total = sum(len(c) for c in components)
+    if total == 0:
+        return 0.0
+    return sum(len(c) * chain_purity(c, pid_to_chain) for c in components) / total
+
+
 def reconstruction_metrics(
     component_pids: Sequence[str], true_event_pids: Set[str]
 ) -> Dict[str, float]:

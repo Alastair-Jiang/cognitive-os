@@ -23,17 +23,25 @@
 |---|---|
 | Phase 0 仓库初始化 | ✅ 完成(本仓库) |
 | Phase 1 Dynamic Retrieval Prototype | ✅ 首轮实验完成 |
-| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 40/40 测试通过 |
-| Benchmark EXP-001 | ✅ 完成(主模式 + 截断模式) |
-| H-001 Anchor 效率 | 🔶 PARTIAL(效率✅, 召回损失 22.6pp 超线) |
-| H-002 多网渐进验证 | ❌ REFUTED(按原表述; 早停机制有效) |
-| H-003 结构一致性 | 🔶 NOT SUPPORTED(测量待重设计) |
+| Phase 1b 假设修订实验(EXP-002) | ✅ 完成(扫描 10 档 + 共识诊断 + H-003 重设计) |
+| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 51/51 测试通过 |
+| Benchmark EXP-001 | ✅ 完成(主模式 + 截断模式 + medium 档) |
+| Benchmark EXP-002 | ✅ 完成(歧义档位扫描 / 共识聚合 / H-003 重设计) |
+| H-001 Anchor 效率 | ❌ REFUTED(质量组件; 效率组件 10 档全成立, 召回损失不随歧义收敛) |
+| H-002 多网渐进验证 | ❌ REFUTED(按原表述; 早停有效, mean 聚合无实质改善) |
+| H-003 结构一致性 | 🔶 REFUTED(纯度口径) / PARTIAL(链恢复口径, 连通率 0.940) |
 
 **EXP-001 核心结论(诚实记录, 详见 [research/experiments/EXP-001](research/experiments/EXP-001-dynamic-nets-vs-baseline.md))**:
 在高歧义合成语料上, **扁平语义基线 A 在 F1/NDCG/Recall 上全部领先**。
 Dynamic Net 尚未被证明更有效——但 Anchor 带来 4.3× 计算节省与 MRR 反超
 (0.933 vs 0.794), 渐进验证早停有效(75% 查询)。**在证据充分前,
 Dynamic Net / Anchor 机制保持为实验模块, 不进核心架构。**
+
+**EXP-002 核心结论(详见 [EXP-002](research/experiments/EXP-002-ambiguity-scan-and-diagnostics.md))**:
+歧义档位扫描(10 档)证实 H-001 效率组件稳健(节省 4-5×)而质量组件全败
+(召回损失 26.2-56.0pp, 与歧义度无单调关系); C 的共识聚合 max/mean 无实质
+差异; H-003 重设计揭示结构信号对**链恢复**有效(连通率 0.940 vs 0.29-0.40)
+但对**事件聚类纯度**有害(引用硬桥接)——指标的选取决定结论。
 
 **诚实原则**: 本文档及 docs/ 中的所有论断, 未标注 [V] 的一律是假设。
 任何"更优/更高效"的说法都必须指向 research/experiments/ 中的可复现实验。

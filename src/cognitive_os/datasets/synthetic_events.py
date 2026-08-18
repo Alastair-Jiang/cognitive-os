@@ -37,6 +37,8 @@ class SyntheticCorpusConfig:
     source_min_weight: float = 0.6
     primary_source_prob: float = 0.6  # 碎片使用事件主来源的概率
     index_top_m: int = 6  # 预计算邻居索引大小
+    causal_chains: int = 0  # >0: 把事件组织成 K 条因果链, 链内相邻事件互相提及(H-003 强结构信号)
+    mention_prob: float = 0.4  # 碎片提及后继事件碎片的概率(仅 causal_chains>0 时生效)
     seed: int = 20260819
 
 
@@ -71,6 +73,26 @@ class SyntheticEventCorpus:
         ]
         rng.shuffle(source_weights)  # 不按索引顺序给权重, 避免系统性偏差
 
+        # 因果链划分(仅当 causal_chains > 0): 事件按生成顺序均匀分入 K 条链
+        chain_of_event: Dict[str, int] = {}
+        successor_fragments: Dict[str, List[str]] = {}
+        if cfg.causal_chains > 0:
+            k = min(cfg.causal_chains, cfg.n_events)
+            per = max(1, cfg.n_events // k)
+            chains = [
+                [f"evt{e:02d}" for e in range(c * per, min((c + 1) * per, cfg.n_events))]
+                for c in range(k)
+            ]
+            for c, evs in enumerate(chains):
+                for ev in evs:
+                    chain_of_event[ev] = c
+            for chain in chains:
+                for idx, ev in enumerate(chain):
+                    if idx + 1 < len(chain):
+                        successor_fragments[ev] = [
+                            f"{chain[idx + 1]}-f{f:02d}" for f in range(cfg.fragments_per_event)
+                        ]
+
         for e in range(cfg.n_events):
             event_id = f"evt{e:02d}"
             self.events[event_id] = []
@@ -97,6 +119,13 @@ class SyntheticEventCorpus:
                 else:
                     src = rng.randrange(cfg.source_count)
                 ts = t_start + rng.uniform(0.0, cfg.event_span)
+                meta: Dict[str, Any] = {"fragment_index": f, "event_index": e}
+                if cfg.causal_chains > 0:
+                    meta["chain_id"] = chain_of_event[event_id]
+                    # 提及后继事件碎片(因果/传播引用): 引用目标仅限链内下一事件
+                    succ_pool = successor_fragments.get(event_id, [])
+                    if succ_pool and rng.random() < cfg.mention_prob:
+                        meta["mentions"] = [rng.choice(succ_pool)]
                 point = InformationPoint(
                     pid=pid,
                     event_id=event_id,
@@ -104,7 +133,7 @@ class SyntheticEventCorpus:
                     timestamp=ts,
                     source=f"s{src}",
                     source_weight=source_weights[src],
-                    meta={"fragment_index": f, "event_index": e},
+                    meta=meta,
                 )
                 self.points.append(point)
                 self._by_id[pid] = point
@@ -148,6 +177,14 @@ class SyntheticEventCorpus:
 
     def event_fragments(self, event_id: str) -> List[str]:
         return list(self.events.get(event_id, []))
+
+    def mentions(self, pid: str) -> List[str]:
+        """该碎片显式提及的碎片 pid 列表(因果/传播引用; 无则空列表)。"""
+        return list(self._by_id[pid].meta.get("mentions", []))
+
+    def chain_of(self, pid: str) -> int:
+        """碎片所属因果链 id(无因果结构时返回 -1)。"""
+        return int(self._by_id[pid].meta.get("chain_id", -1))
 
     def observable_pids(self, t: float) -> List[str]:
         """时间 t 之前可观测的所有碎片(模拟信息未完整)。"""

@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "experiment": "EXP-002-h003",
+    "timestamp": "20260819-033051",
+    "corpus": {
+      "n_events": 12,
+      "fragments_per_event": 8,
+      "embed_dim": 24,
+      "n_topics": 5,
+      "topics_per_event": 4,
+      "within_event_noise": 0.3,
+      "time_horizon": 100.0,
+      "event_span": 20.0,
+      "source_count": 4,
+      "source_min_weight": 0.6,
+      "primary_source_prob": 0.6,
+      "index_top_m": 6,
+      "causal_chains": 3,
+      "mention_prob": 0.4,
+      "seed": 20260819
+    },
+    "judgement_threshold": 0.85,
+    "full_layer_thresholds": [
+      0.68,
+      0.78,
+      0.85
+    ]
+  },
+  "corpus_stats": {
+    "within_mean": 0.9197139954844482,
+    "cross_mean": 0.5432620226764923,
+    "within_min": 0.8756947513763682,
+    "cross_max": 0.9315000847634706
+  },
+  "full_layer": {
+    "0.68": {
+      "semantic-only": {
+        "mean_event_purity": 0.08333333333333333,
+        "mean_chain_purity": 0.3333333333333333,
+        "chain_connectivity": 1.0,
+        "n_components": 1,
+        "n_edges": 1603
+      },
+      "multi-signal": {
+        "mean_event_purity": 0.08333333333333333,
+        "mean_chain_purity": 0.3333333333333333,
+        "chain_connectivity": 1.0,
+        "n_components": 1,
+        "n_edges": 883
+      },
+      "+causal": {
+        "mean_event_purity": 0.08333333333333333,
+        "mean_chain_purity": 0.3333333333333333,
+        "chain_connectivity": 1.0,
+        "n_components": 1,
+        "n_edges": 908
+      }
+    },
+    "0.78": {
+      "semantic-only": {
+        "mean_event_purity": 0.16666666666666666,
+        "mean_chain_purity": 0.5,
+        "chain_connectivity": 0.5698924731182795,
+        "n_components": 2,
+        "n_edges": 949
+      },
+      "multi-signal": {
+        "mean_event_purity": 0.16666666666666666,
+        "mean_chain_purity": 0.5,
+        "chain_connectivity": 0.5698924731182795,
+        "n_components": 2,
+        "n_edges": 523
+      },
+      "+causal": {
+        "mean_event_purity": 0.08333333333333333,
+        "mean_chain_purity": 0.3333333333333333,
+        "chain_connectivity": 1.0,
+        "n_components": 1,
+        "n_edges": 551
+      }
+    },
+    "0.85": {
+      "semantic-only": {
+        "mean_event_purity": 0.3333333333333333,
+        "mean_chain_purity": 0.5833333333333334,
+        "chain_connectivity": 0.39784946236559143,
+        "n_components": 4,
+        "n_edges": 577
+      },
+      "multi-signal": {
+        "mean_event_purity": 0.4791666666666667,
+        "mean_chain_purity": 0.6458333333333334,
+        "chain_connectivity": 0.29368279569892475,
+        "n_components": 11,
+        "n_edges": 303
+      },
+      "+causal": {
+        "mean_event_purity": 0.11458333333333333,
+        "mean_chain_purity": 0.3645833333333333,
+        "chain_connectivity": 0.939516129032258,
+        "n_components": 4,
+        "n_edges": 334
+      }
+    }
+  },
+  "retrieval_layer": {
+    "A-traditional": {
+      "f1_at_k": 0.7549,
+      "modes": {
+        "semantic-only": {
+          "event_purity": 0.6742,
+          "chain_purity": 0.7424
+        },
+        "multi-signal": {
+          "event_purity": 0.7879,
+          "chain_purity": 0.8485
+        },
+        "+causal": {
+          "event_purity": 0.7803,
+          "chain_purity": 0.8485
+        }
+      }
+    },
+    "B-anchor": {
+      "f1_at_k": 0.4983,
+      "modes": {
+        "semantic-only": {
+          "event_purity": 0.7886,
+          "chain_purity": 0.7886
+        },
+        "multi-signal": {
+          "event_purity": 0.888,
+          "chain_purity": 0.888
+        },
+        "+causal": {
+          "event_purity": 0.888,
+          "chain_purity": 0.888
+        }
+      }
+    },
+    "C-multinet": {
+      "f1_at_k": 0.8922,
+      "modes": {
+        "semantic-only": {
+          "event_purity": 0.8485,
+          "chain_purity": 0.8485
+        },
+        "multi-signal": {
+          "event_purity": 0.9242,
+          "chain_purity": 0.9242
+        },
+        "+causal": {
+          "event_purity": 0.9242,
+          "chain_purity": 0.9242
+        }
+      }
+    }
+  },
+  "judgement": {
+    "H-003": "FAIL",
+    "delta_chain_purity": -0.2188,
+    "delta_event_purity": -0.2188
+  }
+}

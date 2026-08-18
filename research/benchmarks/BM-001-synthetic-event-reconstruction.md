@@ -77,3 +77,31 @@ event_span=20, source_count=4, index_top_m=6, seed=20260819`
 - 预测性指标(predictive recall)使用全索引重跑, 衡量的是算法在
   完整空间结构下的排序行为, 是"提前识别"的受控代理指标, 非真实时间线;
 - 本 Benchmark 只测量检索与结构重建, 不测量推理/引用质量。
+
+## 7. EXP-002 扩展(2026-08-19 追加, 预注册)
+
+### 7.1 歧义档位扫描(检验 H-001 召回损失曲线)
+
+- 语料: 12 事件 × 8 碎片, embed_dim=24, n_topics=5, seed=20260819;
+- 两轴: topics_per_event ∈ {2, 4, 5} × within_event_noise ∈ {0.15, 0.3, 0.5};
+- 策略配置**固定**(medium 档模板), 不针对档位调参;
+- 每档 12 查询(每事件 1 种子, query_seed=1), k=10;
+- 判定: H-001 效率 = B sim_calls < 0.5 × A; 质量 = Recall 损失 ≤ 10pp。
+
+### 7.2 共识聚合诊断(检验 C 策略的证据合并方式)
+
+- ValidatorConfig.aggregation ∈ {max, mean}; 两者在相同查询/预算下对比
+  F1 / MRR / sim_calls / 早停率; 默认 max(最强网主导), mean = 平均发言。
+
+### 7.3 H-003 测量重设计(结构信号 vs 语义相似度)
+
+- 语料扩展: `causal_chains`(事件组织成 K 条链, 链内相邻事件碎片互相
+  提及, meta.mentions)——与语义独立的真实引用结构(默认 0 关闭);
+- 建图扩展: `EvidenceGraph.build(causal_edges=True)` 将引用作为硬边
+  (权重 1.0, 不依赖语义阈值);
+- 指标: mean_component_purity(聚类级事件纯度) / mean_chain_purity /
+  chain_connectivity(链连通率, 辅助);
+- 判定(主阈值 semantic_threshold=0.85, 全量层): +causal vs 纯语义,
+  Δchain_purity ≥ +0.10 且 Δevent_purity ≥ −0.10 → PASS;
+- 由于纯度口径可能不适用于非排他的链结构, 链连通率作为辅助证据,
+  结论表述必须区分"事件聚类"与"链恢复"两个目标。
