@@ -40,11 +40,12 @@ dependencies = []
 dev = [
     "numpy>=1.24",
     "pytest>=7.0",
+    "ruff>=0.5",
 ]
 
 [project.urls]
-Repository = "https://github.com/Dongxu-Jiang/cognitive-os"
-Issues = "https://github.com/Dongxu-Jiang/cognitive-os/issues"
+Repository = "https://github.com/Alastair-Jiang/cognitive-os"
+Issues = "https://github.com/Alastair-Jiang/cognitive-os/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

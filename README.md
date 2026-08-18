@@ -6,6 +6,12 @@
 
 **[English](README.md) · [中文](#)**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![GitHub issues](https://img.shields.io/github/issues/Alastair-Jiang/cognitive-os)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/Alastair-Jiang/cognitive-os)
+![GitHub stars](https://img.shields.io/github/stars/Alastair-Jiang/cognitive-os)
+
 </div>
 
 > **这不是一个 AGI 项目声明。**

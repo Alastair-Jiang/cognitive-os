@@ -1,0 +1,51 @@
+name: 功能请求
+description: 为这个项目提出一个想法
+title: "[Feature]: "
+labels: ["✨ 功能"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢提出功能建议! 本研究仓库遵循「假设→实验→结论」的诚实研究循环,
+        请尽量把你的想法写成可验证的假设。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题陈述
+      description: 这个功能解决什么问题? 痛点是什么?
+      placeholder: 当前…很不方便
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: 假设 / 预期效果
+      description: 你预期(理想情况下)会发生什么? 参考 hypotheses/ 的格式。
+    validations:
+      required: false
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提议的解决方案
+      description: 描述你希望看到的行为。
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 已考虑的替代方案
+      description: 你尝试过的变通方法或替代做法。
+    validations:
+      required: false
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 规模
+      description: 这个改动有多大?
+      options:
+        - 小 (类 bugfix, < 100 行)
+        - 中 (新模块, ~100-500 行)
+        - 大 (架构级改动)
+      default: 0
+    validations:
+      required: true

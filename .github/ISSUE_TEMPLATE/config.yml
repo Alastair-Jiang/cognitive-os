@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/Alastair-Jiang/cognitive-os/discussions
+    about: 在这里提问、分享想法
+  - name: Security
+    url: https://github.com/Alastair-Jiang/cognitive-os/security/policy
+    about: 请在此报告安全漏洞
