@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # 向量表示: 一维浮点元组(纯标准库, 零依赖)
-Embedding = Tuple[float, ...]
+Embedding = tuple[float, ...]
 
 
 @dataclass
@@ -25,7 +25,7 @@ class InformationPoint:
     source: str  # 来源 id
     source_weight: float  # 来源可靠性, (0, 1]
     text: str = ""  # 可选文本片段
-    meta: Dict[str, Any] = field(default_factory=dict)
+    meta: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -39,9 +39,9 @@ class Query:
     """
 
     qid: str
-    seed_pids: List[str]
+    seed_pids: list[str]
     event_id: str = ""
-    allowed_pids: Optional[List[str]] = None
+    allowed_pids: list[str] | None = None
 
     def is_allowed(self, pid: str) -> bool:
         if self.allowed_pids is None:
@@ -68,7 +68,7 @@ class Evidence:
     votes: int = 0
     rounds_seen: int = 0
 
-    def as_dict(self) -> Dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         return {
             "pid": self.pid,
             "score": round(self.score, 6),
@@ -88,17 +88,17 @@ class RetrievalResult:
 
     qid: str
     strategy: str
-    ranked_pids: List[str] = field(default_factory=list)
-    scores: List[float] = field(default_factory=list)
-    evidence: Dict[str, Evidence] = field(default_factory=dict)
+    ranked_pids: list[str] = field(default_factory=list)
+    scores: list[float] = field(default_factory=list)
+    evidence: dict[str, Evidence] = field(default_factory=dict)
     iterations: int = 0
     similarity_calls: int = 0  # 计算/API 调用成本代理
     index_lookups: int = 0
     latency_ms: float = 0.0
     early_stopped: bool = False
-    notes: Dict[str, Any] = field(default_factory=dict)
+    notes: dict[str, Any] = field(default_factory=dict)
 
-    def as_dict(self) -> Dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         return {
             "qid": self.qid,
             "strategy": self.strategy,

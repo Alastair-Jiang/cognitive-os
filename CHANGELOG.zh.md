@@ -11,8 +11,21 @@
 
 - 工程化路线图 `docs/engineering_plan.md`: 概念→现状→差距总表、
   E0-E5 六阶段计划(方向/工作内容/验收标准)、工作项→PR 映射标准;
-  盘点 7 项横切工程债(含 BM-001 §2 与 benchmark.small.json 参数漂移的新发现)
-- 研究日志 LOG-2026-08-19-engineering-plan(规划依据与 Next Step)
+  盘点 7 项横切工程债(含 BM-001 §2 与 benchmark.small.json 参数漂移的新发现);
+  **E0 段按要求重写为完整示范**(预期操作/实跑结果/数学推理/已落盘代码清单),
+  其余 E1-E5 保持大纲式, 由本段内容由后段按同一模板执行时对照
+- 统计推断模块 `src/cognitive_os/stats.py`: 配对差/Cohen d_z/sign-flip 随机化检验/
+  boot 均值 CI(零运行时依赖, 仅标准库)
+- EXP-003 多种子显著性复核运行器 `scripts/run_exp003_significance.py` +
+  预注册实验文档(判定标准先写后跑) + 原始 JSON 数据; 判定 **SUPPORTED**
+  (5 seed × 12 查询, mean_diff=+0.081, p=0.0001, 95% CI=[+0.044,+0.115],
+  d_z=+0.58), 边界明确(**单格点成立 + 不写入核心**, 宪法第 2 条);
+  H-002 / roadmap / 研究日志同步如实回填
+- 仓库资产清单 `docs/repo_inventory.md`: 实装模块/研究工件/管线/测试/门面
+  与标签对应, 含计划中资产(E1-E5)的提前标签化(完全便于用户查看)
+- 标签扩展: `area: {nets, stats, benchmark, memory, agents}` 三处同步
+  (LABELS.md / LABELS.zh.md / `.github/labels.json`, 先为未实施模块打 area 位)
+- 研究日志 LOG-2026-08-19-e0-demo-EXP-003(四闸门判定设计 + 如实分屏)
 
 ## [v0.1.0] - 2026-08-19
 

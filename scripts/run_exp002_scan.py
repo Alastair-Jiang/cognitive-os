@@ -24,14 +24,17 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from cognitive_os.anchors.anchor_detector import AnchorConfig  # noqa: E402
-from cognitive_os.datasets.synthetic_events import SyntheticCorpusConfig, SyntheticEventCorpus  # noqa: E402
+from cognitive_os.datasets.synthetic_events import (  # noqa: E402
+    SyntheticCorpusConfig,
+    SyntheticEventCorpus,
+)
 from cognitive_os.metrics import mean  # noqa: E402
 from cognitive_os.nets.search_net import SearchNetConfig  # noqa: E402
 from cognitive_os.retrieval.strategy_a_traditional import TraditionalRetrieval  # noqa: E402
@@ -46,7 +49,7 @@ from run_benchmark import run_one  # noqa: E402
 STRATEGY_KEYS = ["A-traditional", "B-anchor", "C-multinet"]
 
 
-def build_strategies(corpus: SyntheticEventCorpus, s_cfg: Dict[str, Any]):
+def build_strategies(corpus: SyntheticEventCorpus, s_cfg: dict[str, Any]):
     a_cfg = s_cfg["A"]
     a = TraditionalRetrieval(corpus, source_bonus=a_cfg.get("source_bonus", 0.05))
 
@@ -68,7 +71,7 @@ def build_strategies(corpus: SyntheticEventCorpus, s_cfg: Dict[str, Any]):
 
 # 策略参数: 复用 medium 档的锚点/网配置(比 small 更接近"可用"档位),
 # 并在所有扫描档位上固定不变(防止"每档调参"的口径作弊)。
-SCAN_STRATEGY_TEMPLATE: Dict[str, Any] = {
+SCAN_STRATEGY_TEMPLATE: dict[str, Any] = {
     "A": {"source_bonus": 0.05},
     "B": {
         "anchor": {
@@ -109,7 +112,7 @@ SCAN_STRATEGY_TEMPLATE: Dict[str, Any] = {
     },
 }
 
-GRAPH_CFG: Dict[str, Any] = {
+GRAPH_CFG: dict[str, Any] = {
     "semantic_threshold": 0.68,
     "temporal_window": 40.0,
     "require_source_diversity": True,
@@ -117,12 +120,12 @@ GRAPH_CFG: Dict[str, Any] = {
 
 # 歧义轴网格
 N_TOPICS = 5
-OVERLAP_LEVELS: List[Tuple[str, int]] = [
+OVERLAP_LEVELS: list[tuple[str, int]] = [
     ("overlap-low", 2),    # 40% 主题共享
     ("overlap-mid", 4),    # 80% 主题共享
     ("overlap-high", 5),   # 100% 主题共享(全共享 → 事件只靠权重/噪声区分)
 ]
-NOISE_LEVELS: List[Tuple[str, float]] = [
+NOISE_LEVELS: list[tuple[str, float]] = [
     ("noise-low", 0.15),
     ("noise-mid", 0.30),
     ("noise-high", 0.50),  # 与 small 默认一致
@@ -136,7 +139,7 @@ def run_cell(
     k: int,
     nq: int,
     query_seed: int,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """跑一个歧义档位(一个小型完整 benchmark)。"""
     corpus_cfg = SyntheticCorpusConfig(
         n_events=12,
@@ -157,7 +160,7 @@ def run_cell(
     strategies = build_strategies(corpus, SCAN_STRATEGY_TEMPLATE)
 
     queries = corpus.sample_queries(nq, rng_seed=query_seed)
-    per_query: Dict[str, Dict[str, Any]] = {}
+    per_query: dict[str, dict[str, Any]] = {}
     for q in queries:
         event_pids = set(corpus.event_fragments(q.event_id))
         relevant_observed = {p for p in event_pids if q.is_allowed(p)} - set(q.seed_pids)
@@ -172,7 +175,7 @@ def run_cell(
             },
         }
 
-    agg: Dict[str, Dict[str, float]] = {}
+    agg: dict[str, dict[str, float]] = {}
     for s in strategies:
         rows = [per_query[q.qid]["strategies"][s.name] for q in queries]
         agg[s.name] = {
@@ -192,7 +195,9 @@ def run_cell(
     A, B, C = agg["A-traditional"], agg["B-anchor"], agg["C-multinet"]
     recall_loss = A["recall_at_k"] - B["recall_at_k"]
     sim_saving = B["similarity_calls"] / max(A["similarity_calls"], 1e-9)
-    h001_reviewable = A["similarity_calls"] > 0 and B["similarity_calls"] < 0.5 * A["similarity_calls"]
+    h001_reviewable = (
+        A["similarity_calls"] > 0 and B["similarity_calls"] < 0.5 * A["similarity_calls"]
+    )
     h001 = "PASS" if (h001_reviewable and recall_loss <= 0.10) else "FAIL"
 
     return {
@@ -230,7 +235,7 @@ def main() -> None:
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
-    cells: List[Dict[str, Any]] = []
+    cells: list[dict[str, Any]] = []
     for ov_label, tpe in OVERLAP_LEVELS:
         for nz_label, noise in NOISE_LEVELS:
             label = f"{ov_label}-{nz_label}"
@@ -241,7 +246,8 @@ def main() -> None:
 
     # 汇总输出
     ts = time.strftime("%Y%m%d-%H%M%S")
-    out = Path(args.out) if args.out else Path(__file__).resolve().parents[1] / "research" / "results"
+    default_out = Path(__file__).resolve().parents[1] / "research" / "results"
+    out = Path(args.out) if args.out else default_out
     out.mkdir(parents=True, exist_ok=True)
     out_path = out / f"EXP-002-scan-k{args.k}-q{args.queries}-{ts}.json"
     payload = {

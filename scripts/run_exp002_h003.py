@@ -38,31 +38,27 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from cognitive_os.datasets.synthetic_events import SyntheticCorpusConfig, SyntheticEventCorpus  # noqa: E402
+from cognitive_os.datasets.synthetic_events import (  # noqa: E402
+    SyntheticCorpusConfig,
+    SyntheticEventCorpus,
+)
 from cognitive_os.graph.evidence_graph import EvidenceGraph  # noqa: E402
 from cognitive_os.metrics import (  # noqa: E402
-    chain_purity,
     mean,
     mean_chain_purity,
     mean_component_purity,
 )
-from cognitive_os.retrieval.strategy_a_traditional import TraditionalRetrieval  # noqa: E402
-from cognitive_os.retrieval.strategy_b_anchor import AnchorRetrieval  # noqa: E402
-from cognitive_os.retrieval.strategy_c_multinet import DynamicMultiNetRetrieval  # noqa: E402
-from cognitive_os.anchors.anchor_detector import AnchorConfig  # noqa: E402
-from cognitive_os.nets.search_net import SearchNetConfig  # noqa: E402
-from cognitive_os.validation.progressive import ValidatorConfig  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run_benchmark import build_strategies  # noqa: E402
 
-GRAPH_MODES: List[Tuple[str, Dict[str, Any]]] = [
+GRAPH_MODES: list[tuple[str, dict[str, Any]]] = [
     ("semantic-only", {"semantic_threshold": 0.68, "temporal_window": None,
                        "require_source_diversity": False, "causal_edges": False}),
     ("multi-signal", {"semantic_threshold": 0.68, "temporal_window": 40.0,
@@ -98,12 +94,12 @@ CORPUS_CFG = dict(
 
 def graph_analysis(
     corpus: SyntheticEventCorpus,
-    candidate_pids: List[str],
-) -> Dict[str, Dict[str, float]]:
+    candidate_pids: list[str],
+) -> dict[str, dict[str, float]]:
     """对同一候选集, 用三种模式建图, 返回聚类级指标。"""
     pid_to_event = {p: corpus.event_of(p) for p in candidate_pids}
     pid_to_chain = {p: corpus.chain_of(p) for p in candidate_pids}
-    out: Dict[str, Dict[str, float]] = {}
+    out: dict[str, dict[str, float]] = {}
     for mode, kw in GRAPH_MODES:
         g = EvidenceGraph.build(corpus, candidate_pids, **kw)
         comps = g.components()
@@ -129,12 +125,12 @@ def chain_connectivity(corpus: SyntheticEventCorpus, components) -> float:
     测的是“结构信号把传播链连起来”的能力——纯度测排他性, 连通性
     测的是“链是否被恢复”。范围 [0,1] 越高越好。
     """
-    chain_frags: Dict[int, List[str]] = {}
+    chain_frags: dict[int, list[str]] = {}
     for p in corpus.point_ids:
         cid = corpus.chain_of(p)
         if cid >= 0:
             chain_frags.setdefault(cid, []).append(p)
-    comp_of: Dict[str, int] = {}
+    comp_of: dict[str, int] = {}
     for ci, comp in enumerate(components):
         for p in comp:
             comp_of[p] = ci
@@ -233,10 +229,10 @@ def main() -> None:
     strategies = build_strategies(corpus, cfg_json["strategies"])
     queries = corpus.sample_queries(args.queries, rng_seed=1)
 
-    per_strategy: Dict[str, Dict[str, Any]] = {}
+    per_strategy: dict[str, dict[str, Any]] = {}
     for s in strategies:
-        cands_per_query: List[List[str]] = []
-        f1s: List[float] = []
+        cands_per_query: list[list[str]] = []
+        f1s: list[float] = []
         for q in queries:
             res = s.retrieve(q, args.k)
             event_pids = set(corpus.event_fragments(q.event_id))
@@ -250,7 +246,7 @@ def main() -> None:
             cands_per_query.append(cands)
 
         # 聚合: 平均每查询候选集的三模式指标(取平均)
-        per_mode: Dict[str, Dict[str, float]] = {m: {"event_purity": [], "chain_purity": []}
+        per_mode: dict[str, dict[str, float]] = {m: {"event_purity": [], "chain_purity": []}
                                                  for m, _ in GRAPH_MODES}
         for cands in cands_per_query:
             for mode, _ in GRAPH_MODES:
@@ -297,7 +293,8 @@ def main() -> None:
     print(f"  判定: {h003}")
 
     ts = time.strftime("%Y%m%d-%H%M%S")
-    out = Path(args.out) if args.out else Path(__file__).resolve().parents[1] / "research" / "results"
+    default_out = Path(__file__).resolve().parents[1] / "research" / "results"
+    out = Path(args.out) if args.out else default_out
     out.mkdir(parents=True, exist_ok=True)
     out_path = out / f"EXP-002-h003-{ts}.json"
     out_path.write_text(
@@ -317,7 +314,7 @@ def main() -> None:
     print(f"\n原始数据: {out_path}")
 
 
-def _GRAPH_MODE_KW(mode: str) -> Dict[str, Any]:
+def _GRAPH_MODE_KW(mode: str) -> dict[str, Any]:
     for m, kw in GRAPH_MODES:
         if m == mode:
             return kw

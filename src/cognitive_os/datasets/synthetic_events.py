@@ -14,11 +14,12 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
+from collections.abc import Sequence
+from dataclasses import dataclass
+from typing import Any
 
 from ..similarity import cosine, mean_embedding, normalize
-from ..types import InformationPoint, Query, Embedding
+from ..types import Embedding, InformationPoint, Query
 
 Vector = Sequence[float]
 
@@ -45,14 +46,14 @@ class SyntheticCorpusConfig:
 class SyntheticEventCorpus:
     """合成信息空间: 点集合 + 事件 ground truth + 邻居索引。"""
 
-    def __init__(self, cfg: Optional[SyntheticCorpusConfig] = None):
+    def __init__(self, cfg: SyntheticCorpusConfig | None = None):
         self.cfg = cfg or SyntheticCorpusConfig()
-        self.points: List[InformationPoint] = []
-        self.events: Dict[str, List[str]] = {}
-        self._by_id: Dict[str, InformationPoint] = {}
-        self._neighbors: Dict[str, List[Tuple[str, float]]] = {}
-        self._event_start: Dict[str, float] = {}
-        self._topic_vectors: List[Embedding] = []
+        self.points: list[InformationPoint] = []
+        self.events: dict[str, list[str]] = {}
+        self._by_id: dict[str, InformationPoint] = {}
+        self._neighbors: dict[str, list[tuple[str, float]]] = {}
+        self._event_start: dict[str, float] = {}
+        self._topic_vectors: list[Embedding] = []
         self._build()
 
     # ------------------------------------------------------------------
@@ -68,14 +69,15 @@ class SyntheticEventCorpus:
 
         self._topic_vectors = [_unit() for _ in range(cfg.n_topics)]
         source_weights = [
-            cfg.source_min_weight + (1.0 - cfg.source_min_weight) * (i / max(cfg.source_count - 1, 1))
+            cfg.source_min_weight
+            + (1.0 - cfg.source_min_weight) * (i / max(cfg.source_count - 1, 1))
             for i in range(cfg.source_count)
         ]
         rng.shuffle(source_weights)  # 不按索引顺序给权重, 避免系统性偏差
 
         # 因果链划分(仅当 causal_chains > 0): 事件按生成顺序均匀分入 K 条链
-        chain_of_event: Dict[str, int] = {}
-        successor_fragments: Dict[str, List[str]] = {}
+        chain_of_event: dict[str, int] = {}
+        successor_fragments: dict[str, list[str]] = {}
         if cfg.causal_chains > 0:
             k = min(cfg.causal_chains, cfg.n_events)
             per = max(1, cfg.n_events // k)
@@ -113,13 +115,15 @@ class SyntheticEventCorpus:
             for f in range(cfg.fragments_per_event):
                 pid = f"{event_id}-f{f:02d}"
                 noise = _unit()
-                emb = normalize(tuple(theme[d] + cfg.within_event_noise * noise[d] for d in range(dim)))
+                emb = normalize(
+                    tuple(theme[d] + cfg.within_event_noise * noise[d] for d in range(dim))
+                )
                 if rng.random() < cfg.primary_source_prob:
                     src = primary_source
                 else:
                     src = rng.randrange(cfg.source_count)
                 ts = t_start + rng.uniform(0.0, cfg.event_span)
-                meta: Dict[str, Any] = {"fragment_index": f, "event_index": e}
+                meta: dict[str, Any] = {"fragment_index": f, "event_index": e}
                 if cfg.causal_chains > 0:
                     meta["chain_id"] = chain_of_event[event_id]
                     # 提及后继事件碎片(因果/传播引用): 引用目标仅限链内下一事件
@@ -164,21 +168,21 @@ class SyntheticEventCorpus:
         return self._by_id[pid]
 
     @property
-    def point_ids(self) -> List[str]:
+    def point_ids(self) -> list[str]:
         return [p.pid for p in self.points]
 
     def event_of(self, pid: str) -> str:
         return self._by_id[pid].event_id
 
-    def neighbors(self, pid: str, k: Optional[int] = None) -> List[Tuple[str, float]]:
+    def neighbors(self, pid: str, k: int | None = None) -> list[tuple[str, float]]:
         """索引查询: 返回 (邻居 pid, 余弦相似度), 已按相似度降序。"""
         lst = self._neighbors.get(pid, [])
         return lst[:k] if k is not None else lst
 
-    def event_fragments(self, event_id: str) -> List[str]:
+    def event_fragments(self, event_id: str) -> list[str]:
         return list(self.events.get(event_id, []))
 
-    def mentions(self, pid: str) -> List[str]:
+    def mentions(self, pid: str) -> list[str]:
         """该碎片显式提及的碎片 pid 列表(因果/传播引用; 无则空列表)。"""
         return list(self._by_id[pid].meta.get("mentions", []))
 
@@ -186,11 +190,11 @@ class SyntheticEventCorpus:
         """碎片所属因果链 id(无因果结构时返回 -1)。"""
         return int(self._by_id[pid].meta.get("chain_id", -1))
 
-    def observable_pids(self, t: float) -> List[str]:
+    def observable_pids(self, t: float) -> list[str]:
         """时间 t 之前可观测的所有碎片(模拟信息未完整)。"""
         return [p.pid for p in self.points if p.timestamp <= t]
 
-    def future_fragments(self, event_id: str, t: float) -> List[str]:
+    def future_fragments(self, event_id: str, t: float) -> list[str]:
         """事件在时间 t 之后才出现的碎片(尚未观测)。"""
         return [pid for pid in self.events.get(event_id, []) if self.get(pid).timestamp > t]
 
@@ -201,8 +205,8 @@ class SyntheticEventCorpus:
         self,
         n: int,
         rng_seed: int = 1,
-        truncate_frac: Optional[float] = None,
-    ) -> List[Query]:
+        truncate_frac: float | None = None,
+    ) -> list[Query]:
         """采样查询: 每查询 = 一个种子碎片。
 
         truncate_frac: 若给定(0, 1), 查询时刻 = 事件开始 + frac × 事件跨度,
@@ -211,7 +215,7 @@ class SyntheticEventCorpus:
         """
         rng = random.Random(rng_seed)
         event_ids = sorted(self.events.keys())
-        queries: List[Query] = []
+        queries: list[Query] = []
         for i in range(n):
             event_id = rng.choice(event_ids)
             frags = self.events[event_id]
@@ -239,11 +243,11 @@ class SyntheticEventCorpus:
     # ------------------------------------------------------------------
     # 描述统计(用于实验文档与测试)
     # ------------------------------------------------------------------
-    def similarity_stats(self, sample_size: int = 400) -> Dict[str, float]:
+    def similarity_stats(self, sample_size: int = 400) -> dict[str, float]:
         """同事件/跨事件余弦相似度的抽样统计。"""
         rng = random.Random(self.cfg.seed + 999)
-        within: List[float] = []
-        cross: List[float] = []
+        within: list[float] = []
+        cross: list[float] = []
         for _ in range(sample_size):
             ev = rng.choice(sorted(self.events.keys()))
             frags = self.events[ev]

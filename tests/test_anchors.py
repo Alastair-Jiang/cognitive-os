@@ -52,15 +52,23 @@ class TestAnchorDetection(unittest.TestCase):
 
     def test_source_focused_anchors_reliabler_than_semantic(self):
         """来源导向的锚点, 平均来源可靠性高于语义导向的锚点(多查询聚合)。"""
-        src_cfg = AnchorConfig(n_anchors=4, semantic_w=0.0, source_w=1.0, temporal_w=0.0, density_w=0.0)
-        sem_cfg = AnchorConfig(n_anchors=4, semantic_w=1.0, source_w=0.0, temporal_w=0.0, density_w=0.0)
+        src_cfg = AnchorConfig(
+            n_anchors=4, semantic_w=0.0, source_w=1.0, temporal_w=0.0, density_w=0.0
+        )
+        sem_cfg = AnchorConfig(
+            n_anchors=4, semantic_w=1.0, source_w=0.0, temporal_w=0.0, density_w=0.0
+        )
         src_total, sem_total, n = 0.0, 0.0, 0
         for query in self.corpus.sample_queries(5, rng_seed=21):
             q_emb = self.corpus.embed_seed(query.seed_pids)
             src_anchors = detect_anchors(self.corpus, query.seed_pids, q_emb, cfg=src_cfg)
             sem_anchors = detect_anchors(self.corpus, query.seed_pids, q_emb, cfg=sem_cfg)
-            src_total += sum(self.corpus.get(a).source_weight for a in src_anchors) / len(src_anchors)
-            sem_total += sum(self.corpus.get(a).source_weight for a in sem_anchors) / len(sem_anchors)
+            src_total += (
+                sum(self.corpus.get(a).source_weight for a in src_anchors) / len(src_anchors)
+            )
+            sem_total += (
+                sum(self.corpus.get(a).source_weight for a in sem_anchors) / len(sem_anchors)
+            )
             n += 1
         self.assertGreater(src_total / n, sem_total / n)
 

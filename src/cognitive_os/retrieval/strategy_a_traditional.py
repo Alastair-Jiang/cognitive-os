@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import time
-from typing import Optional
 
 from ..similarity import cosine
 from ..types import Evidence, Query, RetrievalResult

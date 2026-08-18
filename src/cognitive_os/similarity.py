@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Sequence, Tuple
+from collections.abc import Sequence
 
 Vector = Sequence[float]
 
@@ -27,22 +27,22 @@ def l2(a: Vector, b: Vector) -> float:
     return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5
 
 
-def add(a: Vector, b: Vector) -> Tuple[float, ...]:
+def add(a: Vector, b: Vector) -> tuple[float, ...]:
     return tuple(x + y for x, y in zip(a, b))
 
 
-def scale(v: Vector, s: float) -> Tuple[float, ...]:
+def scale(v: Vector, s: float) -> tuple[float, ...]:
     return tuple(x * s for x in v)
 
 
-def normalize(v: Vector) -> Tuple[float, ...]:
+def normalize(v: Vector) -> tuple[float, ...]:
     n = norm(v)
     if n == 0.0:
         return tuple(v)
     return tuple(x / n for x in v)
 
 
-def mean_embedding(vectors: Sequence[Vector]) -> Tuple[float, ...]:
+def mean_embedding(vectors: Sequence[Vector]) -> tuple[float, ...]:
     """多个向量的均值并归一化(种子碎片查询表示)。"""
     if not vectors:
         return ()

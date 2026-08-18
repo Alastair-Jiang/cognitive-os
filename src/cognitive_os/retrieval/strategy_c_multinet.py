@@ -11,11 +11,10 @@
 from __future__ import annotations
 
 import time
-from typing import List, Optional
 
 from ..nets.search_net import NetSearchStats, SearchNet, SearchNetConfig
-from ..validation.progressive import ProgressiveValidator, ValidatorConfig
 from ..types import Query, RetrievalResult
+from ..validation.progressive import ProgressiveValidator, ValidatorConfig
 from .base import RetrievalStrategy
 
 
@@ -25,9 +24,9 @@ class DynamicMultiNetRetrieval(RetrievalStrategy):
     def __init__(
         self,
         corpus,
-        net_configs: List[SearchNetConfig],
-        validator_cfg: Optional[ValidatorConfig] = None,
-        frontier_k: Optional[int] = None,
+        net_configs: list[SearchNetConfig],
+        validator_cfg: ValidatorConfig | None = None,
+        frontier_k: int | None = None,
     ):
         super().__init__(corpus)
         if not net_configs:
@@ -43,7 +42,7 @@ class DynamicMultiNetRetrieval(RetrievalStrategy):
         allowed = query.is_allowed
 
         validator = ProgressiveValidator(self.validator_cfg)
-        frontier: List[str] = list(query.seed_pids)
+        frontier: list[str] = list(query.seed_pids)
 
         while True:
             validator.mark_round()

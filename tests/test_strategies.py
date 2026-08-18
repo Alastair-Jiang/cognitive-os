@@ -22,7 +22,9 @@ def _make_c():
         SyntheticEventCorpus(),
         net_configs=[
             SearchNetConfig(name="n1", radius=0.88, semantic_w=1.0, max_hops=1),
-            SearchNetConfig(name="n2", radius=0.7, semantic_w=0.5, source_w=0.4, temporal_window=40.0),
+            SearchNetConfig(
+                name="n2", radius=0.7, semantic_w=0.5, source_w=0.4, temporal_window=40.0
+            ),
         ],
         validator_cfg=ValidatorConfig(),
     )

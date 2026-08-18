@@ -21,16 +21,19 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from cognitive_os.anchors.anchor_detector import AnchorConfig  # noqa: E402
-from cognitive_os.datasets.synthetic_events import SyntheticCorpusConfig, SyntheticEventCorpus  # noqa: E402
+from cognitive_os.datasets.synthetic_events import (  # noqa: E402
+    SyntheticCorpusConfig,
+    SyntheticEventCorpus,
+)
 from cognitive_os.graph.evidence_graph import EvidenceGraph  # noqa: E402
-from cognitive_os.metrics import rank_stats, recall_at_k, mean  # noqa: E402
+from cognitive_os.metrics import mean, rank_stats, recall_at_k  # noqa: E402
 from cognitive_os.nets.search_net import SearchNetConfig  # noqa: E402
 from cognitive_os.retrieval.strategy_a_traditional import TraditionalRetrieval  # noqa: E402
 from cognitive_os.retrieval.strategy_b_anchor import AnchorRetrieval  # noqa: E402
@@ -39,7 +42,7 @@ from cognitive_os.types import Query, RetrievalResult  # noqa: E402
 from cognitive_os.validation.progressive import ValidatorConfig  # noqa: E402
 
 
-def build_strategies(corpus: SyntheticEventCorpus, s_cfg: Dict[str, Any]):
+def build_strategies(corpus: SyntheticEventCorpus, s_cfg: dict[str, Any]):
     a_cfg = s_cfg["A"]
     a = TraditionalRetrieval(corpus, source_bonus=a_cfg.get("source_bonus", 0.05))
 
@@ -62,10 +65,10 @@ def build_strategies(corpus: SyntheticEventCorpus, s_cfg: Dict[str, Any]):
 def graph_metrics(
     corpus: SyntheticEventCorpus,
     result: RetrievalResult,
-    g_cfg: Dict[str, Any],
+    g_cfg: dict[str, Any],
     relevant: set,
-    seed_pids: List[str],
-) -> Dict[str, float]:
+    seed_pids: list[str],
+) -> dict[str, float]:
     """对"种子 + top-k"建多信号图与纯语义图, 返回成分纯度与重建 F1。
 
     种子必须纳入图中: 否则种子的连通成分退化为孤立点(伪 1.0 纯度)。
@@ -111,11 +114,11 @@ def run_one(
     strategy,
     query: Query,
     k: int,
-    g_cfg: Dict[str, Any],
-    truncate_frac: Optional[float],
+    g_cfg: dict[str, Any],
+    truncate_frac: float | None,
     relevant_observed: set,
     future: set,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     res = strategy.retrieve(query, k)
     d = res.as_dict()
     d["metrics"] = rank_stats(res.ranked_pids, relevant_observed, k)
@@ -135,7 +138,9 @@ def main() -> None:
     ap.add_argument("--config", default="configs/benchmark.small.json")
     ap.add_argument("--queries", type=int, default=0, help="0 = 每事件一个查询")
     ap.add_argument("--k", type=int, default=10)
-    ap.add_argument("--truncate", type=float, default=None, help="0-1: 查询时刻 = 事件开始 + frac×跨度")
+    ap.add_argument(
+        "--truncate", type=float, default=None, help="0-1: 查询时刻 = 事件开始 + frac×跨度"
+    )
     ap.add_argument("--query-seed", type=int, default=1)
     ap.add_argument("--out", default=None, help="输出 JSON 路径(默认 research/results/)")
     args = ap.parse_args()
@@ -151,23 +156,27 @@ def main() -> None:
     strategies = build_strategies(corpus, cfg["strategies"])
     g_cfg = cfg.get("graph", {})
 
-    per_query: Dict[str, Dict[str, Any]] = {}
+    per_query: dict[str, dict[str, Any]] = {}
     for q in queries:
         event_pids = set(corpus.event_fragments(q.event_id))
         # 相关集排除种子自身: 种子不可检索, 否则 Recall 分母虚高
         relevant_observed = {p for p in event_pids if q.is_allowed(p)} - set(q.seed_pids)
-        future = {p for p in event_pids if not q.is_allowed(p)} if args.truncate is not None else set()
+        future = (
+            {p for p in event_pids if not q.is_allowed(p)} if args.truncate is not None else set()
+        )
         per_query[q.qid] = {
             "event_id": q.event_id,
             "seed": q.seed_pids,
             "strategies": {
-                s.name: run_one(corpus, s, q, args.k, g_cfg, args.truncate, relevant_observed, future)
+                s.name: run_one(
+                    corpus, s, q, args.k, g_cfg, args.truncate, relevant_observed, future
+                )
                 for s in strategies
             },
         }
 
     # 聚合
-    agg: Dict[str, Dict[str, float]] = {}
+    agg: dict[str, dict[str, float]] = {}
     metric_keys = [
         "precision_at_k", "recall_at_k", "f1_at_k", "ndcg_at_k", "mrr",
     ]
@@ -204,7 +213,9 @@ def main() -> None:
         "PASS" if (b_saves and b_recall_loss <= 0.10) else "FAIL"
     )
     judgements["H-002_multinet_quality"] = (
-        "PASS" if (C["f1_at_k"] >= A["f1_at_k"] - 1e-9 and C["early_stopped_frac"] > 0.0) else "FAIL"
+        "PASS"
+        if (C["f1_at_k"] >= A["f1_at_k"] - 1e-9 and C["early_stopped_frac"] > 0.0)
+        else "FAIL"
     )
     judgements["H-002_predictive_recall"] = (
         "PASS"
@@ -222,7 +233,8 @@ def main() -> None:
     tag = f"{cfg_path.stem}-k{args.k}-q{nq}"
     if args.truncate is not None:
         tag += f"-t{args.truncate}"
-    out = Path(args.out) if args.out else Path(__file__).resolve().parents[1] / "research" / "results"
+    default_out = Path(__file__).resolve().parents[1] / "research" / "results"
+    out = Path(args.out) if args.out else default_out
     out.mkdir(parents=True, exist_ok=True)
     out_path = out / f"EXP-001-{tag}-{ts}.json"
     payload = {
@@ -246,15 +258,26 @@ def main() -> None:
     print(f"\n=== EXP-001 {cfg_path.name} k={args.k} nq={nq} truncate={args.truncate} ===")
     print(f"corpus: within_mean={corpus.similarity_stats()['within_mean']:.3f} "
           f"cross_mean={corpus.similarity_stats()['cross_mean']:.3f}")
-    hdr = ["strategy", "P@k", "R@k", "F1@k", "NDCG", "MRR", "sim_calls", "iters", "ms", "purity", "reconF1"]
+    hdr = ["strategy", "P@k", "R@k", "F1@k", "NDCG", "MRR",
+           "sim_calls", "iters", "ms", "purity", "reconF1"]
     if args.truncate is not None:
         hdr.append("predR")
     print("  ".join(f"{h:>10}" for h in hdr))
     for s in strategies:
         a = agg[s.name]
-        row = [s.name, f"{a['precision_at_k']:.3f}", f"{a['recall_at_k']:.3f}", f"{a['f1_at_k']:.3f}",
-               f"{a['ndcg_at_k']:.3f}", f"{a['mrr']:.3f}", f"{a['similarity_calls']:.0f}",
-               f"{a['iterations']:.1f}", f"{a['latency_ms']:.2f}", f"{a['purity']:.3f}", f"{a['recon_f1']:.3f}"]
+        row = [
+            s.name,
+            f"{a['precision_at_k']:.3f}",
+            f"{a['recall_at_k']:.3f}",
+            f"{a['f1_at_k']:.3f}",
+            f"{a['ndcg_at_k']:.3f}",
+            f"{a['mrr']:.3f}",
+            f"{a['similarity_calls']:.0f}",
+            f"{a['iterations']:.1f}",
+            f"{a['latency_ms']:.2f}",
+            f"{a['purity']:.3f}",
+            f"{a['recon_f1']:.3f}",
+        ]
         if args.truncate is not None:
             row.append(f"{a['predictive_recall_at_k']:.3f}")
         print("  ".join(f"{c:>10}" for c in row))

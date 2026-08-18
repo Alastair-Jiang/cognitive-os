@@ -19,22 +19,24 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from cognitive_os.datasets.synthetic_events import SyntheticCorpusConfig, SyntheticEventCorpus  # noqa: E402
+from cognitive_os.datasets.synthetic_events import (  # noqa: E402
+    SyntheticCorpusConfig,
+    SyntheticEventCorpus,
+)
+from cognitive_os.metrics import mean  # noqa: E402
 from cognitive_os.nets.search_net import SearchNetConfig  # noqa: E402
 from cognitive_os.retrieval.strategy_c_multinet import DynamicMultiNetRetrieval  # noqa: E402
 from cognitive_os.validation.progressive import ValidatorConfig  # noqa: E402
-from cognitive_os.metrics import mean  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from run_benchmark import run_one  # noqa: E402
 
-GRAPH_CFG: Dict[str, Any] = {
+GRAPH_CFG: dict[str, Any] = {
     "semantic_threshold": 0.68,
     "temporal_window": 40.0,
     "require_source_diversity": True,
@@ -43,11 +45,11 @@ GRAPH_CFG: Dict[str, Any] = {
 
 def run_c_with_aggregation(
     corpus: SyntheticEventCorpus,
-    c_cfg: Dict[str, Any],
+    c_cfg: dict[str, Any],
     queries,
     k: int,
     aggregation: str,
-) -> Dict[str, Dict[str, float]]:
+) -> dict[str, dict[str, float]]:
     validator_cfg = ValidatorConfig(**c_cfg["validator"])
     validator_cfg.aggregation = aggregation
     strategy = DynamicMultiNetRetrieval(
@@ -55,7 +57,7 @@ def run_c_with_aggregation(
         net_configs=[SearchNetConfig(**n) for n in c_cfg["nets"]],
         validator_cfg=validator_cfg,
     )
-    per_q: Dict[str, Dict[str, Any]] = {}
+    per_q: dict[str, dict[str, Any]] = {}
     for q in queries:
         event_pids = set(corpus.event_fragments(q.event_id))
         relevant_observed = {p for p in event_pids if q.is_allowed(p)} - set(q.seed_pids)
@@ -68,7 +70,7 @@ def run_c_with_aggregation(
 
     keys = ["f1_at_k", "recall_at_k", "precision_at_k", "mrr", "similarity_calls",
             "iterations", "latency_ms"]
-    agg: Dict[str, float] = {}
+    agg: dict[str, float] = {}
     for key in keys:
         if key in ("latency_ms", "iterations", "similarity_calls"):
             agg[key] = mean([per_q[q.qid][key] for q in queries])
@@ -91,7 +93,7 @@ def main() -> None:
 
     root = Path(__file__).resolve().parents[1]
     configs = args.config or ["configs/benchmark.small.json", "configs/benchmark.medium.json"]
-    reports: List[Dict[str, Any]] = []
+    reports: list[dict[str, Any]] = []
 
     for cfg_rel in configs:
         cfg_path = root / cfg_rel
@@ -102,7 +104,7 @@ def main() -> None:
         queries = corpus.sample_queries(nq, rng_seed=1, truncate_frac=args.truncate)
         c_cfg = cfg["strategies"]["C"]
 
-        rows: Dict[str, Dict[str, float]] = {}
+        rows: dict[str, dict[str, float]] = {}
         for agg in ("max", "mean"):
             rows[agg] = run_c_with_aggregation(corpus, c_cfg, queries, args.k, agg)
 

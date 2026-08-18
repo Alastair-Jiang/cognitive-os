@@ -11,8 +11,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional
+from dataclasses import dataclass
 
 from ..types import Evidence
 
@@ -30,14 +29,14 @@ class ValidatorConfig:
 class ProgressiveValidator:
     """跨网、跨轮的渐进式验证器。"""
 
-    def __init__(self, cfg: Optional[ValidatorConfig] = None):
+    def __init__(self, cfg: ValidatorConfig | None = None):
         self.cfg = cfg or ValidatorConfig()
         if self.cfg.aggregation not in ("max", "mean"):
             raise ValueError(f"aggregation 必须是 'max' 或 'mean', 收到 {self.cfg.aggregation!r}")
-        self.evidence: Dict[str, Evidence] = {}
-        self._raw_scores: Dict[str, List[float]] = {}
+        self.evidence: dict[str, Evidence] = {}
+        self._raw_scores: dict[str, list[float]] = {}
         self.rounds_run: int = 0
-        self._topk_history: List[float] = []
+        self._topk_history: list[float] = []
         self._consecutive_stable: int = 0
         self.stopped_reason: str = ""
 
@@ -45,7 +44,7 @@ class ProgressiveValidator:
         """标记一轮验证的开始(每轮调用一次, 与网数无关)。"""
         self.rounds_run += 1
 
-    def add_round(self, candidates: List[Evidence], net_name: str = "") -> None:
+    def add_round(self, candidates: list[Evidence], net_name: str = "") -> None:
         """把一轮(一个网)的候选并入证据表。"""
         for ev in candidates:
             cur = self.evidence.get(ev.pid)
@@ -79,8 +78,9 @@ class ProgressiveValidator:
             consensus = e.votes / max_votes
             e.confidence = (1.0 - cw) * e.score + cw * consensus
 
-    def top_k(self, k: int) -> List[str]:
-        return [e.pid for e in sorted(self.evidence.values(), key=lambda e: e.confidence, reverse=True)[:k]]
+    def top_k(self, k: int) -> list[str]:
+        ranked = sorted(self.evidence.values(), key=lambda e: e.confidence, reverse=True)[:k]
+        return [e.pid for e in ranked]
 
     def mean_topk_confidence(self, k: int) -> float:
         ranked = sorted(self.evidence.values(), key=lambda e: e.confidence, reverse=True)[:k]
@@ -110,7 +110,7 @@ class ProgressiveValidator:
             return True
         return False
 
-    def final_ranked(self, k: int) -> List[str]:
+    def final_ranked(self, k: int) -> list[str]:
         """最终排序(仍保留全部候选; 低置信度自然靠后, 不删除)。"""
         self.update_confidence()
         return self.top_k(k)

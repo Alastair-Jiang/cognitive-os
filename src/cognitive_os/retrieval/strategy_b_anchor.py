@@ -12,7 +12,6 @@
 from __future__ import annotations
 
 import time
-from typing import List, Optional
 
 from ..anchors.anchor_detector import AnchorConfig, detect_anchors
 from ..nets.search_net import NetSearchStats, SearchNet, SearchNetConfig
@@ -26,8 +25,8 @@ class AnchorRetrieval(RetrievalStrategy):
     def __init__(
         self,
         corpus,
-        anchor_cfg: Optional[AnchorConfig] = None,
-        net_cfg: Optional[SearchNetConfig] = None,
+        anchor_cfg: AnchorConfig | None = None,
+        net_cfg: SearchNetConfig | None = None,
     ):
         super().__init__(corpus)
         self.anchor_cfg = anchor_cfg or AnchorConfig()
@@ -39,7 +38,7 @@ class AnchorRetrieval(RetrievalStrategy):
         q_emb = self.corpus.embed_seed(query.seed_pids)
         allowed = query.is_allowed
 
-        anchors: List[str] = detect_anchors(
+        anchors: list[str] = detect_anchors(
             self.corpus,
             query.seed_pids,
             q_emb,
