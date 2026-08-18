@@ -24,6 +24,7 @@ class ValidatorConfig:
     stabilize_rounds: int = 2  # 连续多少轮稳定才停
     max_rounds: int = 6  # 验证预算(防无限循环)
     consensus_w: float = 0.4  # 共识分量权重(1-consensus_w 为证据分量)
+    aggregation: str = "max"  # 跨网/跨轮证据聚合: "max"(最强网主导) | "mean"(各网平均发言)
 
 
 class ProgressiveValidator:
@@ -31,7 +32,10 @@ class ProgressiveValidator:
 
     def __init__(self, cfg: Optional[ValidatorConfig] = None):
         self.cfg = cfg or ValidatorConfig()
+        if self.cfg.aggregation not in ("max", "mean"):
+            raise ValueError(f"aggregation 必须是 'max' 或 'mean', 收到 {self.cfg.aggregation!r}")
         self.evidence: Dict[str, Evidence] = {}
+        self._raw_scores: Dict[str, List[float]] = {}
         self.rounds_run: int = 0
         self._topk_history: List[float] = []
         self._consecutive_stable: int = 0
@@ -48,8 +52,8 @@ class ProgressiveValidator:
             if cur is None:
                 self.evidence[ev.pid] = Evidence(pid=ev.pid)
                 cur = self.evidence[ev.pid]
-            # 证据强度: 取历史最优(不同网不同阈值, 取高者)
-            cur.score = max(cur.score, ev.score)
+            # 证据分量: 始终记录原始观测(聚合方式在 update_confidence 统一决定)
+            self._raw_scores.setdefault(ev.pid, []).append(ev.score)
             cur.semantic_sim = max(cur.semantic_sim, ev.semantic_sim)
             cur.source_evidence = max(cur.source_evidence, ev.source_evidence)
             cur.temporal_evidence = max(cur.temporal_evidence, ev.temporal_evidence)
@@ -57,11 +61,21 @@ class ProgressiveValidator:
             cur.votes += 1
             cur.rounds_seen = self.rounds_run
 
+    def _aggregate_score(self, pid: str) -> float:
+        """按配置聚合一个候选的跨网/跨轮证据分。"""
+        scores = self._raw_scores.get(pid, [])
+        if not scores:
+            return self.evidence[pid].score
+        if self.cfg.aggregation == "mean":
+            return sum(scores) / len(scores)
+        return max(scores)
+
     def update_confidence(self) -> None:
         """重算所有候选的置信度(证据强度 + 跨网共识)。"""
         max_votes = max((e.votes for e in self.evidence.values()), default=1)
         cw = self.cfg.consensus_w
         for e in self.evidence.values():
+            e.score = self._aggregate_score(e.pid)
             consensus = e.votes / max_votes
             e.confidence = (1.0 - cw) * e.score + cw * consensus
 

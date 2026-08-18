@@ -43,8 +43,12 @@ class EvidenceGraph:
         temporal_window: Optional[float] = None,
         require_source_diversity: bool = False,
         max_edges_per_node: Optional[int] = None,
+        causal_edges: bool = False,
     ) -> "EvidenceGraph":
         """在候选点之间按多信号一致性建边。
+
+        causal_edges: 启用时, 显式提及/引用关系(meta["mentions"])也建边——
+        引用是硬结构信号, 不依赖语义阈值(跨事件因果/传播链)。
 
         max_edges_per_node: 单点最大度数上限(防止稠密图);
         None = 不限制(第一版小语料不限制)。
@@ -52,6 +56,22 @@ class EvidenceGraph:
         g = cls()
         candidates = list(candidate_pids)
         deg: Dict[str, int] = {}
+
+        # 引用边: 先建(硬结构边), 与语义边独立
+        if causal_edges:
+            pid_set = set(candidates)
+            for a in candidates:
+                for b in corpus.mentions(a):
+                    if b not in pid_set:
+                        continue
+                    if max_edges_per_node is not None and (
+                        deg.get(a, 0) >= max_edges_per_node or deg.get(b, 0) >= max_edges_per_node
+                    ):
+                        continue
+                    g.add_edge(a, b, 1.0)  # 引用 = 确定性结构信号, 权重 1.0
+                    deg[a] = deg.get(a, 0) + 1
+                    deg[b] = deg.get(b, 0) + 1
+
         for i, a in enumerate(candidates):
             pa = corpus.get(a)
             for b in candidates[i + 1 :]:
