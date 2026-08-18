@@ -1,63 +1,69 @@
-# Label 指南
+English | [简体中文](./LABELS.zh.md) >
 
-本仓库所有 label 的含义与排序。**Rating 等级必带 emoji 前缀, 且沿低→高
-渐变**; 其他维度内要么全带 emoji 要么全不带。Label 使用项目主语言(中文)。
+# Label Guide
 
-## 类型 (Type)
+Every label in this repository, what it means, and how it ranks. **Rating
+tiers must carry an emoji prefix with a low→high gradient**; within other
+dimensions, either all labels carry an emoji or none do. Labels use the
+project's primary language (中文/Chinese).
 
-| Label | 含义 |
+## Type
+
+| Label | Meaning |
 |---|---|
-| `🐛 缺陷` | 某个功能不符合预期 |
-| `✨ 功能` | 新功能或请求 |
-| `📚 文档` | 文档的改进或补充 |
-| `❓ 问题` | 需要进一步信息的提问 |
-| `🙋 寻求帮助` | 欢迎贡献者参与 |
-| `🌱 新手友好` | 适合新贡献者入门 |
+| `🐛 缺陷` | Something isn't working as expected |
+| `✨ 功能` | New feature or request |
+| `📚 文档` | Improvements or additions to documentation |
+| `❓ 问题` | A question that needs more information |
+| `🙋 寻求帮助` | Extra attention is needed; contributions welcome |
+| `🌱 新手友好` | Good for newcomers |
 
-## 优先级 (P0 → P3)
+## Priority (P0 → P3)
 
-| Label | 含义 |
+| Label | Meaning |
 |---|---|
-| `🔴 P0` | 紧急: 数据丢失、安全绕过、崩溃循环、核心不可用 |
-| `🟠 P1` | 高: 阻塞计划内工作, 需尽快处理 |
-| `🟡 P2` | 中: 常规优先级 |
-| `🟢 P3` | 低: 锦上添花 |
+| `🔴 P0` | Emergency: data loss, security bypass, crash loop, unusable core |
+| `🟠 P1` | High: blocks planned work, needs attention soon |
+| `🟡 P2` | Medium: normal priority |
+| `🟢 P3` | Low: nice to have |
 
-## 状态 (Status)
+## Status
 
-| Label | 含义 |
+| Label | Meaning |
 |---|---|
-| `🚧 进行中` | 工作正在进行 |
-| `🧱 被阻塞` | 被其他事项阻塞 |
-| `✅ 待合并` | 已批准, 可以合并 |
-| `🎉 已合并` | 已经合并 |
-| `🚫 不修复` | 不会处理 |
+| `🚧 进行中` | Work is underway |
+| `🧱 被阻塞` | Blocked by something else |
+| `✅ 待合并` | Approved, ready to merge |
+| `🎉 已合并` | Already merged |
+| `🚫 不修复` | Will not be addressed |
 
-## 模块 (Area)
+## Area
 
-| Label | 含义 |
+| Label | Meaning |
 |---|---|
-| `area: retrieval` | 检索策略模块 (A/B/C 策略) |
-| `area: anchors` | 锚点检测与多信号综合模块 |
-| `area: graph` | 证据图与结构一致性模块 |
-| `area: validation` | 渐进式验证与早停模块 |
-| `area: dataset` | 合成语料生成与评测数据 |
-| `area: research` | 研究工件: hypotheses/experiments/benchmarks/log |
-| `area: docs` | 文档与仓库门面 |
+| `area: retrieval` | Retrieval strategy module (strategies A/B/C) |
+| `area: anchors` | Anchor detection & multi-signal module |
+| `area: graph` | Evidence graph & structure-consistency module |
+| `area: validation` | Progressive validation & early-stopping module |
+| `area: dataset` | Synthetic corpus generation & evaluation data |
+| `area: research` | Research artifacts: hypotheses/experiments/benchmarks/log |
+| `area: docs` | Documentation & repo surface |
 
-## Rating (PR 质量, 低 → 高)
+## Rating (PR quality, low → high)
 
-> Rating 等级是本仓库唯一**强制带 emoji** 的 label 组 — 低→高渐变使
-> 排序无歧义。主题: **研究证据等级**(贴合本项目假设→实验→结论的文化)。
+> Rating tiers are the only labels in this repo that **MUST carry an emoji**
+> — the low→high gradient makes the ranking unambiguous. Theme: **research
+> evidence tiers** (mirrors this project's hypothesis → experiment →
+> conclusion culture).
 
-| 位次 | Label | 含义 |
+| Rank | Label | Meaning |
 |---|---|---|
-| 1 | `rating: 🔬 假设` | 最低档: 未经验证的假设/想法 |
-| 2 | `rating: 🧪 原型` | 第二档: 有实现原型, 无实验结论 |
-| 3 | `rating: 📊 实验` | 第三档: 已有实验数据支撑 |
-| 4 | `rating: ✅ 已验证` | 第四档: 假设得到实验支持 |
-| 5 | `rating: 🏆 里程碑` | 最高档: 确立阶段结论/研究里程碑 |
+| 1 | `rating: 🔬 假设` | lowest tier: unvalidated hypothesis / idea |
+| 2 | `rating: 🧪 原型` | tier 2: prototype implemented, no experimental conclusion |
+| 3 | `rating: 📊 实验` | tier 3: backed by experimental data |
+| 4 | `rating: ✅ 已验证` | tier 4: hypothesis supported by experiments |
+| 5 | `rating: 🏆 里程碑` | highest tier: establishes a phase conclusion / research milestone |
 
-## 其他
+## Other
 
-> Maintained by repo-standardizer — 修改 label 时同步更新本文件。
+> Maintained by repo-standardizer — keep this file in sync whenever labels change.

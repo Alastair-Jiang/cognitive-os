@@ -1,10 +1,10 @@
-# Cognitive OS — Personal Cognitive OS 研究仓库
+English | [简体中文](./README.zh.md) >
+
+# Cognitive OS — Research Repository for a Personal Cognitive OS
 
 <div align="center">
 
-*研究"个人智能基础设施 / Personal Cognitive OS"的开放式实验平台。*
-
-**[English](README.md) · [中文](#)**
+*An open experimental platform for researching "Personal Cognitive OS" / personal intelligence infrastructure.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
@@ -14,143 +14,170 @@
 
 </div>
 
-> **这不是一个 AGI 项目声明。**
-> 项目最终是否能够向 AGI 靠近, 不应该由概念判断, 而应该由实验结果决定。
-> 正确的定位是:
+> **This is not an AGI project claim.**
+> Whether this project approaches AGI should be decided by experimental
+> results, not by conceptual judgement. The correct positioning:
 >
 > > *An experimental architecture for studying persistent, personalized,
 > > adaptive intelligence.*
 
 ---
 
-## 当前状态(2026-08-19)
+## Current status (2026-08-19)
 
-| 项 | 状态 |
+| Item | Status |
 |---|---|
-| Phase 0 仓库初始化 | ✅ 完成(本仓库) |
-| Phase 1 Dynamic Retrieval Prototype | ✅ 首轮实验完成 |
-| Phase 1b 假设修订实验(EXP-002) | ✅ 完成(扫描 10 档 + 共识诊断 + H-003 重设计) |
-| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 51/51 测试通过 |
-| Benchmark EXP-001 | ✅ 完成(主模式 + 截断模式 + medium 档) |
-| Benchmark EXP-002 | ✅ 完成(歧义档位扫描 / 共识聚合 / H-003 重设计) |
-| H-001 Anchor 效率 | ❌ REFUTED(质量组件; 效率组件 10 档全成立, 召回损失不随歧义收敛) |
-| H-002 多网渐进验证 | ❌ REFUTED(按原表述; 早停有效, mean 聚合无实质改善) |
-| H-003 结构一致性 | 🔶 REFUTED(纯度口径) / PARTIAL(链恢复口径, 连通率 0.940) |
+| Phase 0 — Repo bootstrap | ✅ Done |
+| Phase 1 — Dynamic Retrieval Prototype | ✅ First experiments done |
+| Phase 1b — Hypothesis revision (EXP-002) | ✅ Done (10-cell sweep + consensus diagnosis + H-003 redesign) |
+| Three strategies (A Traditional / B Anchor / C Multi-Net) | ✅ Implemented, 51/51 tests pass |
+| Benchmark EXP-001 | ✅ Done (main + truncated + medium config) |
+| Benchmark EXP-002 | ✅ Done (ambiguity sweep / consensus / H-003 redesign) |
+| H-001 Anchor efficiency | ❌ REFUTED (quality component; efficiency holds across 10 cells, recall loss does not converge with ambiguity) |
+| H-002 Multi-Net progressive validation | ❌ REFUTED (as stated; early stopping works, mean aggregation no real gain) |
+| H-003 Structure consistency | 🔶 REFUTED (purity framing) / PARTIAL (chain-recovery framing, connectivity 0.940) |
 
-**EXP-001 核心结论(诚实记录, 详见 [research/experiments/EXP-001](research/experiments/EXP-001-dynamic-nets-vs-baseline.md))**:
-在高歧义合成语料上, **扁平语义基线 A 在 F1/NDCG/Recall 上全部领先**。
-Dynamic Net 尚未被证明更有效——但 Anchor 带来 4.3× 计算节省与 MRR 反超
-(0.933 vs 0.794), 渐进验证早停有效(75% 查询)。**在证据充分前,
-Dynamic Net / Anchor 机制保持为实验模块, 不进核心架构。**
+**EXP-001 core conclusion (honest record, see [research/experiments/EXP-001](research/experiments/EXP-001-dynamic-nets-vs-baseline.md))**:
+On the high-ambiguity synthetic corpus, **the flat semantic baseline A leads
+on F1 / NDCG / Recall**. Dynamic Net is not yet proven more effective — but
+Anchor gives a 4.3× compute saving and higher MRR (0.933 vs 0.794), and
+progressive-validation early stopping works (75% of queries). **Until the
+evidence is sufficient, Dynamic Net / Anchor stay experimental modules —
+they do not enter the core architecture.**
 
-**EXP-002 核心结论(详见 [EXP-002](research/experiments/EXP-002-ambiguity-scan-and-diagnostics.md))**:
-歧义档位扫描(10 档)证实 H-001 效率组件稳健(节省 4-5×)而质量组件全败
-(召回损失 26.2-56.0pp, 与歧义度无单调关系); C 的共识聚合 max/mean 无实质
-差异; H-003 重设计揭示结构信号对**链恢复**有效(连通率 0.940 vs 0.29-0.40)
-但对**事件聚类纯度**有害(引用硬桥接)——指标的选取决定结论。
+**EXP-002 core conclusion (see [EXP-002](research/experiments/EXP-002-ambiguity-scan-and-diagnostics.md))**:
+A 10-cell ambiguity sweep confirms H-001's efficiency component is robust
+(4–5× saving) while its quality component fails everywhere (recall loss
+26.2–56.0pp, no monotonic dependence on ambiguity); the C-consensus
+aggregation max vs mean shows no real difference; the H-003 redesign shows
+structural signals help **chain recovery** (connectivity 0.940 vs 0.29–0.40)
+but hurt **event-cluster purity** (reference edges hard-bridge) — the chosen
+metric decides the conclusion.
 
-**诚实原则**: 本文档及 docs/ 中的所有论断, 未标注 [V] 的一律是假设。
-任何"更优/更高效"的说法都必须指向 research/experiments/ 中的可复现实验。
+**Honesty principle**: every claim in this file and in `docs/` is a
+hypothesis unless marked `[V]`. Any "better / more efficient" statement must
+point to a reproducible experiment in `research/experiments/`.
 
 ---
 
-## 这个仓库要研究什么
+## What this repository researches
 
-项目最初来源于一个信息安全问题: 一条有效信息在网络中被切分成多个碎片,
-通过不同节点、不同路径传播。传统方式必须等信息完整后才能验证,
-成本很高。因此本项目研究反向问题:
+The project originates from an information-security problem: a piece of
+valid information is split into fragments propagating through different
+nodes and paths. Traditional methods must wait until the information is
+complete to verify it, at high cost. This project studies the inverse
+question:
 
-> **能否在信息尚未完整形成之前, 通过动态变化的"网"、局部锚点、向量关系
-> 和渐进式验证, 提前识别哪些碎片更可能属于同一个有效信息结构?**
+> **Before information has fully formed, can we — through dynamic "nets",
+> local anchors, vector relations, and progressive validation — identify in
+> advance which fragments are more likely to belong to the same valid
+> information structure?**
 
-核心概念(全部为假设, 详见 [docs/vision.md](docs/vision.md)):
+Core concepts (all hypotheses, see [docs/vision.md](docs/vision.md)):
 
-- **Dynamic Information Net**: 多个可配置搜索网并行, 而非单条检索链路;
-- **Progressive Validation**: 验证从"末端一次性"变为"过程中持续";
-- **Anchor Mechanism**: 用少量多信号 Anchor 代替 O(N²) 两两比较;
-- **Structure Consistency ≠ Semantic Similarity**: "苹果新品/苹果财报/
-  苹果产区灾害"语义相似但不是同一结构;
-- **Information Topology**: 从检索相关点走向恢复关系结构;
-- 长期方向: Search Strategy Learning → Personal Memory → Multi-Agent →
-  Cognitive OS → World Model → Physical Interface。
+- **Dynamic Information Net**: multiple configurable search nets in
+  parallel, rather than a single retrieval pipeline;
+- **Progressive Validation**: validation moves from "one-shot at the end" to
+  "continuous during the process";
+- **Anchor Mechanism**: a few multi-signal anchors replace O(N²)
+  pairwise comparison;
+- **Structure Consistency ≠ Semantic Similarity**: "Apple launches / Apple
+  earnings / apple-orchard disaster" are semantically similar but not the
+  same structure;
+- **Information Topology**: from retrieving relevant points to recovering
+  relational structure;
+- Long-term direction: Search Strategy Learning → Personal Memory →
+  Multi-Agent → Cognitive OS → World Model → Physical Interface.
 
-## 仓库结构
+## Repository layout
 
 ```text
 cognitive-os/
 ├── docs/                  vision / architecture / research_questions /
 │                          system_constitution / roadmap
-├── research/              研究记录区
-│   ├── hypotheses/        假设(H-001..003, 状态 UNVALIDATED)
-│   ├── experiments/       预注册/完成实验(EXP-001)
-│   ├── benchmarks/        Benchmark 规格(BM-001)
-│   ├── results/           实验结果 JSON(原始数据)
-│   └── log/               研究日志(Problem/Hypothesis/Change/Experiment/
+├── research/              research records
+│   ├── hypotheses/        hypotheses (H-001..003, status UNVALIDATED)
+│   ├── experiments/       registered / completed experiments (EXP-001)
+│   ├── benchmarks/        benchmark specs (BM-001)
+│   ├── results/           experiment result JSON (raw data)
+│   └── log/               research log (Problem/Hypothesis/Change/Experiment/
 │                          Result/Interpretation/Next Step)
 ├── src/cognitive_os/
-│   ├── datasets/          合成事件碎片信息空间(带 ground truth)
-│   ├── nets/              检索网(可配置搜索策略原语)
-│   ├── anchors/           锚点检测(多信号综合)
-│   ├── validation/        渐进式验证(无硬性提前淘汰)
-│   ├── graph/             证据图(多信号一致性)
-│   ├── retrieval/         三策略: A 传统 / B Anchor / C Multi-Net
-│   ├── memory/            [STUB] 未来阶段
-│   ├── agents/            [STUB] 未来阶段
-│   └── orchestration/     [STUB] 未来阶段
-├── tests/                 单元测试(unittest, 零依赖)
-├── configs/               Benchmark 配置(small / medium)
+│   ├── datasets/          synthetic event-fragment space (ground truth)
+│   ├── nets/              search nets (configurable strategy primitives)
+│   ├── anchors/           anchor detection (multi-signal)
+│   ├── validation/        progressive validation (no hard pruning)
+│   ├── graph/             evidence graph (multi-signal consistency)
+│   ├── retrieval/         three strategies: A / B / C
+│   ├── memory/            [STUB] future phase
+│   ├── agents/            [STUB] future phase
+│   └── orchestration/     [STUB] future phase
+├── tests/                 unit tests (unittest, zero-dep)
+├── configs/               benchmark configs (small / medium)
 ├── examples/              quickstart
 └── scripts/               run_benchmark.py
 ```
 
-## 快速开始
+## Quick start
 
-**零运行时依赖**(纯 Python 标准库, Python ≥ 3.10), 无需 pip install:
+**Zero runtime dependencies** (pure Python stdlib, Python ≥ 3.10), no
+`pip install` needed:
 
 ```bash
-# 1. 跑一次快速示例(合成语料 + 三策略对比)
+# 1. quick example (synthetic corpus + 3-strategy comparison)
 python examples/quickstart.py
 
-# 2. 跑 Benchmark(首轮实验, 结果写入 research/results/)
+# 2. run benchmark (results written to research/results/)
 python scripts/run_benchmark.py --config configs/benchmark.small.json
 
-# 3. 信息未完整场景(查询时刻 = 事件 60% 处)
+# 3. incomplete-information scenario (query time = 60% of event span)
 python scripts/run_benchmark.py --config configs/benchmark.small.json --truncate 0.6
 
-# 4. 运行测试(标准库 unittest)
+# 4. run tests (stdlib unittest)
 python -m unittest discover -s tests -v
 ```
 
-## 三种检索策略
+## The three retrieval strategies
 
-| 策略 | 文件 | 思想 |
+| Strategy | File | Idea |
 |---|---|---|
-| A: Traditional | `src/cognitive_os/retrieval/strategy_a_traditional.py` | 全库扁平 top-k(基线) |
-| B: Anchor-based | `src/cognitive_os/retrieval/strategy_b_anchor.py` | 多信号 Anchor + 局部扩张 |
-| C: Dynamic Multi-Net | `src/cognitive_os/retrieval/strategy_c_multinet.py` | 多网并行 + 渐进验证 + 早停 |
+| A: Traditional | `src/cognitive_os/retrieval/strategy_a_traditional.py` | flat top-k over the whole corpus (baseline) |
+| B: Anchor-based | `src/cognitive_os/retrieval/strategy_b_anchor.py` | multi-signal anchors + local expansion |
+| C: Dynamic Multi-Net | `src/cognitive_os/retrieval/strategy_c_multinet.py` | parallel nets + progressive validation + early stop |
 
-每个策略都诚实记录 `similarity_calls` / `index_lookups` / `iterations` /
-`latency_ms`(见 [docs/system_constitution.md](docs/system_constitution.md) 第 3 条)。
+Every strategy honestly records `similarity_calls` / `index_lookups` /
+`iterations` / `latency_ms` (see [docs/system_constitution.md](docs/system_constitution.md) §3).
 
-## 如何参与研究(研究纪律)
+## How to join the research (research discipline)
 
-1. 新想法先写进 [research/hypotheses/](research/hypotheses/), 状态 UNVALIDATED;
-2. 设计实验并预注册到 [research/experiments/](research/experiments/);
-3. 运行脚本, 原始数据落到 [research/results/](research/results/);
-4. 用实验更新假设状态, 被否定就记录 REFUTED, 不强行保留;
-5. 每次重要修改写 [research/log/](research/log/) 条目。
+1. Write new ideas into [research/hypotheses/](research/hypotheses/) first,
+   status UNVALIDATED;
+2. Design and pre-register experiments in
+   [research/experiments/](research/experiments/);
+3. Run scripts; raw data lands in [research/results/](research/results/);
+4. Update hypothesis status from experiments — if refuted, record REFUTED,
+   do not force-retain;
+5. Append a [research/log/](research/log/) entry for every significant change.
 
-**禁止**: 把假设包装成已验证结论; 用"听起来先进"代替实验;
-只写 "Added feature X" 而不写假设与实验结果。
+**Forbidden**: wrapping hypotheses as validated conclusions; substituting
+"sounds advanced" for experiments; writing only "Added feature X" without
+the hypothesis and the experimental result.
 
-## 相关文档
+## Related docs
 
-- [Vision(愿景)](docs/vision.md)
-- [Architecture(架构)](docs/architecture.md)
-- [Research Questions(研究问题)](docs/research_questions.md)
-- [System Constitution(系统宪法/行为约束)](docs/system_constitution.md)
-- [Roadmap(路线图)](docs/roadmap.md)
+- [Vision](docs/vision.md)
+- [Architecture](docs/architecture.md)
+- [Research Questions](docs/research_questions.md)
+- [System Constitution](docs/system_constitution.md)
+- [Roadmap](docs/roadmap.md)
+
+## Contributing
+
+- [Contributing Guide](CONTRIBUTING.md) · [Security Policy](SECURITY.md) ·
+  [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Label Guide](LABELS.md) · [AI Agent Guide](AGENTS.md) ·
+  [Changelog](CHANGELOG.md)
 
 ## License
 
-MIT © 2026 Alastair(Dongxu-Jiang)。详见 [LICENSE](LICENSE)。
+MIT © 2026 Alastair(Dongxu-Jiang). See [LICENSE](LICENSE).
