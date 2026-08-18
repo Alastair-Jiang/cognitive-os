@@ -35,12 +35,12 @@
 | 工件 | 类型 | 现状 | 结论/用途 | 支持的 Rating |
 |---|---|---|---|---|
 | `research/hypotheses/H-001` | 假设 | 部分证实(效率稳定) | B 省 sim 4-5× | `rating: 📊 实验` |
-| `research/hypotheses/H-002` | 假设 | 进行中(EXP-003 复核) | C 未证更优(附带观察待复核) | `rating: 🔬 假设` |
+| `research/hypotheses/H-002` | 假设 | 复核完成(EXP-003 格点级 SUPPORTED) | C 未证更优(仅 overlap-mid/noise-mid 格点 C&gt;A 成立) | `rating: 🔬 假设` |
 | `research/hypotheses/H-003` | 假设 | REFUTED(结构入检索无收益) | 链纯度反例成立 | `rating: ✅ 已验证`(证伪成立) |
 | `research/benchmarks/BM-001` | benchmark 规格 | 有效, 已扩 §5/§7 | 三策略对照框架 | `rating: 📊 实验` |
 | `research/experiments/EXP-001` | 实验 | 完成(2026-08) | 阶段基线 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-002` | 实验 | 完成(2026-08) | 歧义扫描 + 诊断 | `rating: 🏆 里程碑` |
-| `research/experiments/EXP-003` | 实验 | 进行中(预注册 + 首次实跑) | 复核附带观察 | `rating: 📊 实验` |
+| `research/experiments/EXP-003` | 实验 | 完成(判定 SUPPORTED, 仅格点级) | 复核附带观察 | `rating: 📊 实验` |
 | `research/results/*.json` | 原始数据 | 2+3+1+1 个 EXP 结果 | 结论的唯一证据源 | `area: research` |
 
 标签: `rating: 🔬 假设` / `rating: 🧪 原型` / `rating: 📊 实验` /
@@ -97,6 +97,7 @@
 | `CONTRIBUTING` / `SECURITY` / `CoC` | 治理 | ✅(双语化, 同步上游) |
 | `LABELS.md` + `labels.json` | 标签系统 | ✅(本 PR 扩 area:{nets, stats, benchmark, memory, agents}) |
 | `AGENTS.md` + `CLAUDE.md` | AI 协作规约 | ✅(双语) |
+| `OPENCLAW.md` | OpenClaw 专属工程化推进工作提示词(接续 E0 之后) | 🆕 本 PR |
 | `docs/vision.md` | 愿景(未验证概念) | ✅ |
 | `docs/architecture.md` | 系统架构(现状) | ✅ |
 | `docs/system_constitution.md` | 诚实宪法 | ✅ |

@@ -29,6 +29,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
   mirrored in `LABELS.md` / `LABELS.zh.md` / `.github/labels.json`
 - Research log LOG-2026-08-19-e0-demo-EXP-003
 
+- OpenClaw-specific work prompt `OPENCLAW.md`: continuation guidance for the OpenClaw agent
+  (work loop, full verification chain, PR hygiene, honesty boundaries, next-step
+  priorities D-2/D-5/D-3-tail/E1), distilled from the E0 demonstration cycle (PR #4)
+
+### Fixed
+
+- EXP-003 doc: path-truncation garble in the stats-module reference corrected to `src/cognitive_os/stats.py`
+- Repo inventory: synced stale status rows (EXP-003 completed — verdict SUPPORTED,
+  grid-level scope; H-002 review completed)
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

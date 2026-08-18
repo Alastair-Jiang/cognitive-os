@@ -13,7 +13,7 @@ EXP-002 歧义扫描在格点 overlap-mid(tpe=4)/noise-mid(0.30)上观察到:
 无统计推断。EXP-002 明确标记:"需 EXP-003 多 seed 重复 + 显著性检验确认, 暂不更新 H-002"。
 
 本实验即该复核——同时是 E0 实验平台基线的验收样例:
-`ci/stats.py`(随机化检验 + bootstrap 区间 + 效应量)首次实战。
+`src/cognitive_os/stats.py`(随机化检验 + bootstrap 区间 + 效应量)首次实战。
 
 ## 设置(预注册, 先于运行写下)
 
