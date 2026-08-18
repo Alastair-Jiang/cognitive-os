@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import math
-from typing import Dict, Iterable, List, Optional, Sequence, Set
+from collections.abc import Sequence
 
 
-def precision_at_k(ranked: Sequence[str], relevant: Set[str], k: int) -> float:
+def precision_at_k(ranked: Sequence[str], relevant: set[str], k: int) -> float:
     top = ranked[:k]
     if not top:
         return 0.0
     return sum(1 for pid in top if pid in relevant) / len(top)
 
 
-def recall_at_k(ranked: Sequence[str], relevant: Set[str], k: int) -> float:
+def recall_at_k(ranked: Sequence[str], relevant: set[str], k: int) -> float:
     if not relevant:
         return 0.0
     top = ranked[:k]
@@ -30,7 +30,7 @@ def _dcg(rewards: Sequence[float]) -> float:
     return sum(r / math.log2(i + 2) for i, r in enumerate(rewards))
 
 
-def ndcg_at_k(ranked: Sequence[str], relevant: Set[str], k: int) -> float:
+def ndcg_at_k(ranked: Sequence[str], relevant: set[str], k: int) -> float:
     """二值相关性下的 NDCG@k。"""
     top = ranked[:k]
     if not top:
@@ -44,7 +44,7 @@ def ndcg_at_k(ranked: Sequence[str], relevant: Set[str], k: int) -> float:
     return dcg / idcg
 
 
-def mrr(ranked: Sequence[str], relevant: Set[str]) -> float:
+def mrr(ranked: Sequence[str], relevant: set[str]) -> float:
     """第一个相关点的倒数排名; 无相关点返回 0。"""
     for i, pid in enumerate(ranked):
         if pid in relevant:
@@ -52,7 +52,7 @@ def mrr(ranked: Sequence[str], relevant: Set[str]) -> float:
     return 0.0
 
 
-def jaccard(a: Set[str], b: Set[str]) -> float:
+def jaccard(a: set[str], b: set[str]) -> float:
     if not a and not b:
         return 1.0
     return len(a & b) / len(a | b)
@@ -67,14 +67,14 @@ def mean(values: Sequence[float]) -> float:
 # ---------------------------------------------------------------------------
 
 
-def cluster_purity(component_pids: Sequence[str], pid_to_event: Dict[str, str]) -> float:
+def cluster_purity(component_pids: Sequence[str], pid_to_event: dict[str, str]) -> float:
     """连通成分的纯度: 最大事件占比。
 
     纯度为 1.0 表示成分完全由单一事件构成。
     """
     if not component_pids:
         return 0.0
-    counts: Dict[str, int] = {}
+    counts: dict[str, int] = {}
     for pid in component_pids:
         ev = pid_to_event.get(pid, "")
         counts[ev] = counts.get(ev, 0) + 1
@@ -82,7 +82,7 @@ def cluster_purity(component_pids: Sequence[str], pid_to_event: Dict[str, str]) 
 
 
 def mean_component_purity(
-    components: Sequence[Sequence[str]], pid_to_event: Dict[str, str]
+    components: Sequence[Sequence[str]], pid_to_event: dict[str, str]
 ) -> float:
     """聚类级纯度(H-003 重设计): 全部连通成分纯度的按大小加权平均。
 
@@ -95,14 +95,14 @@ def mean_component_purity(
     return sum(len(c) * cluster_purity(c, pid_to_event) for c in components) / total
 
 
-def chain_purity(component_pids: Sequence[str], pid_to_chain: Dict[str, int]) -> float:
+def chain_purity(component_pids: Sequence[str], pid_to_chain: dict[str, int]) -> float:
     """成分的链纯度: 最大因果链占比(测“结构信号把链聚起来”)。
 
     与 cluster_purity 的唯一区别是 ground-truth 标签为链而非事件。
     """
     if not component_pids:
         return 0.0
-    counts: Dict[int, int] = {}
+    counts: dict[int, int] = {}
     for pid in component_pids:
         ch = pid_to_chain.get(pid, -1)
         counts[ch] = counts.get(ch, 0) + 1
@@ -110,7 +110,7 @@ def chain_purity(component_pids: Sequence[str], pid_to_chain: Dict[str, int]) ->
 
 
 def mean_chain_purity(
-    components: Sequence[Sequence[str]], pid_to_chain: Dict[str, int]
+    components: Sequence[Sequence[str]], pid_to_chain: dict[str, int]
 ) -> float:
     """聚类级链纯度: 全部成分的链纯度按大小加权平均。"""
     total = sum(len(c) for c in components)
@@ -120,8 +120,8 @@ def mean_chain_purity(
 
 
 def reconstruction_metrics(
-    component_pids: Sequence[str], true_event_pids: Set[str]
-) -> Dict[str, float]:
+    component_pids: Sequence[str], true_event_pids: set[str]
+) -> dict[str, float]:
     """以 ground-truth 事件为参照, 度量成分的重建质量。"""
     if not component_pids:
         return {"precision": 0.0, "recall": 0.0, "f1": 0.0}
@@ -132,7 +132,7 @@ def reconstruction_metrics(
     return {"precision": prec, "recall": rec, "f1": f1}
 
 
-def rank_stats(ranked: Sequence[str], relevant: Set[str], k: int) -> Dict[str, float]:
+def rank_stats(ranked: Sequence[str], relevant: set[str], k: int) -> dict[str, float]:
     """一次检索的完整指标快照。"""
     p = precision_at_k(ranked, relevant, k)
     r = recall_at_k(ranked, relevant, k)

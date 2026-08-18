@@ -25,7 +25,7 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
@@ -57,7 +57,7 @@ CELL_WITHIN_EVENT_NOISE = 0.30  # "noise-mid"
 STRATEGIES_UNDERCLAIM = ["A-traditional", "C-multinet"]  # 只主张 C vs A
 
 
-def run_seed(corpus_seed: int, nq: int, k: int) -> Dict[str, Any]:
+def run_seed(corpus_seed: int, nq: int, k: int) -> dict[str, Any]:
     """单 seed: 建语料 → 同查询集 → A/C 配对 per-query F1。"""
     corpus = SyntheticEventCorpus(
         SyntheticCorpusConfig(
@@ -80,10 +80,10 @@ def run_seed(corpus_seed: int, nq: int, k: int) -> Dict[str, Any]:
     strategies = {s.name: s for s in build_strategies(corpus, SCAN_STRATEGY_TEMPLATE)}
     a, c = strategies["A-traditional"], strategies["C-multinet"]
 
-    a_f1: List[float] = []
-    c_f1: List[float] = []
-    a_calls: List[float] = []
-    c_calls: List[float] = []
+    a_f1: list[float] = []
+    c_f1: list[float] = []
+    a_calls: list[float] = []
+    c_calls: list[float] = []
     for q in queries:
         event_pids = set(corpus.event_fragments(q.event_id))
         relevant = {p for p in event_pids if q.is_allowed(p)} - set(q.seed_pids)
@@ -114,9 +114,9 @@ def run_seed(corpus_seed: int, nq: int, k: int) -> Dict[str, Any]:
 
 
 def decide(
-    all_diffs: List[float],
-    per_seed_mean_diffs: List[float],
-) -> Dict[str, Any]:
+    all_diffs: list[float],
+    per_seed_mean_diffs: list[float],
+) -> dict[str, Any]:
     """预注册判定(见 EXP-003 文档 §判定标准)。"""
     p_res = permutation_test(all_diffs, n_resample=10000, rng_seed=777)
     ci_res = bootstrap_mean_ci(all_diffs, n_resample=10000, alpha=0.05, rng_seed=888)
@@ -164,12 +164,12 @@ def main() -> None:
     args = ap.parse_args()
     seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
 
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for s in seeds:
         print(f"[EXP-003] corpus_seed={s} ({seeds.index(s)+1}/{len(seeds)}) …", flush=True)
         rows.append(run_seed(s, args.queries, args.k))
 
-    all_diffs: List[float] = [d for r in rows for d in r["diffs"]]
+    all_diffs: list[float] = [d for r in rows for d in r["diffs"]]
     per_seed_mean_diffs = [r["mean_diff"] for r in rows]
     judgement = decide(all_diffs, per_seed_mean_diffs)
 

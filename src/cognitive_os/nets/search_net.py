@@ -8,19 +8,19 @@
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional, Sequence, Tuple
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 
-from ..similarity import cosine
-from ..types import Evidence, Embedding, Query
 from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..similarity import cosine
+from ..types import Embedding, Evidence
 
 
 @dataclass
 class SearchNetConfig:
     name: str = "net"
     radius: float = 0.80  # 邻居相似度下限(过滤弱邻居)
-    temporal_window: Optional[float] = None  # 时间窗; None = 忽略时间信号
+    temporal_window: float | None = None  # 时间窗; None = 忽略时间信号
     source_min_weight: float = 0.0  # 低于该可靠性的来源不进入候选
     max_candidates_per_anchor: int = 5  # 每轮扩张预算(按锚点数放大)
     max_hops: int = 2
@@ -42,7 +42,7 @@ class NetSearchStats:
 class SearchNet:
     """围绕种子(与可选锚点)扩张的单网搜索。"""
 
-    def __init__(self, corpus: SyntheticEventCorpus, cfg: Optional[SearchNetConfig] = None):
+    def __init__(self, corpus: SyntheticEventCorpus, cfg: SearchNetConfig | None = None):
         self.corpus = corpus
         self.cfg = cfg or SearchNetConfig()
         self.name = self.cfg.name
@@ -68,11 +68,11 @@ class SearchNet:
     def search(
         self,
         seed_pids: Sequence[str],
-        query_emb: Optional[Embedding] = None,
+        query_emb: Embedding | None = None,
         extra_frontier: Sequence[str] = (),
-        stats: Optional[NetSearchStats] = None,
-        allowed: Optional[Callable[[str], bool]] = None,
-    ) -> List[Evidence]:
+        stats: NetSearchStats | None = None,
+        allowed: Callable[[str], bool] | None = None,
+    ) -> list[Evidence]:
         """从种子(与额外前沿点, 如锚点)出发, 沿索引做多跳扩张。
 
         返回按组合证据分降序的候选 Evidence 列表(不含种子本身)。
@@ -85,11 +85,11 @@ class SearchNet:
         seed_time = sum(p.timestamp for p in seed_points) / max(len(seed_points), 1)
 
         visited = set(seed_pids) | set(extra_frontier)
-        candidates: Dict[str, Evidence] = {}
+        candidates: dict[str, Evidence] = {}
         frontier = list(seed_pids) + list(extra_frontier)
 
         for _ in range(max(1, c.max_hops)):
-            next_frontier: List[Tuple[float, str]] = []
+            next_frontier: list[tuple[float, str]] = []
             for pid in frontier:
                 for nid, nsim in corpus.neighbors(pid):
                     stats.index_lookups += 1

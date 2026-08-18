@@ -13,11 +13,11 @@ Anchor 不是"最相似点", 而是综合以下信号的候选枢纽点:
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional, Sequence
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 
-from ..nets.search_net import NetSearchStats
 from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..nets.search_net import NetSearchStats
 from ..similarity import cosine
 from ..types import Embedding
 
@@ -36,11 +36,11 @@ class AnchorConfig:
 def detect_anchors(
     corpus: SyntheticEventCorpus,
     seed_pids: Sequence[str],
-    query_emb: Optional[Embedding] = None,
-    cfg: Optional[AnchorConfig] = None,
-    stats: Optional[NetSearchStats] = None,
-    allowed: Optional[Callable[[str], bool]] = None,
-) -> List[str]:
+    query_emb: Embedding | None = None,
+    cfg: AnchorConfig | None = None,
+    stats: NetSearchStats | None = None,
+    allowed: Callable[[str], bool] | None = None,
+) -> list[str]:
     """返回按综合锚点分降序的前 n_anchors 个点(不含种子)。
 
     1. 候选池: 种子沿索引扩张 pool_hops 跳(只产生索引访问与局部评估);
@@ -59,10 +59,10 @@ def detect_anchors(
     wsum = wsum if wsum > 0 else 1.0
 
     # 1) 候选池: 沿索引扩张
-    pool: Dict[str, float] = {}
+    pool: dict[str, float] = {}
     frontier = list(seed_pids)
     for _ in range(max(1, cfg.pool_hops)):
-        nxt: List[str] = []
+        nxt: list[str] = []
         for pid in frontier:
             for nid, _sim in corpus.neighbors(pid):
                 stats.index_lookups += 1
@@ -77,7 +77,7 @@ def detect_anchors(
             break
 
     # 2) 池内多信号锚点评分
-    scored: List[tuple[float, str]] = []
+    scored: list[tuple[float, str]] = []
     for pid in pool:
         p = corpus.get(pid)
         sem = cosine(query_emb, p.embedding)

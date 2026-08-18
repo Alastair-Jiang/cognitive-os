@@ -5,8 +5,8 @@ from __future__ import annotations
 from cognitive_os.datasets.synthetic_events import SyntheticCorpusConfig, SyntheticEventCorpus
 from cognitive_os.graph.evidence_graph import EvidenceGraph
 from cognitive_os.metrics import chain_purity, mean_chain_purity, mean_component_purity
-from cognitive_os.validation.progressive import ProgressiveValidator, ValidatorConfig
 from cognitive_os.types import Evidence
+from cognitive_os.validation.progressive import ProgressiveValidator, ValidatorConfig
 
 
 def make_corpus(**overrides):

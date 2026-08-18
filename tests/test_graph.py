@@ -29,8 +29,14 @@ class TestEvidenceGraph(unittest.TestCase):
 
     def test_isolated_component(self):
         """低于语义阈值的两点不成边, 成分各自孤立。"""
-        a = InformationPoint(pid="a", event_id="e1", embedding=(1.0, 0.0, 0.0), timestamp=0.0, source="s1", source_weight=0.9)
-        b = InformationPoint(pid="b", event_id="e2", embedding=(0.0, 1.0, 0.0), timestamp=1.0, source="s1", source_weight=0.9)
+        a = InformationPoint(
+            pid="a", event_id="e1", embedding=(1.0, 0.0, 0.0),
+            timestamp=0.0, source="s1", source_weight=0.9,
+        )
+        b = InformationPoint(
+            pid="b", event_id="e2", embedding=(0.0, 1.0, 0.0),
+            timestamp=1.0, source="s1", source_weight=0.9,
+        )
         stub = _StubCorpus([a, b])
         g = EvidenceGraph.build(stub, ["a", "b"], semantic_threshold=0.8)
         self.assertEqual(g.component_of("a"), ["a"])
@@ -38,8 +44,14 @@ class TestEvidenceGraph(unittest.TestCase):
 
     def test_temporal_window_blocks_edge(self):
         """语义相似但时间相距过远的点对不成边。"""
-        a = InformationPoint(pid="a", event_id="e1", embedding=(1.0, 0.0), timestamp=0.0, source="s1", source_weight=0.9)
-        b = InformationPoint(pid="b", event_id="e1", embedding=(0.99, 0.1), timestamp=90.0, source="s1", source_weight=0.9)
+        a = InformationPoint(
+            pid="a", event_id="e1", embedding=(1.0, 0.0),
+            timestamp=0.0, source="s1", source_weight=0.9,
+        )
+        b = InformationPoint(
+            pid="b", event_id="e1", embedding=(0.99, 0.1),
+            timestamp=90.0, source="s1", source_weight=0.9,
+        )
         stub = _StubCorpus([a, b])
         g = EvidenceGraph.build(stub, ["a", "b"], semantic_threshold=0.8, temporal_window=5.0)
         self.assertFalse(g.has_edge("a", "b"))
@@ -48,11 +60,22 @@ class TestEvidenceGraph(unittest.TestCase):
 
     def test_source_diversity_requirement(self):
         """require_source_diversity=True 时, 同来源点对不成边。"""
-        a = InformationPoint(pid="a", event_id="e1", embedding=(1.0, 0.0), timestamp=0.0, source="s1", source_weight=0.9)
-        b = InformationPoint(pid="b", event_id="e1", embedding=(0.99, 0.1), timestamp=1.0, source="s1", source_weight=0.9)
-        c = InformationPoint(pid="c", event_id="e1", embedding=(0.98, 0.2), timestamp=2.0, source="s2", source_weight=0.8)
+        a = InformationPoint(
+            pid="a", event_id="e1", embedding=(1.0, 0.0),
+            timestamp=0.0, source="s1", source_weight=0.9,
+        )
+        b = InformationPoint(
+            pid="b", event_id="e1", embedding=(0.99, 0.1),
+            timestamp=1.0, source="s1", source_weight=0.9,
+        )
+        c = InformationPoint(
+            pid="c", event_id="e1", embedding=(0.98, 0.2),
+            timestamp=2.0, source="s2", source_weight=0.8,
+        )
         stub = _StubCorpus([a, b, c])
-        g = EvidenceGraph.build(stub, ["a", "b", "c"], semantic_threshold=0.8, require_source_diversity=True)
+        g = EvidenceGraph.build(
+            stub, ["a", "b", "c"], semantic_threshold=0.8, require_source_diversity=True
+        )
         self.assertFalse(g.has_edge("a", "b"))
         self.assertTrue(g.has_edge("a", "c"))
 
@@ -74,7 +97,9 @@ class TestEvidenceGraph(unittest.TestCase):
 
     def test_components_partition(self):
         corpus = self.corpus
-        g = EvidenceGraph.build(corpus, corpus.point_ids, semantic_threshold=0.85, temporal_window=30.0)
+        g = EvidenceGraph.build(
+            corpus, corpus.point_ids, semantic_threshold=0.85, temporal_window=30.0
+        )
         comps = g.components()
         seen = set()
         for comp in comps:

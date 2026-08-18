@@ -28,7 +28,8 @@ def main() -> None:
     print(f"语料: {len(corpus.points)} 个碎片, {len(corpus.events)} 个事件")
     print(f"同事件平均相似度={stats['within_mean']:.3f}, "
           f"跨事件平均={stats['cross_mean']:.3f}, "
-          f"跨事件最大={stats['cross_max']:.3f} (存在歧义: {stats['cross_max'] > stats['within_mean'] * 0.6})")
+          f"跨事件最大={stats['cross_max']:.3f} "
+          f"(存在歧义: {stats['cross_max'] > stats['within_mean'] * 0.6})")
 
     query = corpus.sample_queries(1, rng_seed=7)[0]
     print(f"\n查询 qid={query.qid} 种子={query.seed_pids[0]} 目标事件={query.event_id}")
@@ -44,7 +45,9 @@ def main() -> None:
         corpus,
         net_configs=[
             SearchNetConfig(name="narrow-semantic", radius=0.88, semantic_w=1.0, max_hops=1),
-            SearchNetConfig(name="wide-source", radius=0.7, source_w=0.4, semantic_w=0.5, temporal_window=40.0),
+            SearchNetConfig(
+                name="wide-source", radius=0.7, source_w=0.4, semantic_w=0.5, temporal_window=40.0
+            ),
         ],
         validator_cfg=ValidatorConfig(),
     )
@@ -54,7 +57,8 @@ def main() -> None:
         res = strat.retrieve(query, k)
         hits = [pid for pid in res.ranked_pids if pid in relevant]
         print(f"\n[{strat.name}] iterations={res.iterations} sim_calls={res.similarity_calls} "
-              f"idx_lookups={res.index_lookups} latency={res.latency_ms:.2f}ms early_stop={res.early_stopped}")
+              f"idx_lookups={res.index_lookups} latency={res.latency_ms:.2f}ms "
+              f"early_stop={res.early_stopped}")
         print(f"  top-{k} 命中目标事件 {len(hits)}/{len(relevant)}: {hits[:5]}")
 
 

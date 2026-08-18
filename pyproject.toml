@@ -59,7 +59,12 @@ target-version = ["py310", "py311", "py312"]
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
+# 脚手架豁免: scripts/examples/tests 均先 sys.path.insert 后 import(仓库约定),
+# E402 按目录豁免, 与既有行内 noqa 双轨并存
+per-file-ignores = {"scripts/*.py" = ["E402", "N806", "N802"], "examples/*.py" = ["E402", "N806"], "tests/*.py" = ["E402"]}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -10,18 +10,18 @@
 
 from __future__ import annotations
 
-from typing import Dict, Iterable, List, Optional, Set, Tuple
+from collections.abc import Iterable
 
-from ..similarity import cosine
 from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..similarity import cosine
 
 
 class EvidenceGraph:
     """候选点上的无向一致性图。"""
 
     def __init__(self) -> None:
-        self.edges: Dict[Tuple[str, str], float] = {}  # (a, b) -> weight, a < b
-        self.adj: Dict[str, Set[str]] = {}
+        self.edges: dict[tuple[str, str], float] = {}  # (a, b) -> weight, a < b
+        self.adj: dict[str, set[str]] = {}
 
     def add_edge(self, a: str, b: str, weight: float) -> None:
         key = (a, b) if a < b else (b, a)
@@ -40,11 +40,11 @@ class EvidenceGraph:
         corpus: SyntheticEventCorpus,
         candidate_pids: Iterable[str],
         semantic_threshold: float = 0.7,
-        temporal_window: Optional[float] = None,
+        temporal_window: float | None = None,
         require_source_diversity: bool = False,
-        max_edges_per_node: Optional[int] = None,
+        max_edges_per_node: int | None = None,
         causal_edges: bool = False,
-    ) -> "EvidenceGraph":
+    ) -> EvidenceGraph:
         """在候选点之间按多信号一致性建边。
 
         causal_edges: 启用时, 显式提及/引用关系(meta["mentions"])也建边——
@@ -55,7 +55,7 @@ class EvidenceGraph:
         """
         g = cls()
         candidates = list(candidate_pids)
-        deg: Dict[str, int] = {}
+        deg: dict[str, int] = {}
 
         # 引用边: 先建(硬结构边), 与语义边独立
         if causal_edges:
@@ -83,7 +83,10 @@ class EvidenceGraph:
                 sim = cosine(pa.embedding, pb.embedding)
                 if sim < semantic_threshold:
                     continue
-                if temporal_window is not None and abs(pa.timestamp - pb.timestamp) > temporal_window:
+                if (
+                    temporal_window is not None
+                    and abs(pa.timestamp - pb.timestamp) > temporal_window
+                ):
                     continue
                 if require_source_diversity and pa.source == pb.source:
                     continue
@@ -93,7 +96,7 @@ class EvidenceGraph:
                 deg[b] = deg.get(b, 0) + 1
         return g
 
-    def component_of(self, pid: str) -> List[str]:
+    def component_of(self, pid: str) -> list[str]:
         """pid 所在的连通成分(BFS)。孤立点返回 [pid]。"""
         if pid not in self.adj:
             return [pid]
@@ -107,9 +110,9 @@ class EvidenceGraph:
                     stack.append(nxt)
         return sorted(seen)
 
-    def components(self) -> List[List[str]]:
-        seen: Set[str] = set()
-        comps: List[List[str]] = []
+    def components(self) -> list[list[str]]:
+        seen: set[str] = set()
+        comps: list[list[str]] = []
         for pid in self.adj:
             if pid in seen:
                 continue
@@ -119,14 +122,14 @@ class EvidenceGraph:
         return comps
 
     @staticmethod
-    def cluster_purity(component_pids: List[str], pid_to_event: Dict[str, str]) -> float:
+    def cluster_purity(component_pids: list[str], pid_to_event: dict[str, str]) -> float:
         """连通成分的纯度: 最大事件占比(1.0 = 单一事件)。"""
         from ..metrics import cluster_purity as _purity
 
         return _purity(component_pids, pid_to_event)
 
     @staticmethod
-    def reconstruction(component_pids: List[str], true_event_pids: Set[str]) -> Dict[str, float]:
+    def reconstruction(component_pids: list[str], true_event_pids: set[str]) -> dict[str, float]:
         from ..metrics import reconstruction_metrics
 
         return reconstruction_metrics(component_pids, true_event_pids)

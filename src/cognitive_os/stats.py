@@ -18,10 +18,10 @@ from __future__ import annotations
 
 import math
 import random
-from typing import Dict, List, Sequence
+from collections.abc import Sequence
 
 
-def paired_diffs(a: Sequence[float], b: Sequence[float]) -> List[float]:
+def paired_diffs(a: Sequence[float], b: Sequence[float]) -> list[float]:
     """配对差向量 d_i = a_i - b_i(两序列同序一一配对)。"""
     if len(a) != len(b):
         raise ValueError(f"配对序列长度必须一致, 收到 {len(a)} vs {len(b)}")
@@ -50,7 +50,7 @@ def permutation_test(
     diffs: Sequence[float],
     n_resample: int = 10000,
     rng_seed: int = 777,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """双侧配对随机化检验(sign-flip permutation test)。
 
     设 per-query 差向量 d = (d_1, ..., d_n), H0: d_i 关于 0 对称
@@ -90,7 +90,7 @@ def bootstrap_mean_ci(
     n_resample: int = 10000,
     alpha: float = 0.05,
     rng_seed: int = 888,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """bootstrap 百分位均值区间(对输入样本有放回重采样)。
 
     对配对差 values 重采样 B = n_resample 次, 每次记 mean;
@@ -105,7 +105,7 @@ def bootstrap_mean_ci(
         raise ValueError(f"alpha 必须在 (0,1), 收到 {alpha}")
     rng = random.Random(rng_seed)
     n = len(values)
-    means: List[float] = []
+    means: list[float] = []
     for _ in range(n_resample):
         s = 0.0
         for _ in range(n):
