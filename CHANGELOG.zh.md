@@ -27,6 +27,17 @@
   (LABELS.md / LABELS.zh.md / `.github/labels.json`, 先为未实施模块打 area 位)
 - 研究日志 LOG-2026-08-19-e0-demo-EXP-003(四闸门判定设计 + 如实分屏)
 
+- OpenClaw 专属工作提示词 `OPENCLAW.md`: 接续 E0 之后的工程化推进指引
+  (工作循环/完整验证链/PR 卫生/诚实边界/下一步优先级 D-2、D-5、D-3 尾、E1),
+  沉淀自 E0 完整示范周期(PR #4); OpenClaw 工作时自动读取, 其他 agent 仍以
+  `AGENTS.md` 为准
+
+### Fixed
+
+- EXP-003 文档: 路径截断乱码(统计模块引用)修正为 `src/cognitive_os/stats.py`
+- 仓库资产清单: 同步过期状态行(EXP-003 已完成——判定 SUPPORTED 仅格点级;
+  H-002 复核完成)
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added
