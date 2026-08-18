@@ -43,7 +43,7 @@ EXP-001 的诚实结论(H-001 部分成立 / H-002 否定 / H-003 待重设计)�
   research_questions.md。详见 [EXP-002](research/experiments/EXP-002-ambiguity-scan-and-diagnostics.md)。
 
 ⚠️ 附带观察(未定论): noise=0.3 档位单 seed 下 C F1@k=0.892 > A 0.755,
-需 EXP-003 多 seed 显著性检验复核。
+→ 已定: [EXP-003](../research/experiments/EXP-003-multiseed-significance.md) 复核 **SUPPORTED**(5 seed × 12 查询, mean_diff=+0.081, p=0.0001, CI=[+0.044,+0.115], d_z=+0.58)。仅对该格点成立, 按宪法第 2 条不写入核心(边界/成本见该文)。
 
 ## Phase 2: Anchor Mechanism 深化
 
