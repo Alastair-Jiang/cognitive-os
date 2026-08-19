@@ -71,12 +71,20 @@ class TestEndToEnd(unittest.TestCase):
     """端到端: 在临时目录跑真实脚本(副进程), 验证退出码。"""
 
     def _run(self, tmp: Path, *args: str) -> tuple[int, str]:
+        import os
         import subprocess
 
+        # D-8: GBK console (CN Windows default) breaks emoji/CJK output
+        # with UnicodeEncodeError. Explicit decode + env var, belt & braces.
+        env = dict(os.environ)
+        env["PYTHONIOENCODING"] = "utf-8"
         proc = subprocess.run(
             [sys.executable, str(SCRIPTS / "check_specs_consistency.py"), *args],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
             cwd=str(tmp),
         )
         return proc.returncode, proc.stdout + proc.stderr

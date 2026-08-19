@@ -20,10 +20,14 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_DOC = REPO / "research" / "benchmarks" / "BM-001-synthetic-event-reconstruction.md"
+
+if hasattr(sys.stdout, "reconfigure"):  # D-8: GBK 控制台下打印 ✅/❌ 不炸
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # key=value 对(整数/浮点; key 为下划线小写标识符)
 _KV_RE = re.compile(r"\b([a-z][a-z0-9_]*)=(\d+(?:\.\d+)?)\b")

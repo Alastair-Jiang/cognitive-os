@@ -18,9 +18,13 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+
+if hasattr(sys.stdout, "reconfigure"):  # D-8: GBK 控制台下打印 ✅/❌ 不炸
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 ZW = "\u200b"
 _BT = "`"
 ENTITIES = ["&" + "gt;", "&" + "lt;", "&" + "amp;"]
