@@ -60,6 +60,15 @@
 - **D-8 修复**: 门禁脚本 stdout 重配置为 UTF-8; 测试 subprocess 显式解码
   并注入 PYTHONIOENCODING — GBK 控制台无环境变量亦 87/87 通过
 
+- 预注册更正轮（运行前，两实验均未运行）: EXP-005 语料 seed 池对齐
+  EXP-003 的 5 固定值（初版误把 3+2 模式归属 EXP-003）、成本计数更正
+  为实际 3 计数器（`NetSearchStats`）、有序路径恢复率广义化为 /L
+  并与 `chain_connectivity` 消歧; EXP-004b 最优策略标签冻结主
+  λ=0.02、EXP-004 与 EXP-005 明确为并行互不前置。审计另录两项工程债
+  待排期：BM-001 运行器判定口径仍停 EXP-001 版（`scripts/run_benchmark.py`
+  的 H-003 条件）；卫生拆词正则仅覆盖小写 1–2 字母 token、漏大写拆词
+  （详见 research/log/LOG-2026-08-19-prereg-corrections.md）
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

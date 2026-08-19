@@ -65,6 +65,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
   subprocess decodes explicitly and injects PYTHONIOENCODING —
   87/87 now passes on a GBK console without env vars
 
+- Pre-registration correction round (runtime untouched; both
+  experiments still un-run): EXP-005 seed pool realigned to
+  EXP-003's five fixed values {20260819, 7, 42, 131, 9999}; "five
+  cost counters" corrected to the real 3-counter `NetSearchStats`;
+  ordered-path recovery rate generalized to /L and
+  disambiguated from `chain_connectivity`. EXP-004b optimal
+  strategy labels frozen to main λ = 0.02; EXP-004 and EXP-005
+  declared parallel (no gate-on-G1-failure). Audit also logs two
+  engineering debts: BM-001 runner judgment caliber for H-003
+  still EXP-001-style in `scripts/run_benchmark.py`, and hygiene
+  SPLIT regex misses uppercase/≥3-letter split garble. Details
+  in research/log/LOG-2026-08-19-prereg-corrections.md
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

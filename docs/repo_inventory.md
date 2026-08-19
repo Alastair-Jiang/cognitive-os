@@ -42,7 +42,8 @@
 | `research/experiments/EXP-002` | 实验 | 完成(2026-08) | 歧义扫描 + 诊断 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-003` | 实验 | 完成(判定 SUPPORTED, 仅格点级) | 复核附带观察 | `rating: 📊 实验` |
  `research/experiments/EXP-004`  实验  预注册(未运行, 自适应策略选择)  H-005 三段式 004a/b/c  `rating: 🔬 假设` 
- `research/experiments/EXP-005`  实验  预注册(未运行, 引用扩张)  H-004 闸门 G1-G4  `rating: 🔬 假设` 
+ `research/experiments/EXP-005`  实验  预注册已更正(未运行, 引用扩张; 2026-08-19 更正: 5 固定 seed / 3 计数器 /
+  恢复率 /L 广义化并消歧)  H-004 闸门 G1-G4  `rating: 🔬 假设` 
  `research/hypotheses/H-004`  假设  UNVALIDATED(2026-08-19 注册)  H-003 目标拆分: 链恢复增益 + 聚类护栏  `rating: 🔬 假设` 
  `research/hypotheses/H-005`  假设  UNVALIDATED(2026-08-19 注册)  自适应策略选择 π(as)  `rating: 🔬 假设` 
 | `research/results/*.json` | 原始数据 | 2+3+1+1 个 EXP 结果 | 结论的唯一证据源 | `area: research` |
