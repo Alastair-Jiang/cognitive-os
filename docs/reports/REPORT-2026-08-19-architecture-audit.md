@@ -74,28 +74,28 @@ Query(种子碎片) → 策略(A/B/C) → 候选收集(检索网/锚点扩张)
 
 ## 4. Verified Findings（已验证结论 [V]，全部有原始数据）
 
-1. **A 是质量基线**：EX P-001 主模式 A F1@k=0.637 &gt; C 0.490 &gt; B 0.512；
-   EX P-002 十格扫描中 9/10 格 A ≥ C（F1 口径），medium 档同向。
+1. **A 是质量基线**：EXP-001 主模式 A F1@k=0.637 &gt; C 0.490 &gt; B 0.512；
+   EXP-002 十格扫描中 9/10 格 A ≥ C（F1 口径），medium 档同向。
 2. **锚点效率组件稳健成立**：B 的 similarity_calls 恒为 A 的 19%–24%
-   （10/10 格，4–5× 节省，与歧义度无关）；EX P-001 中 B MRR 0.933 &gt; A 0.794。
+   （10/10 格，4–5× 节省，与歧义度无关）；EXP-001 中 B MRR 0.933 &gt; A 0.794。
 3. **C 的早停机制有效**：75% 查询提前停止（平均 2.2 轮 vs 预算 6–8）；
-   mean 聚合不改变该结论（EX P-002 诊断）。
-4. **格点级 C &gt; A 已证实**（EX P-003，overlap-mid/noise-mid 格点）：
+   mean 聚合不改变该结论（EXP-002 诊断）。
+4. **格点级 C &gt; A 已证实**（EXP-003，overlap-mid/noise-mid 格点）：
    mean_diff=+0.081，p=0.0001，95% CI [+0.044, +0.115]，d_z=+0.58，5/5 seed 同向；
    代价 sim_calls ~3.7×。**边界：仅该格点，且是"预算换质量"，不可表述为算法更聪明**。
 5. **共识聚合不是杠杆**：mean vs max 无实质质量收益，成本 +73%–80%，早停率近腰斩。
 6. **引用结构边恢复因果链有效**（图层面）：链连通率 0.940 vs 纯语义 0.294–0.398；
    但纯度口径有害（硬桥接稀释排他性）——**指标选取决定结论**。
 7. **检索层建图无边际价值**：语义预筛的 top-k 候选里几乎不含跨事件引用目标，
-   结构信号若要有用必须参与检索/扩张（EX P-002 明确结论，E2/EXP-005 方向）。
+   结构信号若要有用必须参与检索/扩张（EXP-002 明确结论，E2/EXP-005 方向）。
 
 ## 5. Falsified Hypotheses（已证伪，如实记录）
 
 | 假设 | 判定 | 证据 |
 |---|---|---|
 | H-001 质量组件（"不显著损失 Recall"） | **REFUTED** | 10/10 格召回损失 26.2–56.0pp，全部远超 10pp 容忍线；损失与歧义度无单调关系，"低歧义→收敛"修订预期亦被否定 |
-| H-002 按原表述（"多网更优"） | **REFUTED** | 高歧义档 C F1&lt;A 且成本 14×；截断模式 predR 0.554&lt;0.614；mean 聚合诊断排除"聚合方式"解释。格点级 C&gt;A（EX P-003）不推翻整体判定 |
-| H-003 按纯度表述（"多信号建图纯度更高"） | **REFUTED** | EX P-001 差异 ≤0.013；EX P-002 重设计后 +causal 纯度 0.115/0.365 反而低于 multi-signal 0.479/0.646 |
+| H-002 按原表述（"多网更优"） | **REFUTED** | 高歧义档 C F1&lt;A 且成本 14×；截断模式 predR 0.554&lt;0.614；mean 聚合诊断排除"聚合方式"解释。格点级 C&gt;A（EXP-003）不推翻整体判定 |
+| H-003 按纯度表述（"多信号建图纯度更高"） | **REFUTED** | EXP-001 差异 ≤0.013；EXP-002 重设计后 +causal 纯度 0.115/0.365 反而低于 multi-signal 0.479/0.646 |
 
 ## 6. Unresolved Hypotheses（未决问题）
 
@@ -107,7 +107,7 @@ Query(种子碎片) → 策略(A/B/C) → 候选收集(检索网/锚点扩张)
    ——E2 计划（引用扩张通道 + 有序路径恢复度量），未实验。
 4. **RQ-3 早期识别**：C predR 仍低于 A；结构信号引入扩张后的早期识别增益未测。
 5. **RQ-5 / RQ-6（自适应策略选择）**：完全 UNVALIDATED，无任何实验。
-   **这正是 EX P-004 的研究对象**（见 §9）。
+   **这正是 EXP-004 的研究对象**（见 §9）。
 6. Phase 3+ 全部 RQ（记忆/回声室/可插拔/世界模型）：UNVALIDATED，按宪法不进代码。
 
 ## 7. Technical Debt（技术债清单）
@@ -117,8 +117,8 @@ Query(种子碎片) → 策略(A/B/C) → 候选收集(检索网/锚点扩张)
 | 编号 | 债 | 状态 |
 |---|---|---|
 | D-1 | `run_exp002_h003.py` 内联 CORPUS_CFG（归档但漂移风险在案） | 未收口 |
-| D-3 | 结果 JSON 无 config_hash / code_sha（EX P-003 仅 schema_version） | 未收口 |
-| D-5 | `build_strategies` 在 `run_benchmark.py` 与 `run_exp002_scan.py` 两份拷贝（EX P-003 以 import 缓解，未消除） | 部分缓解 |
+| D-3 | 结果 JSON 无 config_hash / code_sha（EXP-003 仅 schema_version） | 未收口 |
+| D-5 | `build_strategies` 在 `run_benchmark.py` 与 `run_exp002_scan.py` 两份拷贝（EXP-003 以 import 缓解，未消除） | 部分缓解 |
 | D-6 | CI 无覆盖率门禁 / 类型检查 / 基准冒烟 job | 未收口 |
 | D-7 | 无 ADR 目录 | 未收口 |
 | **D-8（本轮新发现，活缺陷）** | **Windows/GBK 可移植性**：`check_specs_consistency.py:131,135` 向 stdout 打印 ✅/❌ emoji；`tests/test_specs_consistency.py` 以 `subprocess.run(..., text=True)`（locale 编码）拉起子进程 → GBK 控制台（中文 Windows 默认）下 `UnicodeEncodeError`，**本机实测 3/87 用例失败**；设 `PYTHONIOENCODING=utf-8` 后 87/87 全过。CI（ubuntu/UTF-8）不可见此缺陷。修复方向：测试侧 subprocess 显式 `encoding="utf-8", errors="replace"` 或注入 `PYTHONIOENCODING` 环境变量；脚本侧 `sys.stdout.reconfigure(encoding="utf-8", errors="replace")` | 待修（小 PR） |
@@ -186,10 +186,10 @@ G3 统计显著性（配对随机化检验 p&lt;0.05 + bootstrap CI 不含 0 + �
 | 轮次 | 内容 | 改动面 | Gate |
 |---|---|---|---|
 | R1（本轮，已完成） | 本审计 + H-005 假设 + EXP-004 预注册 + 日志 | 仅新增 4 个文档 | — |
-| R2 | **EXP-004a Oracle headroom**：`scripts/run_exp004_oracle.py`（import 复用 `run_exp002_scan.SCAN_STRATEGY_TEMPLATE`/`build_strategies`，零 src 改动）；10 格 × ≥3 seed × 12 查询；JSON 落 `research/results/`；回填 EXP-004 文档 | 1 个脚本 | G1 |
+| R2 | **EXP-004a Oracle headroom**：`run_exp004a_oracle.py`（scripts/ 下）（import 复用 `run_exp002_scan.SCAN_STRATEGY_TEMPLATE`/`build_strategies`，零 src 改动）；10 格 × ≥3 seed × 12 查询；JSON 落 `research/results/`；回填 EXP-004 文档 | 1 个脚本 | G1 |
 | R3 | 文档一致性小 PR：README/AGENTS/CLAUDE 测试计数 51→87；RQ-1 注记同步 EXP-003 已复核；repo_inventory H-001/H-003 标签修正；engineering_plan E2 Gate "EXP-004"→"EXP-005"；**D-8 修复**（subprocess UTF-8 编码） | ≤5 文件小改 | 87/87 在 GBK 控制台亦通过 |
-| R4 | 仅当 G1 通过：**EXP-004b/c** 特征提取 + 控制器 v0/v1（实验模块，建议 `src/cognitive_os/retrieval/strategy_selector.py`，不进核心）+ 单测 | 1 模块 + 测试 | G2–G4 |
-| R5+ | D-3/D-5（runner 公共化 + config_hash）、E1 协议化（有 EX P-001 复跑护栏）——沿用 engineering_plan 既有排序，本计划不重复展开 | — | — |
+| R4 | 仅当 G1 通过：**EXP-004b/c** 特征提取 + 控制器 v0/v1（实验模块，建议 `strategy_selector.py`（src/cognitive_os/retrieval/ 下，R4 交付），不进核心）+ 单测 | 1 模块 + 测试 | G2–G4 |
+| R5+ | D-3/D-5（runner 公共化 + config_hash）、E1 协议化（有 EXP-001 复跑护栏）——沿用 engineering_plan 既有排序，本计划不重复展开 | — | — |
 
 **明确不做**（Master Prompt §18/§36 + 宪法 §2/§9）：复杂 Memory、Agent 层、
 World Model、真实 LLM/embedding 接入、任何"看起来像 AGI"的功能——

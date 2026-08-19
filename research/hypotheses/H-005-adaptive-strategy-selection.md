@@ -2,7 +2,7 @@
 
 - **状态**: UNVALIDATED（2026-08-19 注册，依据 Master Prompt v2.0 §8-§14 与架构审计 REPORT-2026-08-19-architecture-audit.md §9）
 - **关联问题**: RQ-5（P(SearchStrategy | Query, Context, History) 可否学习）、RQ-6（策略选择是否可度量、可归因）
-- **关联实验**: EXP-004（预注册见 `../experiments/EXP-004-adaptive-strategy-selection.md`）
+- **关联实验**: EXP-004（预注册见 `research/experiments/EXP-004-adaptive-strategy-selection.md`）
 - **前置证据**: EXP-002 十格扫描 + EXP-003 格点级复核表明"最优策略依赖信息 regime"
   （9/10 格 A ≥ C，1 格 C 显著 &gt; A 且代价 3.7×）——regime 异质性存在**初步迹象**，
   但异质性的**幅度、可预测性、可利用性**均未量化。

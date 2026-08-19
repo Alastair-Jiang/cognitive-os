@@ -62,7 +62,7 @@ D-8 说明"CI 全绿 ≠ 本地可复现", 环境矩阵是诚实计量的组成�
 
 ## Next Step
 
-1. **R2**: `scripts/run_exp004a_oracle.py`（零 src 改动）跑 11 配置 × 3 seed,
+1. **R2**: `run_exp004a_oracle.py`（scripts/ 下）（零 src 改动）跑 11 配置 × 3 seed,
    回填 G1 判定（通过/regime/失败三路都已预注册）;
 2. **R3**: 文档一致性小 PR（测试计数 51→87 同步、RQ-1 注记、inventory 标签、
    engineering_plan E2 编号顺延、D-8 修复）;
