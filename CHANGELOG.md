@@ -49,6 +49,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 - Repo inventory: synced stale status rows (EXP-003 completed — verdict SUPPORTED,
   grid-level scope; H-002 review completed)
 
+- Documentation consistency sweep (audit R3): fixed 13 hygiene findings
+  (word-split garble + dangling path refs) in the EXP-004 pre-registration and
+  architecture audit; synced test counts 51→87 (README/AGENTS, EN+zh);
+  updated RQ-1 note (EXP-003 reviewed); corrected H-001/H-003 status
+  labels in the inventory; listed new scripts in the README tree
+- EXP numbering decision landed: E2 gate cited-expansion experiment
+  renumbered EXP-004 → EXP-005 (engineering plan + OPENCLAW)
+- H-004 hypothesis registered (H-003 split into event-clustering vs
+  chain-recovery, each with falsifiable gates) + EXP-005 pre-registered
+  (cited-expansion channel; gates G1–G4; A-large attribution control)
+- ADR directory added: template + ADR-0001 (Corpus/Embedder/Index
+  protocols, Proposed) + ADR-0002 (zero-dependency redline)
+- **D-8 fixed**: gate scripts reconfigure stdout to UTF-8; test
+  subprocess decodes explicitly and injects PYTHONIOENCODING —
+  87/87 now passes on a GBK console without env vars
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

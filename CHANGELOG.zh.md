@@ -47,6 +47,19 @@
 - 仓库资产清单: 同步过期状态行(EXP-003 已完成——判定 SUPPORTED 仅格点级;
   H-002 复核完成)
 
+- 文档一致性收口（审计 R3）: 修复 13 处卫生异常（EXP-004 预注册与架构
+  审计中的拆词乱码 + 失效路径引用）; 测试计数 51→87 同步（README/AGENTS
+  双语）; RQ-1 注记更新（EXP-003 已复核）; inventory 中 H-001/H-003 状态
+  标签修正; README 目录树补列新脚本
+- EXP 编号裁决落地: E2 Gate 引用扩张实验顺延为 EXP-005
+  （engineering_plan + OPENCLAW 同步）
+- H-004 假设注册（H-003 拆分为事件聚类 vs 链恢复两目标，各配可证伪
+  判定）+ EXP-005 预注册（引用扩张通道; 闸门 G1–G4; A-large 增益归因对照）
+- 新增 ADR 目录: 模板 + ADR-0001（Corpus/Embedder/Index 三协议,
+  Proposed）+ ADR-0002（零运行时依赖红线）
+- **D-8 修复**: 门禁脚本 stdout 重配置为 UTF-8; 测试 subprocess 显式解码
+  并注入 PYTHONIOENCODING — GBK 控制台无环境变量亦 87/87 通过
+
 ## [v0.1.0] - 2026-08-19
 
 ### Added

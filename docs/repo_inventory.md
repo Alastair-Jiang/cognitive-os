@@ -34,13 +34,17 @@
 
 | 工件 | 类型 | 现状 | 结论/用途 | 支持的 Rating |
 |---|---|---|---|---|
-| `research/hypotheses/H-001` | 假设 | 部分证实(效率稳定) | B 省 sim 4-5× | `rating: 📊 实验` |
+| `research/hypotheses/H-001` | 假设 | REFUTED(质量组件) + 效率组件成立 | B 省 sim 4-5×, 但召回损失 26.2-56.0pp 全档超线 | `rating: 📊 实验` |
 | `research/hypotheses/H-002` | 假设 | 复核完成(EXP-003 格点级 SUPPORTED) | C 未证更优(仅 overlap-mid/noise-mid 格点 C&gt;A 成立) | `rating: 🔬 假设` |
 | `research/hypotheses/H-003` | 假设 | REFUTED(结构入检索无收益) | 链纯度反例成立 | `rating: ✅ 已验证`(证伪成立) |
 | `research/benchmarks/BM-001` | benchmark 规格 | 有效, 已扩 §5/§7 | 三策略对照框架 | `rating: 📊 实验` |
 | `research/experiments/EXP-001` | 实验 | 完成(2026-08) | 阶段基线 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-002` | 实验 | 完成(2026-08) | 歧义扫描 + 诊断 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-003` | 实验 | 完成(判定 SUPPORTED, 仅格点级) | 复核附带观察 | `rating: 📊 实验` |
+ `research/experiments/EXP-004`  实验  预注册(未运行, 自适应策略选择)  H-005 三段式 004a/b/c  `rating: 🔬 假设` 
+ `research/experiments/EXP-005`  实验  预注册(未运行, 引用扩张)  H-004 闸门 G1-G4  `rating: 🔬 假设` 
+ `research/hypotheses/H-004`  假设  UNVALIDATED(2026-08-19 注册)  H-003 目标拆分: 链恢复增益 + 聚类护栏  `rating: 🔬 假设` 
+ `research/hypotheses/H-005`  假设  UNVALIDATED(2026-08-19 注册)  自适应策略选择 π(as)  `rating: 🔬 假设` 
 | `research/results/*.json` | 原始数据 | 2+3+1+1 个 EXP 结果 | 结论的唯一证据源 | `area: research` |
 
 标签: `rating: 🔬 假设` / `rating: 🧪 原型` / `rating: 📊 实验` /
@@ -108,6 +112,7 @@
 | `docs/research_questions.md` | RQ 索引 | ✅ |
 | `docs/roadmap.md` | 研究路线图 Phase 1-11 | ✅ |
 | `docs/engineering_plan.md` | 工程化路线图(E0 全套示范, 后续) | 🆕 本 PR |
+ `docs/adr/`  架构决策记录(模板 + ADR-0001 三协议 / ADR-0002 零依赖)  🆕 本轮 
 | `research/log/*.md` | 研究日志链 | ✅(每次显著变更追加) |
 
 标签: `area: docs` / `📚 文档`
@@ -125,7 +130,7 @@
 | Capability | E4 | Phase 8 研究 | 分两份 PR |
 | Provider 注册 | E4 | Phase 8 研究 | 配套 |
 | CI 覆盖率门禁 | E5 | — | ≤ 200 行 |
-| ADR 目录 + 首批 3 条 ADR | E5 | E0/E1/E2 收口后 | 单独 PR |
+ ADR 首批 3 条已建(模板+0001+0002); 后续 ADR 随 E1/E2 收口追加  E5  —  小 PR 
 
 标签: 上述 `area:` 目标 + `✨ 功能` / `rating: 🔬 假设`(标为未验证规划)
 
