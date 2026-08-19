@@ -31,9 +31,18 @@
   (工作循环/完整验证链/PR 卫生/诚实边界/下一步优先级 D-2、D-5、D-3 尾、E1),
   沉淀自 E0 完整示范周期(PR #4); OpenClaw 工作时自动读取, 其他 agent 仍以
   `AGENTS.md` 为准
+- 规格-配置一致性校验器 `scripts/check_specs_consistency.py`: 解析 BM-001 §2
+  声明默认参数与 `configs/*.json` 逐 key 对比(纯 stdlib, 漂移即退出码 1,
+  已挂 CI 三版本矩阵)
+- 仓库卫生扫描器 `scripts/hygiene_scan.py`: 五类落地损坏扫描(零宽字符 /
+  .py 内 HTML 实体 / 拆词乱码 / 反引号路径存在性 / 字母被反引号拆断),
+  已挂 CI 门禁
 
 ### Fixed
 
+- D-2: BM-001 §2 声明默认参数 `n_topics=8, topics_per_event=3,
+  within_event_noise=0.25` 修正为 `configs/benchmark.small.json` 实况
+  `5/4/0.5`(配置为 EXP-001/002/003 实际运行基准, 附修正注记)
 - EXP-003 文档: 路径截断乱码(统计模块引用)修正为 `src/cognitive_os/stats.py`
 - 仓库资产清单: 同步过期状态行(EXP-003 已完成——判定 SUPPORTED 仅格点级;
   H-002 复核完成)

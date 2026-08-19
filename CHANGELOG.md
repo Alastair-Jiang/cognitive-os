@@ -32,9 +32,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 - OpenClaw-specific work prompt `OPENCLAW.md`: continuation guidance for the OpenClaw agent
   (work loop, full verification chain, PR hygiene, honesty boundaries, next-step
   priorities D-2/D-5/D-3-tail/E1), distilled from the E0 demonstration cycle (PR #4)
+- Spec–config consistency checker `scripts/check_specs_consistency.py`: parses
+  declared default params in BM-001 §2 and diffs them against `configs/*.json`
+  (stdlib-only, exits non-zero on drift, wired into CI)
+- Repo hygiene scanner `scripts/hygiene_scan.py`: five-class corruption scan
+  (zero-width / HTML entities in .py / split-word garble / backtick path
+  existence / stray backticks), CI-gated
 
 ### Fixed
 
+- D-2: BM-001 §2 declared defaults (`n_topics=8, topics_per_event=3,
+  within_event_noise=0.25`) corrected to actual `configs/benchmark.small.json`
+  values (`5/4/0.5`), with correction note; config is the running baseline
+  (EXP-001/002/003)
 - EXP-003 doc: path-truncation garble in the stats-module reference corrected to `src/cognitive_os/stats.py`
 - Repo inventory: synced stale status rows (EXP-003 completed — verdict SUPPORTED,
   grid-level scope; H-002 review completed)

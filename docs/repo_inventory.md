@@ -57,6 +57,8 @@
 | `scripts/run_exp002_consensus.py` | 共识聚合诊断 | ✅ 一次性, 归档 |
 | `scripts/run_exp002_h003.py` | H-003 测量 | ✅ 一次性, 归档(含 CORPUS_CFG 内联警讯 D-1) |
 | `scripts/run_exp003_significance.py` | EXP-003 多种子显著性 | 🆕 使用中 |
+| `scripts/check_specs_consistency.py` | D-2 规格-配置一致性校验(CI 门禁) | 🆕 使用中 |
+| `scripts/hygiene_scan.py` | 五类卫生扫描(CI 门禁) | 🆕 使用中 |
 | `scripts/apply_repo_config.sh` | 门面同步脚本 | ✅ |
 | `configs/benchmark.small.json` | 小型 benchmark 配置 | ✅(但 §2 声明与实况分离见 D-2) |
 | `configs/benchmark.medium.json` | 中型 benchmark 配置 | ✅ |
@@ -75,11 +77,13 @@
 | `tests/test_graph.py` | ✅ | 5(图构建/连通) |
 | `tests/test_metrics.py` | ✅ | 6(度量正确性) |
 | `tests/test_stats.py` | 🆕 | 17(统计推断金值/确定性/边界) |
+| `tests/test_specs_consistency.py` | 🆕 | 6(D-2 校验器: 块解析/数值容差/端到端退出码) |
+| `tests/test_hygiene_scan.py` | 🆕 | 12(五类检出 + 误报防护) |
 | `tests/test_strategies.py` | ✅ | 13(三策略行为) |
 | `tests/test_synthetic_dataset.py` | ✅ | 7(语料生成可复现) |
 | `tests/test_validation.py` | ✅ | 5(渐进验证早停) |
 
-**总用例: 68/68 通过(原有 51 + 新增 17)。**
+**总用例: 87/87 通过(原有 68 + 本次新增 19)。**
 已知缺口(并行看, 后续跟进, 见工程化文档 G):
 
 - CI 无覆盖率门禁: 现行 CI 只跑 lint+test, 不统计覆盖率(D-6);
