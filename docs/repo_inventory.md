@@ -11,6 +11,7 @@
 | 模块 | 路径 | 状态 | 创建来源 | 预注的 Gate |
 |---|---|---|---|---|
 | 合成语料 | `src/cognitive_os/datasets` | ✅ 实装, EXP-001 起使用 | BM-001 | — |
+| 文本碎片语料 | `src/cognitive_os/datasets/text_fragments.py` | 🆕 实装, E0.5 模板文本（嵌入由外部 Embedder） | H-006 | EXP-006 P1-P4 |
 | 传统检索 A | `src/cognitive_os/retrieval/strategy_a_traditional.py` | ✅ 实装, **质量基线** | RQ-1 | — |
 | 锚点检索 B | `src/cognitive_os/retrieval/strategy_b_anchor.py` | ✅ 实装, H-001(效率组件稳态) | RQ-1, RQ-4 | H-002 EXP-003 格点复核 |
 | 多网渐进验证 C | `src/cognitive_os/retrieval/strategy_c_multinet.py` | ✅ 实装, 未证更优(见 H-002) | RQ-1, RQ-3 | EXP-003 + H-004 |
@@ -92,7 +93,7 @@
 | `tests/test_synthetic_dataset.py` | ✅ | 7(语料生成可复现) |
 | `tests/test_validation.py` | ✅ | 5(渐进验证早停) |
 
-**总用例: 96/96 通过(87 + E1 协议轮新增 9)。**
+**总用例: 104/104 通过(96 + E0.5 文本语料轮新增 8)。**
 已知缺口(并行看, 后续跟进, 见工程化文档 G):
 
 - CI 无覆盖率门禁: 现行 CI 只跑 lint+test, 不统计覆盖率(D-6);

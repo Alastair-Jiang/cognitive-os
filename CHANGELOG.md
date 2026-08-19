@@ -9,6 +9,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- Text-fragment corpus generator `src/cognitive_os/datasets/text_fragments.py`
+  (E0.5, EXP-006 prerequisite): same structure family as the synthetic
+  corpus (event topic sets / primary source / time windows / causal
+  chains / mention draws, params aligned with `configs/benchmark.small.json`
+  minus the two representation-only fields), fragments rendered as Chinese
+  template text (topic sentence + event predicate sentence +
+  causal-chain mention sentence); no vectors produced here, embeddings
+  come from an external Embedder (GPU path, BGE-M3); query interface mirrors
+  `sample_queries` semantics; tests 96 to 104 (incl. golden structure hash)
 - E1 protocol layer: `src/cognitive_os/protocols.py` (structural
   Corpus / Embedder / Index protocols, stdlib-only) + identity adapters
   `src/cognitive_os/adapters/identity.py` (CorpusView / IdentityEmbedder /
