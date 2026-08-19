@@ -28,9 +28,15 @@
 - 碎片来自不同来源, 来源有可靠性权重 → 锚点证据超出语义。
 
 默认参数(configs/benchmark.small.json):
-`n_events=12, fragments_per_event=8, embed_dim=24, n_topics=8,
-topics_per_event=3, within_event_noise=0.25, time_horizon=100,
+`n_events=12, fragments_per_event=8, embed_dim=24, n_topics=5,
+topics_per_event=4, within_event_noise=0.5, time_horizon=100,
 event_span=20, source_count=4, index_top_m=6, seed=20260819`
+
+> 2026-08-19 修正(D-2): 原声明 `n_topics=8, topics_per_event=3,
+> within_event_noise=0.25` 与 `configs/benchmark.small.json` 实际值漂移。
+> 配置为 EXP-001/EXP-002/EXP-003 实际运行基准(§7.1 歧义扫描亦为
+> n_topics=5), 以配置为准修正本文档; 由 `scripts/check_specs_consistency.py`
+> 在 CI 中持续校验, 防止再次漂移。
 
 ## 3. 协议(预注册, 防止事后改口径)
 
