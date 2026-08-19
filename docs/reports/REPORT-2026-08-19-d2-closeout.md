@@ -51,9 +51,9 @@
 |---|---|---|
 | ZW | 零宽字符 U+200B | `hello\u200bworld` |
 | ENTITY | .py 内 HTML 实体字面量 | `'a &gt; b'` |
-| SPLIT | 拆词乱码(英文词被空格拆断) | `ov er la p` → `overlap` |
-| PATH | 反引号引用的仓库路径不存在 | `` `src/not_exist.py` `` |
-| STRAYBT | 字母被反引号拆断(仅 ASCII) | `EX`P-003`` |
+| SPLIT | 拆词乱码(英文词被空格拆断) | `over lap` → `overlap` |
+| PATH | 反引号引用的仓库路径不存在 | `` `src/not_exist` `` |
+| STRAYBT | 字母被反引号拆断(仅 ASCII) | `EX``P-003`` |
 
 误报防护: 自然短词白名单(`to be or not` 不报)、markdown 合法
 `&gt;` 转义不查、中文代码跨度 `` `runner 库` `` 不报、包内相对路径惯例豁免。
