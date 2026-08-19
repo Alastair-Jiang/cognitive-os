@@ -9,6 +9,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- E1 protocol layer: `src/cognitive_os/protocols.py` (structural
+  Corpus / Embedder / Index protocols, stdlib-only) + identity adapters
+  `src/cognitive_os/adapters/identity.py` (CorpusView / IdentityEmbedder /
+  BruteForceIndex); strategy stack (retrieval / nets / anchors /
+  validation) decoupled from the concrete corpus, machine-checked by
+  a purity test (ADR-0001 acceptance); behavior equivalence proven by
+  `scripts/prove_protocol_equivalence.py` — identity path reproduces the
+  direct path field-by-field and matches frozen EXP-001 aggregates
+  (latency excluded); tests 87 to 96
 - GPU research line pre-registration: ADR-0003 (zero-dep redline
   scoped to stdlib core; GPU stack as optional extras behind E1
   protocols; 12 GiB steady VRAM hard gate; model SHA256 pinned;

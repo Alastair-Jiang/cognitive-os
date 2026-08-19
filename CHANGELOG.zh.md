@@ -9,6 +9,12 @@
 
 ### Added
 
+- E1 协议层: `src/cognitive_os/protocols.py`（语料/嵌入/索引三协议,
+  纯标准库）+ 恒等适配器 `src/cognitive_os/adapters/identity.py`
+  （CorpusView / IdentityEmbedder / BruteForceIndex）; 策略栈四目录
+  与具体语料解耦, 纯度由单测机器验证（ADR-0001 验收条件）; 行为等价由
+  `scripts/prove_protocol_equivalence.py` 证明（视图路径与直接路径逐字段
+  一致, 且对账冻结 EXP-001 聚合, 时延除外）; 测试 87 增至 96
 - GPU 研究线预注册三件套: ADR-0003（零依赖红线收窄到核心
   stdlib 路径，GPU 栈走可选 extras 经 E1 三协议插拔；稳态显存
   12 GiB 硬闸门；模型 SHA256 钉死；GPU 遥测计数器扩编）+

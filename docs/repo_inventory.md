@@ -14,12 +14,14 @@
 | 传统检索 A | `src/cognitive_os/retrieval/strategy_a_traditional.py` | ✅ 实装, **质量基线** | RQ-1 | — |
 | 锚点检索 B | `src/cognitive_os/retrieval/strategy_b_anchor.py` | ✅ 实装, H-001(效率组件稳态) | RQ-1, RQ-4 | H-002 EXP-003 格点复核 |
 | 多网渐进验证 C | `src/cognitive_os/retrieval/strategy_c_multinet.py` | ✅ 实装, 未证更优(见 H-002) | RQ-1, RQ-3 | EXP-003 + H-004 |
-| 检索网引擎 | `src/cognitive_os/nets` | ⚠️ 实装, 配置静态(计划 E1: Embedder/ANN 抽象) | RQ-1 | E1 |
+| 检索网引擎 | `src/cognitive_os/nets` | ⚠️ 实装, 已挂接 E1 三协议(ANN 待 EXP-007) | RQ-1 | EXP-007 |
 | 渐进验证器 | `src/cognitive_os/validation` | ⚠️ 实装, 置信度无校准/无成本预算 | RQ-3 | E1+E2 |
 | 锚点检测器 | `src/cognitive_os/anchors` | ✅ 实装, 4 信号 | RQ-4 | E2信号扩展 |
 | 证据图 | `src/cognitive_os/graph` | ⚠️ 实装(仅事后评估), 未入检索扩张(H-003 失败) | RQ-2 | E2 |
 | 度量工具 | `src/cognitive_os/metrics.py` | ✅ 实装 | BM-001 §3 | — |
 | 统计推断 | `src/cognitive_os/stats.py` | 🆕 实装(E0, perm/seed boot/effect) | 工程化路线图 §E0 | — |
+| 三协议 | `src/cognitive_os/protocols.py` | 🆕 实装(E1, 语料/嵌入/索引最小策略面) | ADR-0001 | E1 行为等价 |
+| 恒等适配器 | `src/cognitive_os/adapters/identity.py` | 🆕 实装(E1, CorpusView + 暴力索引, 等价已证) | ADR-0001/0003 | — |
 | 记忆控制面 | `src/cognitive_os/memory` | ❌ STUB(计划 E3) | PS-3 | — |
 | 能力接口 | `src/cognitive_os/agents` | ❌ STUB(计划 E4) | PS-4 | — |
 | 多 Agent 编排 | `src/cognitive_os/orchestration` | ❌ STUB(计划 E4) | PS-4 | — |
@@ -90,7 +92,7 @@
 | `tests/test_synthetic_dataset.py` | ✅ | 7(语料生成可复现) |
 | `tests/test_validation.py` | ✅ | 5(渐进验证早停) |
 
-**总用例: 87/87 通过(原有 68 + 本次新增 19)。**
+**总用例: 96/96 通过(87 + E1 协议轮新增 9)。**
 已知缺口(并行看, 后续跟进, 见工程化文档 G):
 
 - CI 无覆盖率门禁: 现行 CI 只跑 lint+test, 不统计覆盖率(D-6);

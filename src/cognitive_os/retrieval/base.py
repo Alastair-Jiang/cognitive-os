@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..protocols import Corpus
 from ..types import Query, RetrievalResult
 
 
@@ -17,7 +17,7 @@ class RetrievalStrategy(ABC):
 
     name: str = "base"
 
-    def __init__(self, corpus: SyntheticEventCorpus):
+    def __init__(self, corpus: Corpus):
         self.corpus = corpus
 
     @abstractmethod

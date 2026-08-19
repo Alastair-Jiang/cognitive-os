@@ -35,6 +35,7 @@ from cognitive_os.datasets.synthetic_events import (  # noqa: E402
 from cognitive_os.graph.evidence_graph import EvidenceGraph  # noqa: E402
 from cognitive_os.metrics import mean, rank_stats, recall_at_k  # noqa: E402
 from cognitive_os.nets.search_net import SearchNetConfig  # noqa: E402
+from cognitive_os.protocols import Corpus  # noqa: E402
 from cognitive_os.retrieval.strategy_a_traditional import TraditionalRetrieval  # noqa: E402
 from cognitive_os.retrieval.strategy_b_anchor import AnchorRetrieval  # noqa: E402
 from cognitive_os.retrieval.strategy_c_multinet import DynamicMultiNetRetrieval  # noqa: E402
@@ -42,7 +43,7 @@ from cognitive_os.types import Query, RetrievalResult  # noqa: E402
 from cognitive_os.validation.progressive import ValidatorConfig  # noqa: E402
 
 
-def build_strategies(corpus: SyntheticEventCorpus, s_cfg: dict[str, Any]):
+def build_strategies(corpus: Corpus, s_cfg: dict[str, Any]):
     a_cfg = s_cfg["A"]
     a = TraditionalRetrieval(corpus, source_bonus=a_cfg.get("source_bonus", 0.05))
 

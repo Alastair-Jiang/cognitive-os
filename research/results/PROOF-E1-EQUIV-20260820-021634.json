@@ -1,0 +1,104 @@
+{
+  "config": "D:\\Code\\cognitive-os\\configs\\benchmark.small.json",
+  "k": 10,
+  "n_queries": 12,
+  "query_seed": 1,
+  "truncate_frac": null,
+  "strategy_names": [
+    "A-traditional",
+    "B-anchor",
+    "C-multinet"
+  ],
+  "diffs": [],
+  "frozen_diffs": [],
+  "aggregate_direct": {
+    "A-traditional": {
+      "precision_at_k": 0.5416666666666666,
+      "recall_at_k": 0.7738095238095237,
+      "f1_at_k": 0.6372549019607843,
+      "ndcg_at_k": 0.7132201615954369,
+      "mrr": 0.7944444444444444,
+      "similarity_calls": 95.0,
+      "index_lookups": 0.0,
+      "iterations": 1.0,
+      "purity": 0.6043771043771043,
+      "recon_f1": 0.6099537037037036,
+      "purity_semantic_only": 0.5909090909090909,
+      "early_stopped_frac": 0.0
+    },
+    "B-anchor": {
+      "precision_at_k": 0.5194444444444445,
+      "recall_at_k": 0.5476190476190476,
+      "f1_at_k": 0.5119392453951277,
+      "ndcg_at_k": 0.615257685351983,
+      "mrr": 0.9333333333333332,
+      "similarity_calls": 22.083333333333332,
+      "index_lookups": 30.0,
+      "iterations": 2.0,
+      "purity": 0.6194444444444445,
+      "recon_f1": 0.4232864085805262,
+      "purity_semantic_only": 0.6194444444444445,
+      "early_stopped_frac": 0.0
+    },
+    "C-multinet": {
+      "precision_at_k": 0.4166666666666667,
+      "recall_at_k": 0.5952380952380952,
+      "f1_at_k": 0.49019607843137253,
+      "ndcg_at_k": 0.5515823468801516,
+      "mrr": 0.625,
+      "similarity_calls": 1326.25,
+      "index_lookups": 1969.0,
+      "iterations": 2.25,
+      "purity": 0.5833333333333334,
+      "recon_f1": 0.46296296296296297,
+      "purity_semantic_only": 0.5833333333333334,
+      "early_stopped_frac": 0.75
+    }
+  },
+  "aggregate_view": {
+    "A-traditional": {
+      "precision_at_k": 0.5416666666666666,
+      "recall_at_k": 0.7738095238095237,
+      "f1_at_k": 0.6372549019607843,
+      "ndcg_at_k": 0.7132201615954369,
+      "mrr": 0.7944444444444444,
+      "similarity_calls": 95.0,
+      "index_lookups": 0.0,
+      "iterations": 1.0,
+      "purity": 0.6043771043771043,
+      "recon_f1": 0.6099537037037036,
+      "purity_semantic_only": 0.5909090909090909,
+      "early_stopped_frac": 0.0
+    },
+    "B-anchor": {
+      "precision_at_k": 0.5194444444444445,
+      "recall_at_k": 0.5476190476190476,
+      "f1_at_k": 0.5119392453951277,
+      "ndcg_at_k": 0.615257685351983,
+      "mrr": 0.9333333333333332,
+      "similarity_calls": 22.083333333333332,
+      "index_lookups": 30.0,
+      "iterations": 2.0,
+      "purity": 0.6194444444444445,
+      "recon_f1": 0.4232864085805262,
+      "purity_semantic_only": 0.6194444444444445,
+      "early_stopped_frac": 0.0
+    },
+    "C-multinet": {
+      "precision_at_k": 0.4166666666666667,
+      "recall_at_k": 0.5952380952380952,
+      "f1_at_k": 0.49019607843137253,
+      "ndcg_at_k": 0.5515823468801516,
+      "mrr": 0.625,
+      "similarity_calls": 1326.25,
+      "index_lookups": 1969.0,
+      "iterations": 2.25,
+      "purity": 0.5833333333333334,
+      "recon_f1": 0.46296296296296297,
+      "purity_semantic_only": 0.5833333333333334,
+      "early_stopped_frac": 0.75
+    }
+  },
+  "frozen_path": "D:\\Code\\cognitive-os\\research\\results\\EXP-001-benchmark.small-k10-q12-20260819-031641.json",
+  "verdict": "PASS"
+}

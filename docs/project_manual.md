@@ -22,7 +22,7 @@
 | 锚点算力节省（10 格扫描） | 4–5× 稳定 ✅（质量侧不成立 ❌） | EXP-002 [5] |
 | 链恢复连通率（+causal 建图） | 0.940，对照 0.398 / 0.294 | EXP-002 H-003 再设计 [5] |
 | 主显著性结果（C−A，格点 tpe=4/noise=0.30） | mean_diff=+0.081，p=0.0001，95% CI [+0.044, +0.115]，d_z=+0.58（60 配对 × 5 seed） | EXP-003 [6][10] |
-| 工程健康 | 单元测试 87/87 ✅；卫生扫描 103 文件 0 异常 ✅ | `tests/` [8] `scripts/hygiene_scan.py` [11] |
+| 工程健康 | 单元测试 96/96 ✅；卫生扫描 117 文件 0 异常 ✅ | `tests/` [8] `scripts/hygiene_scan.py` [11] |
 | 工程完成度 | E0 ✅ · E1–E4 🗺️ · E5 持续 ✅ | [1] |
 | 研究进度 | PHASE 0/1/1b ✅ · PHASE 2 进行中 | [17] |
 
@@ -302,7 +302,7 @@ SyntheticEventCorpus（96 碎片 / 12 事件，可参数化）
 
 | 门禁 | 命令 | 现状 |
 |---|---|---|
-| 单元测试 | `python -m pytest tests/ -q` | 87/87（10 个测试文件）[8] |
+| 单元测试 | `python -m pytest tests/ -q` | 96/96（13 个测试文件）[8] |
 | 仓库卫生 | `python scripts/hygiene_scan.py` | 103 文件 0 异常（零宽/实体/拆词/幽灵路径/杂散反引号）[11] |
 | 规格一致性 | `python scripts/check_specs_consistency.py` | BM-001 §2 参数表与 `configs/*.json` 一致 |
 | 提交风格 | `type(scope): 描述` | CONTRIBUTING.md |

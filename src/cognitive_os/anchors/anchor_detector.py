@@ -16,7 +16,7 @@ import math
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..protocols import Corpus
 from ..nets.search_net import NetSearchStats
 from ..similarity import cosine
 from ..types import Embedding
@@ -34,7 +34,7 @@ class AnchorConfig:
 
 
 def detect_anchors(
-    corpus: SyntheticEventCorpus,
+    corpus: Corpus,
     seed_pids: Sequence[str],
     query_emb: Embedding | None = None,
     cfg: AnchorConfig | None = None,
@@ -54,7 +54,7 @@ def detect_anchors(
 
     seed_points = [corpus.get(pid) for pid in seed_pids]
     seed_time = sum(p.timestamp for p in seed_points) / max(len(seed_points), 1)
-    max_density = max((len(corpus.neighbors(p.pid)) for p in corpus.points), default=1)
+    max_density = max((len(corpus.neighbors(pid)) for pid in corpus.point_ids), default=1)
     wsum = cfg.semantic_w + cfg.source_w + cfg.temporal_w + cfg.density_w
     wsum = wsum if wsum > 0 else 1.0
 

@@ -11,7 +11,7 @@ import math
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from ..datasets.synthetic_events import SyntheticEventCorpus
+from ..protocols import Corpus
 from ..similarity import cosine
 from ..types import Embedding, Evidence
 
@@ -42,7 +42,7 @@ class NetSearchStats:
 class SearchNet:
     """围绕种子(与可选锚点)扩张的单网搜索。"""
 
-    def __init__(self, corpus: SyntheticEventCorpus, cfg: SearchNetConfig | None = None):
+    def __init__(self, corpus: Corpus, cfg: SearchNetConfig | None = None):
         self.corpus = corpus
         self.cfg = cfg or SearchNetConfig()
         self.name = self.cfg.name
