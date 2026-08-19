@@ -28,6 +28,7 @@ class SearchNetConfig:
     source_w: float = 0.0
     temporal_w: float = 0.0
     structural_w: float = 0.0  # 邻域支持度(作为结构一致性的廉价代理)
+    cite_expansion: bool = False  # 引用扩张通道: corpus.mentions(pid) 作为硬结构候选
 
 
 @dataclass
@@ -91,6 +92,36 @@ class SearchNet:
         for _ in range(max(1, c.max_hops)):
             next_frontier: list[tuple[float, str]] = []
             for pid in frontier:
+                # 引用扩张通道: mentions 是硬结构信号, 豁免语义半径与来源门槛
+                if c.cite_expansion:
+                    for nid in corpus.mentions(pid):
+                        stats.index_lookups += 1
+                        if nid in visited:
+                            continue
+                        if allowed is not None and not allowed(nid):
+                            continue
+                        point = corpus.get(nid)
+                        sem = cosine(query_emb, point.embedding)
+                        src = point.source_weight
+                        if c.temporal_window is not None:
+                            temp = math.exp(-abs(point.timestamp - seed_time) / c.temporal_window)
+                        else:
+                            temp = 0.0
+                        struct = 1.0
+                        combined = self._combined(sem, src, temp, struct)
+                        stats.similarity_calls += 1
+                        stats.candidates_scored += 1
+                        ev = candidates.get(nid)
+                        if ev is None or combined > ev.score:
+                            candidates[nid] = Evidence(
+                                pid=nid,
+                                score=combined,
+                                semantic_sim=sem,
+                                source_evidence=src,
+                                temporal_evidence=temp,
+                                structural_evidence=struct,
+                            )
+                        next_frontier.append((combined, nid))
                 for nid, nsim in corpus.neighbors(pid):
                     stats.index_lookups += 1
                     if nid in visited:

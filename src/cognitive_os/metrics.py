@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 
 def precision_at_k(ranked: Sequence[str], relevant: set[str], k: int) -> float:
@@ -143,3 +143,63 @@ def rank_stats(ranked: Sequence[str], relevant: set[str], k: int) -> dict[str, f
         "ndcg_at_k": ndcg_at_k(ranked, relevant, k),
         "mrr": mrr(ranked, relevant),
     }
+
+
+def ordered_path_recovery(
+    retained_pids: Sequence[str],
+    chains: Sequence[Sequence[str]],
+    event_of: Callable[[str], str],
+    mentions_of: Callable[[str], Sequence[str]],
+) -> float:
+    """有序路径恢复率: 检索保留点诱导的有向图对每条 ground-truth 链的
+    最长相邻有序子路径长 / L(L 为该链事件数)。
+
+    - retained_pids: 检索保留的候选点(含种子), 诱导图只在这些点上建边;
+    - chains: ground-truth 链, 每条链 = 有序事件 id 序列 [e1..eL];
+    - event_of: pid 到事件 id;
+    - mentions_of: pid 到被提及 pid(引用方向 = 链前进方向, 与 meta["mentions"] 一致)。
+
+    单条链: 事件 t 若在 retained 中有碎片则为"可及"; 相邻有序子路径
+    e_i..e_j 成立当且仅当 i..j 内每个事件可及, 且每对相邻 (e_t, e_{t+1})
+    存在 a 属于 e_t 的保留碎片, b 属于 e_{t+1} 的保留碎片, 使 b 属于
+    mentions_of(a)。ℓ = 最长此类子路径长(无可及事件为 0), 恢复率 = ℓ / L。
+    返回全链平均。这是检索层*有序*恢复新度量, 与 chain_connectivity
+    (无向成对连通) 不同层、不同定义, 不可互换(EXP-005 度量消歧)。
+    """
+    if not chains:
+        return 0.0
+    retained = set(retained_pids)
+    rates: list[float] = []
+    for chain in chains:
+        L = len(chain)
+        if L == 0:
+            continue
+        ev_pids = {
+            ev: {p for p in retained if event_of(p) == ev}
+            for ev in chain
+        }
+        longest = 0
+        cur = 0
+        for t in range(L):
+            ev = chain[t]
+            if not ev_pids[ev]:
+                longest = max(longest, cur)
+                cur = 0
+                continue
+            if t == 0 or not _cite_link(ev_pids[chain[t - 1]], ev_pids[ev], mentions_of):
+                longest = max(longest, cur)
+                cur = 1
+            else:
+                cur += 1
+        longest = max(longest, cur)
+        rates.append(longest / L)
+    return mean(rates)
+
+
+def _cite_link(prev_pids: set[str], next_pids: set[str], mentions_of) -> bool:
+    """相邻事件间是否存在引用边(前事件某碎片提及后事件某碎片)。"""
+    for a in prev_pids:
+        for b in mentions_of(a):
+            if b in next_pids:
+                return True
+    return False
