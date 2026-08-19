@@ -18,4 +18,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[dev]" ruff
       - run: ruff check .
+      - run: python scripts/check_specs_consistency.py
+      - run: python scripts/hygiene_scan.py
       - run: pytest
