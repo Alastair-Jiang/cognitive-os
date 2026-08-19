@@ -1,6 +1,6 @@
 # EXP-004: 自适应检索策略选择（Adaptive Retrieval Strategy Selection）
 
-- **状态**: **预注册（未运行）**——判定标准先于运行写下（宪法 §2；提交历史可证）
+- **状态**: **004a 已运行（2026-08-20，G1 PASS）；004b/004c 待启动**——判定标准先于运行写下（宪法 §2；提交历史可证）
 - **关联假设**: H-005（`research/hypotheses/H-005-adaptive-strategy-selection.md`）
 - **关联问题**: RQ-5, RQ-6
 - **Benchmark 规格**: BM-001 + EXP-002 十格网格 + medium 档
@@ -141,7 +141,15 @@ q4 最小效应 |mean_diff| ≥ 0.01。
 
 ## 结果（运行后回填，本轮留空）
 
-- `research/results/EXP-004a-oracle-*.json`（待生成）
+- **004a（已运行, 2026-08-20）**: `research/results/EXP-004a-oracle-s3-q12-20260820-025839.json`
+  —— U_gf=0.7100(A-traditional), H0 池化 +0.0358, H1 池化 +0.0408,
+  8/10 格 H1≥0.02, 逐 seed 池化 H1 全正(+0.0344/+0.0373/+0.0425) → **G1 PASS**
+  （解锁 004b）。语料宇宙口径备注: 预注册文本「共 11 个」系笔误, 实际独立
+  参数配置 10 个(网格 3×3=9 + medium; small 与 overlap-mid-noise-high 参数
+  全同); G1 阈值按原值执行(至少 3 格, 3/10 较 3/11 更严), 运行器与结果
+  JSON meta 已如实标注。λ 扫描: H1 在 λ∈{0,0.01,0.02,0.05} 为 0.0344/
+  0.0386/0.0408/0.0369, λ=0.1 时 0.0189(主判定不受影响, 如实记录)。
+  详细日志: `research/log/LOG-2026-08-20-exp004a.md`
 - `research/results/EXP-004b-features-*.json`（待生成）
 - `research/results/EXP-004c-controller-*.json`（待生成）
 

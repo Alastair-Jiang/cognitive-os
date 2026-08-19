@@ -67,6 +67,7 @@
 | `scripts/run_exp002_consensus.py` | 共识聚合诊断 | ✅ 一次性, 归档 |
 | `scripts/run_exp002_h003.py` | H-003 测量 | ✅ 一次性, 归档(含 CORPUS_CFG 内联警讯 D-1) |
 | `scripts/run_exp003_significance.py` | EXP-003 多种子显著性 | 🆕 使用中 |
+| EXP-004a 运行器 | `scripts/run_exp004a_oracle.py` | ✅ 实装+已运行(G1 PASS) | EXP-004 预注册 | G1 |
 | `scripts/check_specs_consistency.py` | D-2 规格-配置一致性校验(CI 门禁) | 🆕 使用中 |
 | `scripts/hygiene_scan.py` | 五类卫生扫描(CI 门禁) | 🆕 使用中 |
 | `scripts/apply_repo_config.sh` | 门面同步脚本 | ✅ |
@@ -93,7 +94,7 @@
 | `tests/test_synthetic_dataset.py` | ✅ | 7(语料生成可复现) |
 | `tests/test_validation.py` | ✅ | 5(渐进验证早停) |
 
-**总用例: 104/104 通过(96 + E0.5 文本语料轮新增 8)。**
+**总用例: 113/113 通过(96 + E0.5 文本语料轮新增 8)。**
 已知缺口(并行看, 后续跟进, 见工程化文档 G):
 
 - CI 无覆盖率门禁: 现行 CI 只跑 lint+test, 不统计覆盖率(D-6);

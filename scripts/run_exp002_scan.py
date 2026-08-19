@@ -118,6 +118,29 @@ GRAPH_CFG: dict[str, Any] = {
     "require_source_diversity": True,
 }
 
+def grid_corpus_config(
+    topics_per_event: int,
+    within_event_noise: float,
+    seed: int,
+) -> SyntheticCorpusConfig:
+    """EXP-002 网格格点语料配置(单一事实来源; EXP-004a 复用, D-5)。"""
+    return SyntheticCorpusConfig(
+        n_events=12,
+        fragments_per_event=8,
+        embed_dim=24,
+        n_topics=N_TOPICS,
+        topics_per_event=topics_per_event,
+        within_event_noise=within_event_noise,
+        time_horizon=100.0,
+        event_span=20.0,
+        source_count=4,
+        source_min_weight=0.6,
+        primary_source_prob=0.6,
+        index_top_m=6,
+        seed=seed,
+    )
+
+
 # 歧义轴网格
 N_TOPICS = 5
 OVERLAP_LEVELS: list[tuple[str, int]] = [
@@ -141,21 +164,7 @@ def run_cell(
     query_seed: int,
 ) -> dict[str, Any]:
     """跑一个歧义档位(一个小型完整 benchmark)。"""
-    corpus_cfg = SyntheticCorpusConfig(
-        n_events=12,
-        fragments_per_event=8,
-        embed_dim=24,
-        n_topics=N_TOPICS,
-        topics_per_event=topics_per_event,
-        within_event_noise=within_event_noise,
-        time_horizon=100.0,
-        event_span=20.0,
-        source_count=4,
-        source_min_weight=0.6,
-        primary_source_prob=0.6,
-        index_top_m=6,
-        seed=20260819,
-    )
+    corpus_cfg = grid_corpus_config(topics_per_event, within_event_noise, 20260819)
     corpus = SyntheticEventCorpus(corpus_cfg)
     strategies = build_strategies(corpus, SCAN_STRATEGY_TEMPLATE)
 

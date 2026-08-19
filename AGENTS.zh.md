@@ -30,7 +30,7 @@ Cursor、Copilot、OpenClaw 等)。
 
 ## 仓库速览
 
-- 纯标准库 Python(>= 3.10), 零运行时依赖; 测试: `python -m pytest tests/ -q`(当前 104/104)。
+- 纯标准库 Python(>= 3.10), 零运行时依赖; 测试: `python -m pytest tests/ -q`(当前 113/113)。
 - 三策略: A 传统检索 / B Anchor 锚点 / C 多网渐进验证(EXP-001/002 结论:
   A 是质量基准, B 效率优但召回损失超线, C 未证明更优 — 见 research/)。
 - 关键路径: `src/cognitive_os/`(代码) / `research/`(假设/实验/基准/结果/日志) /

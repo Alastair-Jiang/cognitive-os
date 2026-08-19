@@ -30,7 +30,7 @@
 | Phase 0 — Repo bootstrap | ✅ Done |
 | Phase 1 — Dynamic Retrieval Prototype | ✅ First experiments done |
 | Phase 1b — Hypothesis revision (EXP-002) | ✅ Done (10-cell sweep + consensus diagnosis + H-003 redesign) |
-| Three strategies (A Traditional / B Anchor / C Multi-Net) | ✅ Implemented, 104/104 tests pass |
+| Three strategies (A Traditional / B Anchor / C Multi-Net) | ✅ Implemented, 113/113 tests pass |
 | Benchmark EXP-001 | ✅ Done (main + truncated + medium config) |
 | Benchmark EXP-002 | ✅ Done (ambiguity sweep / consensus / H-003 redesign) |
 | H-001 Anchor efficiency | ❌ REFUTED (quality component; efficiency holds across 10 cells, recall loss does not converge with ambiguity) |
