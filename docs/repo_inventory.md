@@ -46,6 +46,8 @@
   恢复率 /L 广义化并消歧)  H-004 闸门 G1-G4  `rating: 🔬 假设` 
  `research/hypotheses/H-004`  假设  UNVALIDATED(2026-08-19 注册)  H-003 目标拆分: 链恢复增益 + 聚类护栏  `rating: 🔬 假设` 
  `research/hypotheses/H-005`  假设  UNVALIDATED(2026-08-19 注册)  自适应策略选择 π(as)  `rating: 🔬 假设` 
+ `research/hypotheses/H-006`  假设  UNVALIDATED(2026-08-19 注册)  换真嵌入平价复核(四分量 a/b/c/d, GPU 线第一实验)  `rating: 🔬 假设` 
+ `research/experiments/EXP-006`  实验  预注册(未运行, 换真嵌入平价复核; 前置=E1 三协议+文本语料发生器+GPU 栈)  H-006 四分量 P1-P4  `rating: 🔬 假设` 
 | `research/results/*.json` | 原始数据 | 2+3+1+1 个 EXP 结果 | 结论的唯一证据源 | `area: research` |
 
 标签: `rating: 🔬 假设` / `rating: 🧪 原型` / `rating: 📊 实验` /
@@ -113,7 +115,7 @@
 | `docs/research_questions.md` | RQ 索引 | ✅ |
 | `docs/roadmap.md` | 研究路线图 Phase 1-11 | ✅ |
 | `docs/engineering_plan.md` | 工程化路线图(E0 全套示范, 后续) | 🆕 本 PR |
- `docs/adr/`  架构决策记录(模板 + ADR-0001 三协议 / ADR-0002 零依赖)  🆕 本轮 
+ `docs/adr/`  架构决策记录(模板 + ADR-0001 三协议 / ADR-0002 零依赖 / ADR-0003 GPU 可选 extras)  🆕 本轮 
 | `research/log/*.md` | 研究日志链 | ✅(每次显著变更追加) |
 
 标签: `area: docs` / `📚 文档`

@@ -9,6 +9,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- GPU research line pre-registration: ADR-0003 (zero-dep redline
+  scoped to stdlib core; GPU stack as optional extras behind E1
+  protocols; 12 GiB steady VRAM hard gate; model SHA256 pinned;
+  GPU telemetry counters) + H-006 (real-embedder parity, 4
+  falsifiable parts) + EXP-006 pre-registration (5 fixed seeds,
+  P1-P4 frozen criteria, four-gate `decide()` unchanged; EXP-004/005
+  pre-registrations untouched)
 - Project manual `docs/project_manual.md` (tech-report style, bilingual
   audience layering): abilities / architecture / methods / evidence /
   domains / governance / limitations / roadmap + reproduction commands +
