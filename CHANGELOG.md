@@ -9,6 +9,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- Project manual `docs/project_manual.md` (tech-report style, bilingual
+  audience layering): abilities / architecture / methods / evidence /
+  domains / governance / limitations / roadmap + reproduction commands +
+  glossary + 20-entry citation list; status badges (✅/🟡/🗺️/🗓️) on every
+  capability; frozen-header blank tables pre-drawn for EXP-004/005 with a
+  fill-back protocol (Appendix D)
 - Engineering roadmap `docs/engineering_plan.md`: concept→status→gap matrix,
   six-phase plan E0–E5 (direction / work items / acceptance criteria), and the
   work-item→PR mapping standard; audited 7 cross-cutting engineering debts

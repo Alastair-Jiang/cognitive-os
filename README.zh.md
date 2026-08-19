@@ -145,6 +145,7 @@ python -m unittest discover -s tests -v
 
 ## 相关文档
 
+- [项目说明书](docs/project_manual.md)
 - [Vision(愿景)](docs/vision.md)
 - [Architecture(架构)](docs/architecture.md)
 - [Research Questions(研究问题)](docs/research_questions.md)

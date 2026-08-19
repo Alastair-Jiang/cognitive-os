@@ -165,6 +165,7 @@ the hypothesis and the experimental result.
 
 ## Related docs
 
+- [Project Manual](docs/project_manual.md)
 - [Vision](docs/vision.md)
 - [Architecture](docs/architecture.md)
 - [Research Questions](docs/research_questions.md)
