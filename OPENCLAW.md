@@ -73,7 +73,7 @@
 2. **D-5/D-3 尾**：`scripts/` runner 公共化（共享策略构建/聚合逻辑，消除三份复制，`run_exp003` 已示范 import 复用先例）；结果 JSON schema 增补 `config_hash` + `code_sha`（复跑可证伪）。
 3. **E1 检索核心抽象化**（按 `docs/engineering_plan.md` §E1 执行）：Corpus/Embedder/Index 三协议；DoD 硬性要求——grep 可验证策略源码不再 import `SyntheticEventCorpus` 具体类、内存+持久化双实现参数化测试全过、EXP-001 复跑聚合指标与历史 `research/results/` 一致（行为等价证明）、回填 ADR-0001。
 4. **E5 小步并行**：建 `docs/adr/` 目录 + 模板，回填 ADR-0001（三协议）与 ADR-0002（零运行时依赖红线）；mypy 渐进（先 public 接口）；覆盖率门禁（ratchet 机制，只升不降）。
-5. **E2 有硬 Gate**：必须先写 H-004 假设文件（把 H-003 拆分为事件聚类与链恢复两目标）+ EXP-004 预注册，**才允许写策略代码**（宪法第 2 条，顺序不可倒置）。不要跳 Gate。
+5. **E2 有硬 Gate**：必须先写 H-004 假设文件（把 H-003 拆分为事件聚类与链恢复两目标）+ EXP-005 预注册，**才允许写策略代码**（宪法第 2 条，顺序不可倒置）。不要跳 Gate。
 
 ## 6. 诚实边界（红线，违反即返工）
 
