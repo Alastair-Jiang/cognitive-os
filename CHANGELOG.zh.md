@@ -9,6 +9,15 @@
 
 ### Added
 
+- EXP-004a Oracle Headroom 运行器 `scripts/run_exp004a_oracle.py`
+  （R2, 预注册）: 语料宇宙 9 网格 + medium（10 个独立配置; 网格工厂
+  `grid_corpus_config` 抽入 `run_exp002_scan.py`, 进程内逐字段等价
+  证明, 零漂移）× 3 seed × 12 查询 × A/B/C; 逐查询 F1/sim_calls 落盘,
+  λ 扫描 {0, 0.01, 0.02, 0.05, 0.1} 全入汇总; G1 三态 `decide()`
+  （PASS / REGIME / FAIL / EDGE 未命名边界如实标注）。首次运行:
+  U_gf=0.7100（A）, H0=+0.0358, H1=+0.0408, 8/10 格 H1≥0.02 →
+  **G1 PASS**（查询级 headroom 确认, 解锁 004b）; 语料宇宙 11-vs-10
+  预注册笔误在 meta 如实标注; 测试 104 增至 113
 - 文本碎片语料发生器 `src/cognitive_os/datasets/text_fragments.py`
   （E0.5, EXP-006 前置）: 与合成语料同结构族（事件主题集 / 主来源 /
   时间窗 / 因果链 / 提及抽取, 参数对齐 `configs/benchmark.small.json`,

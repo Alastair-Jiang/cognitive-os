@@ -9,6 +9,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- EXP-004a Oracle Headroom runer `scripts/run_exp004a_oracle.py`
+  (R2, preregistered): corpus universe 9 grid cells + medium (10
+  unique configs; grid factory `grid_corpus_config` extracted into
+  `run_exp002_scan.py` with in-process parity proof, zero drift) × 3
+  seeds × 12 queries × A/B/C; per-query F1/sim_calls recorded, λ sweep
+  {0, 0.01, 0.02, 0.05, 0.1} in aggregate; G1 three-state `decide()`
+  (PASS / REGIME / FAIL / EDGE as named-boundary honesty). First
+  run: U_gf=0.7100 (A), H0=+0.0358, H1=+0.0408, 8/10 cells H1≥0.02 →
+  **G1 PASS** (query-level headroom confirmed, 004b unlocked);
+  corpus-universe 11-vs-10 prereg typo noted honestly in meta; tests
+  104 to 113
 - Text-fragment corpus generator `src/cognitive_os/datasets/text_fragments.py`
   (E0.5, EXP-006 prerequisite): same structure family as the synthetic
   corpus (event topic sets / primary source / time windows / causal

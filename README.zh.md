@@ -30,7 +30,7 @@
 | Phase 0 仓库初始化 | ✅ 完成(本仓库) |
 | Phase 1 Dynamic Retrieval Prototype | ✅ 首轮实验完成 |
 | Phase 1b 假设修订实验(EXP-002) | ✅ 完成(扫描 10 档 + 共识诊断 + H-003 重设计) |
-| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 104/104 测试通过 |
+| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 113/113 测试通过 |
 | Benchmark EXP-001 | ✅ 完成(主模式 + 截断模式 + medium 档) |
 | Benchmark EXP-002 | ✅ 完成(歧义档位扫描 / 共识聚合 / H-003 重设计) |
 | H-001 Anchor 效率 | ❌ REFUTED(质量组件; 效率组件 10 档全成立, 召回损失不随歧义收敛) |
