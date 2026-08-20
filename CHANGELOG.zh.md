@@ -9,6 +9,13 @@
 
 ### Added
 
+- 文本碎片语料发生器 `src/cognitive_os/datasets/text_fragments.py`
+  （E0.5, EXP-006 前置）: 与合成语料同结构族（事件主题集 / 主来源 /
+  时间窗 / 因果链 / 提及抽取, 参数对齐 `configs/benchmark.small.json`,
+  仅去掉两个表示层字段）, 碎片为中文模板文本（主题句 + 事件谓词句 +
+  因果链提及句）; 本模块不产生向量, 嵌入由外部 Embedder（GPU 路径,
+  BGE-M3）填入; 查询接口镜像 `sample_queries` 语义; 测试 96 增至 104
+  （含结构黄金哈希）
 - E1 协议层: `src/cognitive_os/protocols.py`（语料/嵌入/索引三协议,
   纯标准库）+ 恒等适配器 `src/cognitive_os/adapters/identity.py`
   （CorpusView / IdentityEmbedder / BruteForceIndex）; 策略栈四目录
