@@ -44,13 +44,13 @@
 | `research/experiments/EXP-001` | 实验 | 完成(2026-08) | 阶段基线 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-002` | 实验 | 完成(2026-08) | 歧义扫描 + 诊断 | `rating: 🏆 里程碑` |
 | `research/experiments/EXP-003` | 实验 | 完成(判定 SUPPORTED, 仅格点级) | 复核附带观察 | `rating: 📊 实验` |
- `research/experiments/EXP-004`  实验  预注册(未运行, 自适应策略选择)  H-005 三段式 004a/b/c  `rating: 🔬 假设` 
+ `research/experiments/EXP-004`  实验  004a 已运行(G1 PASS), 004b/c 未启动  H-005 三段式 004a/b/c  `rating: 🔬 假设` 
  `research/experiments/EXP-005`  实验  预注册已更正(未运行, 引用扩张; 2026-08-19 更正: 5 固定 seed / 3 计数器 /
   恢复率 /L 广义化并消歧)  H-004 闸门 G1-G4  `rating: 🔬 假设` 
  `research/hypotheses/H-004`  假设  UNVALIDATED(2026-08-19 注册)  H-003 目标拆分: 链恢复增益 + 聚类护栏  `rating: 🔬 假设` 
  `research/hypotheses/H-005`  假设  UNVALIDATED(2026-08-19 注册)  自适应策略选择 π(as)  `rating: 🔬 假设` 
- `research/hypotheses/H-006`  假设  UNVALIDATED(2026-08-19 注册)  换真嵌入平价复核(四分量 a/b/c/d, GPU 线第一实验)  `rating: 🔬 假设` 
- `research/experiments/EXP-006`  实验  预注册(未运行, 换真嵌入平价复核; 前置=E1 三协议+文本语料发生器+GPU 栈)  H-006 四分量 P1-P4  `rating: 🔬 假设` 
+ `research/hypotheses/H-006`  假设  UNVALIDATED(2026-08-19 注册)  换真嵌入平价复核(四分量 a/b/c/d, GPU 线第一实验; 硬件≤15 GiB VRAM 到位前不启动)  `rating: 🔬 假设` 
+ `research/experiments/EXP-006`  实验  预注册(未运行, 换真嵌入平价复核; 硬件≤15 GiB VRAM 到位前不启动, 无 GPU 记 INCONCLUSIVE)  H-006 四分量 P1-P4  `rating: 🔬 假设` 
 | `research/results/*.json` | 原始数据 | 2+3+1+1 个 EXP 结果 | 结论的唯一证据源 | `area: research` |
 
 标签: `rating: 🔬 假设` / `rating: 🧪 原型` / `rating: 📊 实验` /
@@ -94,7 +94,7 @@
 | `tests/test_synthetic_dataset.py` | ✅ | 7(语料生成可复现) |
 | `tests/test_validation.py` | ✅ | 5(渐进验证早停) |
 
-**总用例: 118/118 通过(96 + E0.5 文本语料轮新增 8)。**
+**总用例: 118/118 通过（pytest，16 个测试文件）。**
 已知缺口(并行看, 后续跟进, 见工程化文档 G):
 
 - CI 无覆盖率门禁: 现行 CI 只跑 lint+test, 不统计覆盖率(D-6);

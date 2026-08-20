@@ -23,16 +23,19 @@
 
 ---
 
-## Current status (2026-08-19)
+## Current status (2026-08-20)
 
 | Item | Status |
 |---|---|
 | Phase 0 — Repo bootstrap | ✅ Done |
 | Phase 1 — Dynamic Retrieval Prototype | ✅ First experiments done |
 | Phase 1b — Hypothesis revision (EXP-002) | ✅ Done (10-cell sweep + consensus diagnosis + H-003 redesign) |
-| Three strategies (A Traditional / B Anchor / C Multi-Net) | ✅ Implemented, 118/118 tests pass |
+| Three strategies (A Traditional / B Anchor / C Multi-Net) | ✅ Implemented, 118/118 tests pass (pytest, 16 files) |
 | Benchmark EXP-001 | ✅ Done (main + truncated + medium config) |
 | Benchmark EXP-002 | ✅ Done (ambiguity sweep / consensus / H-003 redesign) |
+| Benchmark EXP-003 | ✅ Done (SUPPORTED, grid-point level only: C−A = +0.081, p=0.0001) |
+| E1 protocol layer (Corpus / Embedder / Index) | ✅ Landed + behavior-equivalence proof landed (sqlite persisted-corpus variant outstanding) |
+| EXP-004a Oracle Headroom | ✅ Run (G1 PASS; EXP-004b unlocked, not started) |
 | H-001 Anchor efficiency | ❌ REFUTED (quality component; efficiency holds across 10 cells, recall loss does not converge with ambiguity) |
 | H-002 Multi-Net progressive validation | ❌ REFUTED (as stated; early stopping works, mean aggregation no real gain) |
 | H-003 Structure consistency | 🔶 REFUTED (purity framing) / PARTIAL (chain-recovery framing, connectivity 0.940) |
@@ -96,19 +99,22 @@ cognitive-os/
 ├── docs/                  vision / architecture / research_questions /
 │                          system_constitution / roadmap
 ├── research/              research records
-│   ├── hypotheses/        hypotheses (H-001..003, status UNVALIDATED)
-│   ├── experiments/       registered / completed experiments (EXP-001)
+│   ├── hypotheses/        hypotheses (H-001..006, adjudicated or UNVALIDATED)
+│   ├── experiments/       registered / completed experiments (EXP-001..006)
 │   ├── benchmarks/        benchmark specs (BM-001)
 │   ├── results/           experiment result JSON (raw data)
 │   └── log/               research log (Problem/Hypothesis/Change/Experiment/
 │                          Result/Interpretation/Next Step)
 ├── src/cognitive_os/
 │   ├── datasets/          synthetic event-fragment space (ground truth)
+│   │   │                  + text_fragments.py template corpus (EXP-006 prereq)
 │   ├── nets/              search nets (configurable strategy primitives)
 │   ├── anchors/           anchor detection (multi-signal)
 │   ├── validation/        progressive validation (no hard pruning)
 │   ├── graph/             evidence graph (multi-signal consistency)
 │   ├── retrieval/         three strategies: A / B / C
+│   ├── protocols.py       Corpus / Embedder / Index protocols (E1)
+│   ├── adapters/          identity adapters (CorpusView / IdentityEmbedder / BruteForceIndex)
 │   ├── memory/            [STUB] future phase
 │   ├── agents/            [STUB] future phase
 │   └── orchestration/     [STUB] future phase

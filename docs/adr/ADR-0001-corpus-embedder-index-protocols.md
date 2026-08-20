@@ -1,6 +1,7 @@
 # ADR-0001: 检索核心以 Corpus/Embedder/Index 三协议抽象（E1）
 
-- **状态**: Proposed（2026-08-19 注册；E1 落地并附行为等价证明后转 Accepted）
+- **状态**: Accepted（2026-08-20；E1 三协议 + 恒等适配器已落地，行为等价证明见
+  `research/results/PROOF-E1-EQUIV-20260820-021634.json`；sqlite 持久化语料变体未做，遗留）
 - **日期**: 2026-08-19
 - **上下文**: 现行策略与 runner 直接耦合 `SyntheticEventCorpus` 具体类与
   O(N²) 暴力邻居索引（D-9），语料规模上限受制于此；真实 embedding、

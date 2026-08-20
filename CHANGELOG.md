@@ -90,6 +90,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Fixed
 
+- Docs/plan consistency revision round (2026-08-20, docs/plans only — no strategy code,
+  no experiments): aligned README (EN+zh) status table + directory tree; roadmap Phase 5
+  (EXP-004a G1 PASS) + Phase 9-11 downgraded to long-term goals; research_questions Phase
+  numbering; engineering_plan E1 DoD re-ticked (sqlite variant leftover) + E2 remaining
+  prerequisites + EXP-006 hardware note; project_manual test/file-count unification +
+  `chain_connectivity` typo; EXP-005 prereg status-line garble; repo_inventory EXP-004/
+  H-006/EXP-006 wording; ADR-0001 → Accepted + ADR-0003 hardware note; OPENCLAW §5 rewrite.
+  Evidence `research/results/PROOF-E1-EQUIV-20260820-021634.json` (diffs + frozen_diffs
+  empty). See `docs/plans/PLAN-2026-08-20-docs-consistency.md` and
+  `research/log/LOG-2026-08-20-docs-consistency.md`.
+
 - D-2: BM-001 §2 declared defaults (`n_topics=8, topics_per_event=3,
   within_event_noise=0.25`) corrected to actual `configs/benchmark.small.json`
   values (`5/4/0.5`), with correction note; config is the running baseline

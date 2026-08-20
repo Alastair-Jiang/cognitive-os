@@ -19,7 +19,8 @@
   (p=0.0001, 95% CI [+0.044,+0.115], d_z=+0.58); 边界: 成本 ~3.7×,
   仅单格点成立, 不外推全网格(详见 EXP-003 与 H-002 状态注记)。
 - **关联实验**: EXP-001, EXP-002, EXP-003
-- **下一步**: Phase 2 网配置互补性; EXP-004 自适应策略选择(H-005, 预注册未运行)。
+- **下一步**: EXP-004a 已运行(**G1 PASS**, 查询级自适应空间存在, 详见 EXP-004);
+  下一步 EXP-004b(状态可测性) / EXP-005(引用扩张)。
 
 ### RQ-2 [REFUTED(质量组件)] Anchor 机制能否在不显著损失 P/R 的情况下降低复杂度?
 - **现状(EXP-001 + EXP-002 扫描)**: 效率组件稳健成立(B sim_calls 为 A 的
@@ -37,7 +38,7 @@
   排他性纯度)。结论: 指标选取决定结论, 目标需明确化(事件聚类 vs 链恢复)。
 - **下一步**: 引用边参与检索的实验 + H-003 目标拆分(详见 H-003)。
 
-## Phase 2: Adaptive Search Strategy
+## Phase 5: Adaptive Search Strategy
 
 ### RQ-5 [UNVALIDATED] 系统能否学习 P(SearchStrategy | Query, Context, History)?
 - 从"学 Answer"走向"学 How to Search"。
@@ -46,7 +47,7 @@
 ### RQ-6 [UNVALIDATED] 搜索策略选择本身是否可度量、可归因?
 - 例如: 何时该用 Anchor 策略, 何时该用扁平策略?
 
-## Phase 3: Personal Memory
+## Phase 6: Personal Memory
 
 ### RQ-7 [UNVALIDATED] 分层记忆(L1-L4)能否在不引入回声室的前提下个性化搜索路径?
 - 需要定义并度量"回声室程度"。
@@ -54,12 +55,14 @@
 ### RQ-8 [UNVALIDATED] 推断型记忆(思维策略/元认知)需要多少行为证据才可信?
 - 约束: 不能把模型推断包装成用户事实。
 
-## Phase 4: Multi-Agent Orchestration
+## Phase 8: Multi-Agent Orchestration
 
 ### RQ-9 [UNVALIDATED] Capability Interface 能否做到模型可插拔(不写死厂商)?
 - 验收: 同一 Agent 逻辑在切换 Provider 后行为一致。
 
-## Phase 5: World Model / Physical Interface
+## 长期方向: World Model / Physical Interface
+
+&gt; 无验收、不排期（对应 roadmap 长期目标；原 Phase 10/11 已降级）。
 
 ### RQ-10 [UNVALIDATED] 统一关系空间能否承载"人/事件/时间/地点/因果"而不退化?
 ### RQ-11 [UNVALIDATED] Cognitive Core → Capability API → Physical Action 闭环的延迟/可靠性边界?

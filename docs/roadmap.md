@@ -68,6 +68,15 @@ EXP-001 的诚实结论(H-001 部分成立 / H-002 否定 / H-003 待重设计)�
 - P(SearchStrategy | Query, Context, History) 的建模与度量
 - **验收**: RQ-5/RQ-6 有实验。
 
+> ⚠️ **提前启动注记(2026-08-20)**: 本阶段由架构审计裁决提前启动——审计将架构方向
+> 从"哪个策略更强"转向"何时用哪个策略"(H-005/EXP-004)，这是**审计裁决的架构转向,
+> 不是越过验收跳阶段**(完整裁决见
+> [架构审计](../reports/REPORT-2026-08-19-architecture-audit.md) §9)。
+> 进展: EXP-004a(Oracle Headroom)已运行, **G1 PASS**(主 λ=0.02: 池化 H1=+0.0408 ≥ 0.03,
+> 8/10 格格内 H1≥0.02)——查询级自适应空间存在 → EXP-004b/004c 解锁(均未启动)。
+> 详见 [EXP-004](../research/experiments/EXP-004-adaptive-strategy-selection.md) 与
+> `research/results/EXP-004a-oracle-*.json`。
+
 ## Phase 6: Personal Memory
 
 - L1-L4 分层记忆 + 行为证据要求 + 回声室度量
@@ -85,27 +94,17 @@ EXP-001 的诚实结论(H-001 部分成立 / H-002 否定 / H-003 待重设计)�
 - 权限分级落地(Level 0-4)
 - **验收**: RQ-9 模型可插拔性实验。
 
-## Phase 9: Biomimetic Cognitive Architecture
-
-- Information Flow 研究(什么进工作记忆/长期记忆/被遗忘/获得更多计算资源)
-- Dynamic Cognitive Graph(W 随反馈更新)
-- **验收**: 有可度量的信息流策略, 非比喻式架构。
-
-## Phase 10: World Model
-
-- 人/事件/时间/地点/因果统一关系空间
-- **验收**: RQ-10 有实验。
-
-## Phase 11: Physical / Robotic Interface
-
-- Search / Reason / Remember / Plan / Navigate / Communicate / Manipulate / Observe
-- Cognitive Core → Capability API → Physical Action 闭环
-- **验收**: RQ-11 延迟/可靠性边界有测量。
-
----
-
 ## 长期目标(不是阶段)
 
+> 以下方向**不排期、无验收**——它们要等前置阶段产出可证伪的实验问题后才
+> 升级回阶段(宪法第 9 条反虚荣复杂度; 愿景原文保留在 vision.md §13-16, 不动)。
+
+- **Biomimetic Cognitive Architecture**(原 Phase 9): Information Flow 研究、
+  Dynamic Cognitive Graph——长期方向, 无验收、不排期。
+- **World Model**(原 Phase 10, RQ-10): 人/事件/时间/地点/因果统一关系空间——
+  长期方向, 无验收、不排期。
+- **Physical / Robotic Interface**(原 Phase 11, RQ-11): Cognitive Core →
+  Capability API → Physical Action 闭环——长期方向, 无验收、不排期。
 - AGI 相关问题的研究(泛化/迁移/长时记忆/持续学习/规划/世界建模/
   元认知/工具使用/具身智能)——**AGI 是研究方向, 不是当前结论**。
 

@@ -1,6 +1,6 @@
 # EXP-005: 引用扩张通道（Cited-Expansion）——链恢复增益与事件聚类护栏
 
-- **状态**: PR|E-RE|G|IS|TER|ED（2026-08-19 预注册，未运行）
+- **状态**: PREREGISTERED（2026-08-19 预注册，未运行）
 - **编号裁决**: E2 Gate 原预留编号 EXP-004（见 `docs/engineering_plan.md` 旧文）；
   2026-08-19 架构审计 §8.1 裁决 EXP-004 = 自适应策略选择，本实验顺延为
   EXP-005（engineering_plan E2 Gate 文字已同步）。
