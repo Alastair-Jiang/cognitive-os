@@ -9,6 +9,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follo
 
 ### Added
 
+- E2 prerequisites: cite expansion channel + ordered path recovery
+  metric (EXP-005 front-loaded per prereg). `Corpus` protocol gains a
+  `mentions` method (additive, both corpus impls already satisfy);
+  `SearchNetConfig.cite_expansion` pulls `mentions(pid)` as hard
+  structural candidates (radius/source-filter exempt, billed
+  index_lookups + similarity_calls); `metrics.ordered_path_recovery`
+  (/L, golden-value tested). tests 113 to 118
 - EXP-004a Oracle Headroom runer `scripts/run_exp004a_oracle.py`
   (R2, preregistered): corpus universe 9 grid cells + medium (10
   unique configs; grid factory `grid_corpus_config` extracted into

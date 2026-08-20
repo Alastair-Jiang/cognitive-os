@@ -34,7 +34,7 @@ this repository (Claude Code, Cursor, Copilot, OpenClaw, etc.).
 ## Repo quick map
 
 - Pure-stdlib Python (>= 3.10), zero runtime deps; tests:
-  `python -m pytest tests/ -q` (currently 113/113).
+  `python -m pytest tests/ -q` (currently 118/118).
 - Three strategies: A traditional / B anchor / C multi-net progressive
   validation (EXP-001/002 conclusions: A is the quality baseline, B is
   efficient but exceeds the recall-loss line, C is not proven better —

@@ -9,6 +9,11 @@
 
 ### Added
 
+- E2 前置: 引用扩张通道 + 有序路径恢复度量（EXP-005 预注册前置工程）。
+  `Corpus` 协议增 `mentions`（加性, 两实现已满足）;
+  `SearchNetConfig.cite_expansion` 把 `mentions(pid)` 作为硬结构候选
+  （豁免半径/来源门槛, 计费入 index_lookups 与 similarity_calls）;
+  `metrics.ordered_path_recovery`（/L, 黄金值测试先行）。测试 113 增至 118
 - EXP-004a Oracle Headroom 运行器 `scripts/run_exp004a_oracle.py`
   （R2, 预注册）: 语料宇宙 9 网格 + medium（10 个独立配置; 网格工厂
   `grid_corpus_config` 抽入 `run_exp002_scan.py`, 进程内逐字段等价

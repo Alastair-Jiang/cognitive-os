@@ -49,3 +49,11 @@ class Corpus(Protocol):
     def embed_seed(self, seed_pids: Sequence[str]) -> Embedding: ...
 
     def neighbors(self, pid: str, k: int | None = None) -> list[tuple[str, float]]: ...
+
+    def mentions(self, pid: str) -> list[str]:
+        """pid 显式引用的后续碎片(硬结构信号, 与语义独立)。
+
+        无引用结构的语料返回空列表。这是检索策略可选依赖的结构面:
+        默认(空)语义不改变既有行为(SearchNet 仅在 cite_expansion 开启时使用)。
+        """
+        ...
