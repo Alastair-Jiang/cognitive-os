@@ -18,14 +18,15 @@
 
 **回复规范**：只引用仓库根相对路径（如 `src/cognitive_os/stats.py:12`），禁绝对路径、禁 `~/`。
 
-## 1. 仓库现状快照（2026-08-19，main @ 196edf9；动手前先核实，勿盲信快照）
+## 1. 仓库现状快照（2026-08-20，main @ ff02f49；动手前先核实，勿盲信快照）
 
 - 已合并：PR #3（工程化路线图 E0–E5）、PR #4（E0 统计推断平台完整示范 + 仓库资产标签化 + lint 债务清零，含所有者追加的 `eb1f336`）。
+- **其后已合入（勿再盲信旧快照）**：E1 三协议层 + 行为等价证明（`2fbbe42`）；E0.5 文本语料发生器（`549bb44`）；EXP-004a Oracle Headroom G1 PASS（`e8ce21f`）；E2 cite 通道 + 有序路径度量（`ff02f49`）。
 - **`eb1f336` 要点（必须知晓）**：EXP-003 `decide()` 判定闸门互斥化修复（连续 `if` 覆盖 bug）；REFUTED 语义收紧为「方向反转**且跨 seed 一致**」，矛盾信号（如 80% seed 正向但堆叠均值显著为负）判 INCONCLUSIVE；`seeds.index` → `enumerate`；EXP-003 文档 14+ 处拆词乱码清理。三态判定语义以 `scripts/run_exp003_significance.py::decide()` 现行实现为准。
 - E0 已落盘：`src/cognitive_os/stats.py`（配对 sign-flip 随机化检验 / bootstrap CI / Cohen d_z）、`tests/test_stats.py`（基线 **68/68**）、`scripts/run_exp003_significance.py`、EXP-003 结果（**SUPPORTED，仅格点级成立**，H-002 整体不翻案）、`docs/repo_inventory.md`（全部资产 + E1–E5 计划资产已预打标签）。
 - lint 已清零（ruff 0.16 全绿，CI 3.10/3.11/3.12 三版本绿）。
 - 遗留工程债（详见 `docs/engineering_plan.md` §1 D 表）：
-  **D-2** BM-001 §2 参数与 `configs/*.json` 漂移无校验；**D-3 尾** 结果 JSON 缺 `config_hash`/`code_sha`；**D-5 尾** `scripts/` 三份 runner 逻辑重复；**D-6** CI 无覆盖率门禁。
+  **D-2**（已闭环：`scripts/check_specs_consistency.py` 落地并挂 CI）；**D-3 尾** 结果 JSON 缺 `config_hash`/`code_sha`；**D-5 尾** `scripts/` runner 逻辑重复；**D-6** CI 无覆盖率门禁。
 - 开工动作：`git fetch` → 从最新 `main` 拉新分支（`git status -s` 必须干净）→ 再动第一行代码。
 
 ## 2. 工作循环（每轮任务按此执行，缺一不可）
@@ -68,12 +69,12 @@
 
 ## 5. 下一步任务（按优先级执行）
 
-0. **状态核实**：`git fetch` 后确认 main 已含 PR #4 与 `eb1f336`（本地分支勿复用，拉新分支）。
-1. **D-2**：新建 `scripts/check_specs_consistency.py` —— 校验 BM-001 §2 声明参数与 `configs/*.json` 实际值零漂移（纯 stdlib，输出可挂 CI）；若发现漂移，先如实报告再修，不许静默改配置。
-2. **D-5/D-3 尾**：`scripts/` runner 公共化（共享策略构建/聚合逻辑，消除三份复制，`run_exp003` 已示范 import 复用先例）；结果 JSON schema 增补 `config_hash` + `code_sha`（复跑可证伪）。
-3. **E1 检索核心抽象化**（按 `docs/engineering_plan.md` §E1 执行）：Corpus/Embedder/Index 三协议；DoD 硬性要求——grep 可验证策略源码不再 import `SyntheticEventCorpus` 具体类、内存+持久化双实现参数化测试全过、EXP-001 复跑聚合指标与历史 `research/results/` 一致（行为等价证明）、回填 ADR-0001。
-4. **E5 小步并行**：建 `docs/adr/` 目录 + 模板，回填 ADR-0001（三协议）与 ADR-0002（零运行时依赖红线）；mypy 渐进（先 public 接口）；覆盖率门禁（ratchet 机制，只升不降）。
-5. **E2 有硬 Gate**：必须先写 H-004 假设文件（把 H-003 拆分为事件聚类与链恢复两目标）+ EXP-005 预注册，**才允许写策略代码**（宪法第 2 条，顺序不可倒置）。不要跳 Gate。
+0. **状态核实**：`git fetch` 后确认 main 已含 E1 协议层（`2fbbe42`）、EXP-004a（`e8ce21f`）、E2 cite 通道（`ff02f49`）（本地分支勿复用，拉新分支）。
+1. **E1 收尾（sqlite 持久化语料变体）**：`src/` 补标准库 `sqlite3` 只读语料实现，参数化测试"内存 + 持久化"双实现全过——E1 目前大部完成、余此项（`docs/engineering_plan.md` §E1 DoD）。
+2. **E2 剩余前置（EXP-005 运行的先决条件）**：B'/C' 策略变体（启用引用扩张的 B/C，实验模块，不替换 A/B/C）+ EXP-005 运行器。cite 通道（`src/cognitive_os/nets/search_net.py`）与有序路径度量（`src/cognitive_os/metrics.py`）已落地，勿重复实现。
+3. **EXP-004b 状态可测性**：f1/f2/f3 廉价特征 × 逐查询最优策略标签，Bonferroni 校正、半区防泄漏（004a 已 G1 PASS 解锁）。
+4. **D-3 尾 / D-5 尾**：结果 JSON schema 增补 `config_hash` + `code_sha`；`scripts/` runner 公共化（`run_exp003` 已示范 import 复用先例）。
+5. **GPU extras 前置（ADR-0003）**：≤15 GiB VRAM 显卡到位前不启动 EXP-006；无 GPU 则该实验记 INCONCLUSIVE。`torch`/`faiss` 类重依赖只进 `[gpu]` extras，核心 stdlib 红线不变。
 
 ## 6. 诚实边界（红线，违反即返工）
 

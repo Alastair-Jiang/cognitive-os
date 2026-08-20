@@ -37,7 +37,7 @@
 
 | 概念（vision） | 现状（代码/实验） | 工程差距（Gap） | 对应工程阶段 |
 |---|---|---|---|
-| Dynamic Information Net（§2） | `nets/search_net.py` 配置化检索网；策略 C 多网并行（`strategy_c_multinet.py`） | ① 语料与索引全内存、邻居索引 O(N²) 暴力构建、无持久化、无增量更新；② "网动态调整"未实现（配置静态，只有 C 的前沿随置信度调整）；③ 嵌入是随机合成向量，无 Embedder 抽象边界 | E1 |
+| Dynamic Information Net（§2） | `nets/search_net.py` 配置化检索网；策略 C 多网并行（`strategy_c_multinet.py`） | ① 语料与索引全内存、邻居索引 O(N²) 暴力构建、**持久化语料变体未做**（E1 sqlite 遗留）、无增量更新；② "网动态调整"未实现（配置静态，只有 C 的前沿随置信度调整）；③ 嵌入抽象边界已由 E1 三协议解决（`protocols.py` + `adapters/identity.py` 恒等 Embedder） | E1 |
 | Progressive Validation（§3） | `validation/progressive.py` 跨网共识 + 置信度 + 早停；EXP-001 早停有效（75% 查询） | ① 置信度未校准（无可靠性度量，如校准误差）；② 成本只计数不预算（无 per-query 成本上限的调度）；③ 实验全为单 seed，无显著性检验 | E0 |
 | Anchor Mechanism（§4） | `anchors/anchor_detector.py` 四信号锚点；EXP-002：效率组件 10/10 档成立（省 4-5×），质量组件 10/10 档失败（召回损失 26-56pp） | ① 配置敏感性扫描没有自动化 harness（Phase 2 前置）；② 锚点信号只有 4 种，vision 列出的因果一致性/历史证据/用户相关性未建模 | E0→E2 |
 | Structure Consistency ≠ Semantic Similarity（§5, H-003） | `graph/evidence_graph.py` 多信号建图 + 因果硬边；EXP-002：链恢复口径成立（连通率 0.940 vs 0.398），纯度口径失败 | ① **结构信号只参与事后建图，不参与检索扩张**（EXP-002 明确结论）；② 无有序路径（A→B→C→D）恢复度量，只有成对连通率 | E2 |
@@ -207,15 +207,20 @@ q3 5/5=100% ✅; q4 +0.081 ≥0.01 ✅; 效应量 d_z=+0.58。
    构建成本与查询成本分开上报（宪法第 3 条的工程化）；
    默认实现保持纯标准库，ANN 类优化仅留接口。
 4. **持久化语料变体（最小）**：一个基于标准库 `json`/`sqlite3` 的只读语料实现，
-   证明 Corpus 协议不绑定内存结构。
+   证明 Corpus 协议不绑定内存结构。**（本轮未做，遗留项）**
 
 **验收标准（DoD）**：
-- [ ] 三个策略（A/B/C）源码中不再 import `SyntheticEventCorpus` 具体类，
+- [x] 三个策略（A/B/C）源码中不再 import `SyntheticEventCorpus` 具体类，
       只依赖协议（grep 可验证）；
-- [ ] 全部现有测试在"内存语料 + 持久化语料"两种实现下都能通过（参数化测试）；
-- [ ] EXP-001 的 small 配置复跑：各策略聚合指标与历史 results/ JSON 完全一致
-      （容差内，seed 固定），以此证明重构无行为漂移；
-- [ ] ADR-0001 记录 Corpus/Embedder/Index 三协议的设计取舍。
+- [ ] 全部现有测试在"内存语料 + 持久化语料"两种实现下都能通过（参数化测试）——
+      **遗留项：sqlite 持久化语料变体未做**（`src/` 无 sqlite；仅内存语料 + 恒等适配器双实现）；
+- [x] EXP-001 的 small 配置复跑：各策略聚合指标与历史 results/ JSON 完全一致
+      （容差内，seed 固定），以此证明重构无行为漂移——证据
+      `research/results/PROOF-E1-EQUIV-20260820-021634.json`（`diffs` 与 `frozen_diffs` 均为空）；
+- [x] ADR-0001 记录 Corpus/Embedder/Index 三协议的设计取舍。
+
+**E1 状态: 大部完成，余 1 项**——三协议/解耦/行为等价证明已落地，sqlite 持久化
+语料变体遗留（计入 E2 前置一并跟进，见下）。
 
 **关联**：架构文档 §5.1；为研究 roadmap Phase 2（真实信息空间）铺路。
 
@@ -230,6 +235,13 @@ q3 5/5=100% ✅; q4 +0.081 ≥0.01 ✅; 效应量 d_z=+0.58。
 **Gate（研究准入）**：必须先有 H-004 假设文件（把 H-003 拆分为
 "事件聚类"与"链恢复"两个目标，各配预注册指标——EXP-002 Next Step 第 4 条），
 再预注册 EXP-005，才允许写策略代码。**顺序不可倒置**（宪法第 2 条）。
+
+**当前进度（2026-08-20）**：Gate 文档已就绪（H-004 + EXP-005 预注册均入 main）。
+前置工程部分落地：引用扩张通道（`src/cognitive_os/nets/search_net.py:31`
+`cite_expansion` 配置开关）与有序路径恢复度量
+（`src/cognitive_os/metrics.py:148` `ordered_path_recovery`）均已完成。
+**剩余前置**：① B'/C' 策略变体（启用引用扩张的 B/C，实验模块，不替换 A/B/C）；
+② EXP-005 运行器。二者未启动。
 
 **工作内容**：
 1. **引用扩张通道**：`SearchNet` 增加"沿 mentions 边扩张"的可配置通道
@@ -388,3 +400,7 @@ E0 ──► E1 ──► E2（Gate: H-004 + EXP-005 预注册）
 3. **结论边界重申**：本文所有现状描述引用的实验结论仅对已跑条件有效
    （合成语料、固定 seed、特定配置），不外推到真实信息空间；
    工程阶段完成 ≠ 科学假设成立，两者在 roadmap 与本文中分别记账。
+4. **GPU 线硬件前置（EXP-006 / H-006 / ADR-0003）**：计划购置或云租用
+   ≤15 GiB VRAM 显卡；**硬件到位前不启动 EXP-006**；若最终无 GPU 可用，
+   该实验整条记 **INCONCLUSIVE**（ADR-0003 已约定：GPU 不可用即
+   INCONCLUSIVE，不装死也不造假）。

@@ -1,7 +1,8 @@
 
 # ADR-0003: GPU 路径走可选 extras，零依赖红线限定核心 stdlib 路径
 
-- **状态**: Proposed（2026-08-19 注册；E1 三协议 + GPU 适配器落地并附行为等价证明后转 Accepted）
+- **状态**: Proposed（2026-08-19 注册；GPU 栈未落地，保持 Proposed。硬件前置注记：
+  ≤15 GiB VRAM 显卡到位前不启动 EXP-006，无 GPU 则该实验记 INCONCLUSIVE）
 - **日期**: 2026-08-19
 - **上下文**: 研究主旨变更为「用外接显卡（≤15 GiB VRAM 可用）进行大规模计算」。
   ADR-0002 零依赖红线禁止 torch/faiss 类重依赖进入核心；而真嵌入模型

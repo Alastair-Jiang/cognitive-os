@@ -23,16 +23,19 @@
 
 ---
 
-## 当前状态(2026-08-19)
+## 当前状态(2026-08-20)
 
 | 项 | 状态 |
 |---|---|
 | Phase 0 仓库初始化 | ✅ 完成(本仓库) |
 | Phase 1 Dynamic Retrieval Prototype | ✅ 首轮实验完成 |
 | Phase 1b 假设修订实验(EXP-002) | ✅ 完成(扫描 10 档 + 共识诊断 + H-003 重设计) |
-| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 118/118 测试通过 |
+| 三策略实现(A 传统 / B Anchor / C Multi-Net) | ✅ 已实现, 118/118 测试通过(pytest, 16 个文件) |
 | Benchmark EXP-001 | ✅ 完成(主模式 + 截断模式 + medium 档) |
 | Benchmark EXP-002 | ✅ 完成(歧义档位扫描 / 共识聚合 / H-003 重设计) |
+| Benchmark EXP-003 | ✅ 完成(SUPPORTED, 仅格点级: C−A = +0.081, p=0.0001) |
+| E1 协议层(Corpus / Embedder / Index) | ✅ 已落地 + 行为等价证明已落盘(sqlite 持久化语料变体遗留) |
+| EXP-004a Oracle Headroom | ✅ 已运行(G1 PASS; EXP-004b 解锁未启动) |
 | H-001 Anchor 效率 | ❌ REFUTED(质量组件; 效率组件 10 档全成立, 召回损失不随歧义收敛) |
 | H-002 多网渐进验证 | ❌ REFUTED(按原表述; 早停有效, mean 聚合无实质改善) |
 | H-003 结构一致性 | 🔶 REFUTED(纯度口径) / PARTIAL(链恢复口径, 连通率 0.940) |
@@ -81,19 +84,22 @@ cognitive-os/
 ├── docs/                  vision / architecture / research_questions /
 │                          system_constitution / roadmap
 ├── research/              研究记录区
-│   ├── hypotheses/        假设(H-001..003, 状态 UNVALIDATED)
-│   ├── experiments/       预注册/完成实验(EXP-001)
+│   ├── hypotheses/        假设(H-001..006, 已判定或 UNVALIDATED)
+│   ├── experiments/       预注册/完成实验(EXP-001..006)
 │   ├── benchmarks/        Benchmark 规格(BM-001)
 │   ├── results/           实验结果 JSON(原始数据)
 │   └── log/               研究日志(Problem/Hypothesis/Change/Experiment/
 │                          Result/Interpretation/Next Step)
 ├── src/cognitive_os/
 │   ├── datasets/          合成事件碎片信息空间(带 ground truth)
+│   │   │                  + text_fragments.py 模板语料(EXP-006 前置)
 │   ├── nets/              检索网(可配置搜索策略原语)
 │   ├── anchors/           锚点检测(多信号综合)
 │   ├── validation/        渐进式验证(无硬性提前淘汰)
 │   ├── graph/             证据图(多信号一致性)
 │   ├── retrieval/         三策略: A 传统 / B Anchor / C Multi-Net
+│   ├── protocols.py       Corpus / Embedder / Index 三协议(E1)
+│   ├── adapters/          恒等适配器(CorpusView / IdentityEmbedder / BruteForceIndex)
 │   ├── memory/            [STUB] 未来阶段
 │   ├── agents/            [STUB] 未来阶段
 │   └── orchestration/     [STUB] 未来阶段

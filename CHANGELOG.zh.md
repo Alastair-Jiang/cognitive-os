@@ -77,6 +77,16 @@
 
 ### Fixed
 
+- 文档/计划一致性修订轮（2026-08-20，只改文档/计划——不写策略代码、不跑实验）:
+  README（双语）状态表+目录树对齐; roadmap Phase 5（EXP-004a G1 PASS）入账 +
+  Phase 9-11 降级长期目标; research_questions Phase 编号对齐; engineering_plan
+  E1 DoD 按实勾选（sqlite 变体遗留）+ E2 剩余前置 + EXP-006 硬件注记; project_manual
+  测试数/文件数统一 + chain_connectivity 拼写; EXP-005 预注册状态行乱码; repo_inventory
+  EXP-004/H-006/EXP-006 口径; ADR-0001 转 Accepted + ADR-0003 硬件注记; OPENCLAW §5 重写。
+  证据 `research/results/PROOF-E1-EQUIV-20260820-021634.json`（diffs + frozen_diffs 均空）。
+  详见 `docs/plans/PLAN-2026-08-20-docs-consistency.md` 与
+  `research/log/LOG-2026-08-20-docs-consistency.md`。
+
 - D-2: BM-001 §2 声明默认参数 `n_topics=8, topics_per_event=3,
   within_event_noise=0.25` 修正为 `configs/benchmark.small.json` 实况
   `5/4/0.5`(配置为 EXP-001/002/003 实际运行基准, 附修正注记)
